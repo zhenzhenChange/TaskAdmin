@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import ElementUI from 'element-ui'
 import router from './router'
-import store from './store'
 
 import App from './App.vue'
 
