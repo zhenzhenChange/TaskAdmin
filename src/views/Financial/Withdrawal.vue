@@ -1,21 +1,5 @@
 <template>
-  <div class="list">
-    <h1>文章列表</h1>
-    <el-table :data="articles">
-      <el-table-column prop="title" label="文章标题" width="550"></el-table-column>
-      <!-- <el-table-column prop="body" label="文章正文" width="550">
-        <template slot-scope="scope">
-          <div v-html="scope.row.body"></div>
-        </template>
-      </el-table-column> -->
-      <el-table-column label="操作" width="100">
-        <template slot-scope="scope">
-          <el-button type="text" size="medium" @click="editArticle(scope.row._id)">编辑</el-button>
-          <el-button type="text" size="medium" @click="removeArticle(scope.row)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-  </div>
+  <div>提现处理</div>
 </template>
 
 <script>
@@ -25,8 +9,8 @@ export default {
       articles: [],
       body: []
     };
-  },
-  methods: {
+  }
+  /* methods: {
     async fetchArticles() {
       const res = await this.$http.get("rest/articles");
       this.articles = res.data;
@@ -53,12 +37,7 @@ export default {
   },
   created() {
     this.fetchArticles();
-  }
+  } */
 };
 </script>
-<style scoped>
-/* .el-table td,
-.el-table th {
-  text-align: left !important;
-} */
-</style>
+<style lang="scss" scoped></style>

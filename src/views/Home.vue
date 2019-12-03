@@ -1,65 +1,63 @@
 <template>
-  <el-container style="height: 100vh;">
-    <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
+  <el-container class="vh-100">
+    <el-aside class="home-aside">
       <el-menu router :default-active="$route.path" unique-opened>
         <el-submenu index="1">
           <template slot="title">
-            <i class="el-icon-message"></i>会员列表
+            <i class="el-icon-user"></i>会员中心
           </template>
           <el-menu-item-group>
             <template slot="title">下单会员</template>
-            <el-menu-item index="/items/create">新增物品</el-menu-item>
-            <el-menu-item index="/items/list">物品列表</el-menu-item>
+            <el-menu-item index="/members/part">会员列表</el-menu-item>
           </el-menu-item-group>
           <el-menu-item-group>
             <template slot="title">接单会员</template>
-            <el-menu-item index="/heroes/create">创建英雄</el-menu-item>
-            <el-menu-item index="/heroes/list">英雄列表</el-menu-item>
+            <el-menu-item index="/members/clerk">会员列表</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
         <el-submenu index="2">
           <template slot="title">
-            <i class="el-icon-message"></i>订单管理
+            <i class="el-icon-shopping-bag-1"></i>订单管理
           </template>
           <el-menu-item-group>
             <template slot="title">微信订单管理</template>
-            <el-menu-item index="/articles/create">新增文章</el-menu-item>
-            <el-menu-item index="/articles/list">文章列表</el-menu-item>
+            <el-menu-item index="/orders/record">订单记录</el-menu-item>
+            <el-menu-item index="/orders/appeal">申诉管理</el-menu-item>
           </el-menu-item-group>
-          <el-menu-item-group>
+          <el-menu-item-group class="solot">
             <template slot="title">仪表盘</template>
-            <el-menu-item index="/ads/create">新增广告位</el-menu-item>
-            <el-menu-item index="/ads/list">广告位列表</el-menu-item>
+            <el-menu-item index="/charts/data">数据总控</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
         <el-submenu index="3">
           <template slot="title">
-            <i class="el-icon-message"></i>系统设置
+            <i class="el-icon-setting"></i>系统设置
           </template>
           <el-menu-item-group>
             <template slot="title">财务管理</template>
-            <el-menu-item index="/categories/create">新建分类</el-menu-item>
-            <el-menu-item index="/categories/list">分类列表</el-menu-item>
+            <el-menu-item index="/financial/capital">资金流水</el-menu-item>
+            <el-menu-item index="/financial/customer">人工通道</el-menu-item>
+            <el-menu-item index="/financial/withdrawal">提现处理</el-menu-item>
           </el-menu-item-group>
           <el-menu-item-group>
             <template slot="title">总代管理</template>
-            <el-menu-item index="/admin_users/create">新增管理员</el-menu-item>
-            <el-menu-item index="/admin_users/list">管理员列表</el-menu-item>
+            <el-menu-item index="/agency/agent">总代中心</el-menu-item>
+            <el-menu-item index="/agency/create">添加总代</el-menu-item>
           </el-menu-item-group>
           <el-menu-item-group>
             <template slot="title">系统设置</template>
-            <el-menu-item index="/admin_users/create">新增管理员</el-menu-item>
-            <el-menu-item index="/admin_users/list">管理员列表</el-menu-item>
+            <el-menu-item index="/settings/part">下单端设置</el-menu-item>
+            <el-menu-item index="/settings/clerk">接单端设置</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
       </el-menu>
     </el-aside>
     <el-container>
-      <el-header style="text-align: right; font-size: 12px">
+      <el-header class="home-header">
         <el-button @click="logout">退出登录</el-button>
       </el-header>
       <el-main>
-        <!-- :key="$route.path" 根据路由区分【编辑页】或【新建页】 -->
+        <!-- :key="$route.path" 根据路由区分组件 -->
         <router-view :key="$route.path" />
       </el-main>
     </el-container>
@@ -70,7 +68,6 @@
 export default {
   methods: {
     logout() {
-      localStorage.clear();
       this.$router.push("/");
     }
   }
@@ -78,57 +75,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.el-table td,
-.el-table th {
-  text-align: center;
+.home-aside {
+  color: #333;
+  width: 200px !important;
+  background-color: rgb(238, 241, 246);
 }
 
-.el-table thead {
-  font-size: 1rem;
-}
-
-.el-header {
+.home-header {
   background-color: #b3c0d1;
   color: #333;
   line-height: 60px;
-}
-
-.el-aside {
-  color: #333;
-}
-
-.mt-1 {
-  margin-top: 1rem;
-}
-
-.avatar-uploader .el-upload {
-  border: 1px dashed #d9d9d9;
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-}
-
-.avatar-uploader .el-upload:hover {
-  border-color: #409eff;
-}
-
-.avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 5rem;
-  height: 5rem;
-  line-height: 5rem;
-  text-align: center;
-}
-
-.avatar {
-  width: 5rem;
-  height: 5rem;
-  display: block;
-}
-
-.el-menu-item-group__title {
-  font-size: 1rem;
+  text-align: right;
+  font-size: 12px;
 }
 </style>

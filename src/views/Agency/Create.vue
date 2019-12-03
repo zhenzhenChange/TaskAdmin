@@ -1,18 +1,5 @@
 <template>
-  <div>
-    <h1>{{id ? "编辑" : "新增"}}管理员</h1>
-    <el-form label-width="120px" @submit.native.prevent="save">
-      <el-form-item label="用户名">
-        <el-input v-model="AdminUser.username"></el-input>
-      </el-form-item>
-      <el-form-item label="密码">
-        <el-input v-model="AdminUser.password"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" native-type="submit">保存</el-button>
-      </el-form-item>
-    </el-form>
-  </div>
+  <div>添加总代</div>
 </template>
 
 <script>
@@ -24,8 +11,8 @@ export default {
     return {
       AdminUser: {}
     };
-  },
-  methods: {
+  }
+  /* methods: {
     async save() {
       if (this.id) {
         await this.$http.put(`rest/admin_users/${this.id}`, this.AdminUser);
@@ -45,6 +32,6 @@ export default {
   },
   created() {
     this.id && this.fetch();
-  }
+  } */
 };
 </script>

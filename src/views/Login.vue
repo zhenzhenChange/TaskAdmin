@@ -36,7 +36,10 @@ export default {
       this.$router.push("/home");
       this.$message({
         type: "success",
-        message: "登录成功"
+        message: "登录成功",
+        duration: 1500,
+        center: true,
+        offset: 10
       });
     }
   }

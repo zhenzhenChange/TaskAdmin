@@ -1,16 +1,5 @@
 <template>
-  <div>
-    <h1>分类列表</h1>
-    <el-table :data="ads">
-      <el-table-column prop="name" label="类别" width="100"></el-table-column>
-      <el-table-column label="操作" width="100">
-        <template slot-scope="scope">
-          <el-button type="text" size="medium" @click="editAd(scope.row._id)">编辑</el-button>
-          <el-button type="text" size="medium" @click="removeAd(scope.row)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-  </div>
+  <div>接单端设置</div>
 </template>
 
 <script>
@@ -19,8 +8,8 @@ export default {
     return {
       ads: []
     };
-  },
-  methods: {
+  }
+  /* methods: {
     async fetchAds() {
       const res = await this.$http.get("rest/ads");
       this.ads = res.data;
@@ -47,6 +36,6 @@ export default {
   },
   created() {
     this.fetchAds();
-  }
+  } */
 };
 </script>

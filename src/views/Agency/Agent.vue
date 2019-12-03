@@ -1,17 +1,5 @@
 <template>
-  <div>
-    <h1>分类列表</h1>
-    <el-table :data="admin_users">
-      <el-table-column prop="username" label="用户名" width="100"></el-table-column>
-      <el-table-column prop="password" label="密码" width="100"></el-table-column>
-      <el-table-column label="操作" width="100">
-        <template slot-scope="scope">
-          <el-button type="text" size="medium" @click="editAdminUser(scope.row._id)">编辑</el-button>
-          <el-button type="text" size="medium" @click="removeAdminUser(scope.row)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-  </div>
+  <div>总代中心</div>
 </template>
 
 <script>
@@ -20,8 +8,8 @@ export default {
     return {
       admin_users: []
     };
-  },
-  methods: {
+  }
+  /* methods: {
     async fetchAdminUsers() {
       const res = await this.$http.get("rest/admin_users");
       this.admin_users = res.data;
@@ -48,6 +36,6 @@ export default {
   },
   created() {
     this.fetchAdminUsers();
-  }
+  } */
 };
 </script>

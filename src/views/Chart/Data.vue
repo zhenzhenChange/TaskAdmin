@@ -1,17 +1,5 @@
 <template>
-  <div>
-    <h1>分类列表</h1>
-    <el-table :data="categories">
-      <el-table-column prop="parents.name" label="上级分类" width="100"></el-table-column>
-      <el-table-column prop="name" label="类别" width="100"></el-table-column>
-      <el-table-column label="操作" width="100">
-        <template slot-scope="scope">
-          <el-button type="text" size="medium" @click="editCategory(scope.row._id)">编辑</el-button>
-          <el-button type="text" size="medium" @click="removeCategory(scope.row)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-  </div>
+  <div>仪表盘</div>
 </template>
 
 <script>
@@ -20,8 +8,8 @@ export default {
     return {
       categories: []
     };
-  },
-  methods: {
+  }
+  /* methods: {
     async fetchCategories() {
       const res = await this.$http.get("rest/categories");
       this.categories = res.data;
@@ -48,6 +36,6 @@ export default {
   },
   created() {
     this.fetchCategories();
-  }
+  } */
 };
 </script>
