@@ -85,7 +85,7 @@ export default {
       partData: [
         {
           phone: 18278459466,
-          pwd: "123456",
+          pwd: "18278459466",
           my_balance: 78.04,
           wb_fee: 1304.5,
           wb_datetime: "2019-12-04",
