@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-card class="part-card">
+    <el-card class="card">
       <el-input size="medium" placeholder="输入关键字搜索" autofocus />
       <el-button @click="resetDateFilter">重置日期筛选</el-button>
       <el-button @click="resetAllFilter">重置所有筛选</el-button>
@@ -41,8 +41,8 @@
         label="注册日期"
         sortable
         width="180"
-        column-key="date"
-        :filters="filtersData"
+        column-key="reg_datetime"
+        :filters="timeData"
         :filter-method="filterHandler"
       >
         <template slot-scope="scope">
@@ -101,7 +101,7 @@ export default {
           ]
         }
       ],
-      filtersData: [{ text: "", value: "" }]
+      timeData: [{ text: "", value: "" }]
     };
   },
   created() {
@@ -109,7 +109,7 @@ export default {
   },
   methods: {
     getFiltersData() {
-      this.filtersData = this.partData.map(item => {
+      this.timeData = this.partData.map(item => {
         return {
           text: item.reg_datetime,
           value: item.reg_datetime
@@ -157,11 +157,11 @@ export default {
         type: "info",
         inputType: "password"
       })
-        .then(({ value }) => {
+        .then(() => {
           // this.$http.post(`/api/admin/give/changePwd/${phone}`);
           this.$message({
             type: "success",
-            message: phone + value
+            message: phone
           });
         })
         .catch(() => {
@@ -197,15 +197,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.part-card {
-  margin-bottom: 10px;
-  display: flex;
-  .el-input {
-    width: 300px;
-    margin-right: 30px;
-  }
-}
-
 .part-table-expand {
   font-size: 0;
   label {

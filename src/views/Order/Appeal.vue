@@ -1,45 +1,136 @@
 <template>
-  <div class="list">申诉管理</div>
+  <div>
+    <el-card class="card">
+      <el-button @click="resetDateFilter">重置日期筛选</el-button>
+      <el-button @click="resetAllFilter">重置所有筛选</el-button>
+    </el-card>
+    <el-table ref="filterTable" :data="appealOrderData" stripe border>
+      <el-table-column
+        prop="order_release_time"
+        label="发布日期"
+        sortable
+        width="180"
+        column-key="order_release_time"
+        :filters="timeData"
+        :filter-method="filterHandler"
+      >
+        <template slot-scope="scope">
+          <i class="el-icon-time"></i>
+          <span class="ml-10">{{ scope.row.order_release_time }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="失败时间" prop="order_end_datetime"></el-table-column>
+      <el-table-column label="申诉时间" prop="order_end_datetime"></el-table-column>
+      <el-table-column label="发布账号" prop="uid_give"></el-table-column>
+      <el-table-column label="订 单 号" prop="order_id"></el-table-column>
+      <el-table-column label="订单价格" prop="order_price"></el-table-column>
+      <el-table-column label="接单账号" prop="uid_recive"></el-table-column>
+      <el-table-column label="申诉证据" prop="order_type"></el-table-column>
+      <el-table-column label="申诉状态" prop="action_resState"></el-table-column>
+      <el-table-column label="操作">
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            icon="el-icon-warning"
+            type="danger"
+            @click="deleteRecord(scope.row.order_id)"
+          >删除该记录</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+  </div>
 </template>
 
 <script>
 export default {
   data() {
     return {
-      heroes: [],
-      categories: [],
-      withItems: [],
-      againstItems: []
+      appealOrderData: [
+        {
+          order_id: 45641523498631,
+          uid_give: "发布账号",
+          order_release_time: "发布日期",
+          order_price: "订单价格",
+          uid_recive: "接单账号",
+          order_end_datetime: "失败时间",
+          order_state: "申诉",
+          action_datetime: "申诉时间",
+          action_resState: "申诉状态"
+          // order_remark: "申诉证据",
+        }
+      ],
+      timeData: [{ text: "", value: "" }],
+      stateData: [{ text: "", value: "" }]
     };
-  }
-  /* methods: {
-    async fetchHeroes() {
-      const res = await this.$http.get("rest/heroes");
-      this.heroes = res.data;
-      // this.fetchItemsPositions();
+  },
+  created() {
+    this.getFiltersData();
+  },
+  methods: {
+    getFiltersData() {
+      this.timeData = this.appealOrderData.map(item => {
+        return {
+          text: item.order_release_time,
+          value: item.order_release_time
+        };
+      });
+      this.stateData = this.appealOrderData.map(item => {
+        return {
+          text: item.order_state,
+          value: item.order_state
+        };
+      });
     },
-    editHero(id) {
-      this.$router.push(`/heroes/edit/${id}`);
+    getAppealOrderData() {
+      // this.$http.get(`/api/admin/man/get`);
     },
-    async removeHero(hero) {
-      this.$confirm(`是否确定要删除分类 "${hero.name}"`, "提示", {
+    resetDateFilter() {
+      this.$refs.filterTable.clearFilter("order_release_time");
+    },
+    resetAllFilter() {
+      this.$refs.filterTable.clearFilter();
+    },
+    filterHandler(value, row, column) {
+      const property = column["property"];
+      return row[property] === value;
+    },
+    deleteRecord(order_id) {
+      this.$confirm("确定要删除此记录吗？", "警告", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
-        .then(async () => {
-          await this.$http.delete(`rest/heroes/${hero._id}`);
+        .then(() => {
+          // this.$http.post(`/api/admin/disableAccount/${phone}`);
           this.$message({
             type: "success",
-            message: "删除成功!"
+            message: `${order_id} 删除成功!`,
+            offset: 10
           });
-          this.fetchHeroes();
         })
-        .catch(() => {});
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消操作",
+            offset: 10
+          });
+        });
     }
-  },
-  created() {
-    this.fetchHeroes();
-  } */
+  }
 };
 </script>
+
+<style lang="scss" scoped>
+.order-table-expand {
+  font-size: 0;
+  label {
+    width: 90px;
+    color: #99a9bf;
+  }
+  .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 50%;
+  }
+}
+</style>

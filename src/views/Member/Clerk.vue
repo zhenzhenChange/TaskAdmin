@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-card class="clerk-card">
+    <el-card class="card">
       <el-input size="medium" placeholder="输入关键字搜索" autofocus />
       <el-button @click="resetDateFilter">重置日期筛选</el-button>
       <el-button @click="resetAllFilter">重置所有筛选</el-button>
@@ -53,8 +53,8 @@
         label="注册日期"
         sortable
         width="180"
-        column-key="date"
-        :filters="filtersData"
+        column-key="reg_datetime"
+        :filters="timeData"
         :filter-method="filterHandler"
       >
         <template slot-scope="scope">
@@ -116,7 +116,7 @@ export default {
           ]
         }
       ],
-      filtersData: [{ text: "", value: "" }]
+      timeData: [{ text: "", value: "" }]
     };
   },
   created() {
@@ -124,7 +124,7 @@ export default {
   },
   methods: {
     getFiltersData() {
-      this.filtersData = this.clerkData.map(item => {
+      this.timeData = this.clerkData.map(item => {
         return {
           text: item.reg_datetime,
           value: item.reg_datetime
@@ -151,17 +151,17 @@ export default {
         type: "info",
         inputType: "password"
       })
-        .then(({ value }) => {
+        .then(() => {
           // this.$http.post(`/api/admin/give/changePwd/${phone}`);
           this.$message({
             type: "success",
-            message: phone + value
+            message: `${phone} 密码修改成功！`
           });
         })
         .catch(() => {
           this.$message({
             type: "info",
-            message: "操作取消",
+            message: "已取消操作~",
             offset: 10
           });
         });
@@ -176,13 +176,13 @@ export default {
           // this.$http.post(`/api/admin/disableAccount/${phone}`);
           this.$message({
             type: "success",
-            message: "操作成功!" + phone
+            message: `操作成功!${phone}`
           });
         })
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消操作"
+            message: "已取消操作~"
           });
         });
     }
@@ -191,15 +191,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.clerk-card {
-  margin-bottom: 10px;
-  display: flex;
-  .el-input {
-    width: 300px;
-    margin-right: 30px;
-  }
-}
-
 .clerk-table-expand {
   font-size: 0;
   label {

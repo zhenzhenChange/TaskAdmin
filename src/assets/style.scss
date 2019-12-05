@@ -28,3 +28,13 @@ a {
     text-align: center;
   }
 }
+
+.card {
+  margin-bottom: 10px;
+  display: flex;
+
+  .el-input {
+    width: 300px;
+    margin-right: 30px;
+  }
+}

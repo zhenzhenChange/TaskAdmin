@@ -1,52 +1,27 @@
 <template>
-  <div>人工客服</div>
+  <el-form :label-position="labelPosition" label-width="80px" :model="formLabelAlign">
+    <el-form-item label="名称">
+      <el-input v-model="formLabelAlign.name"></el-input>
+    </el-form-item>
+    <el-form-item label="活动区域">
+      <el-input v-model="formLabelAlign.region"></el-input>
+    </el-form-item>
+    <el-form-item label="活动形式">
+      <el-input v-model="formLabelAlign.type"></el-input>
+    </el-form-item>
+  </el-form>
 </template>
-
 <script>
 export default {
-  props: {
-    id: {}
-  },
   data() {
     return {
-      Article: {},
-      categories: []
+      labelPosition: "right",
+      formLabelAlign: {
+        name: "",
+        region: "",
+        type: ""
+      }
     };
   }
-  /* methods: {
-    async save() {
-      if (this.id) {
-        await this.$http.put(`rest/articles/${this.id}`, this.Article);
-      } else {
-        await this.$http.post("rest/articles", this.Article);
-      }
-      this.$router.push("/articles/list");
-      this.$message({
-        type: String,
-        message: "保存成功"
-      });
-    },
-    async fetch() {
-      const res = await this.$http.get(`rest/articles/${this.id}`);
-      this.Article = res.data;
-    },
-    async fetchArticles() {
-      const res = await this.$http.get(`rest/categories`);
-      this.categories = res.data;
-    },
-    async addImage(file, Editor, cursorLocation, resetUploader) {
-      const formData = new FormData();
-      formData.append("file", file);
-
-      const res = await this.$http.post("upload", formData);
-      Editor.insertEmbed(cursorLocation, "image", res.data.url);
-
-      resetUploader();
-    }
-  },
-  created() {
-    this.fetchArticles();
-    this.id && this.fetch();
-  } */
 };
 </script>

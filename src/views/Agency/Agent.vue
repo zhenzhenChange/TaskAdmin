@@ -1,41 +1,216 @@
 <template>
-  <div>总代中心</div>
+  <div>
+    <el-card class="clerk-card">
+      <el-input size="medium" placeholder="输入关键字搜索" autofocus />
+      <el-button @click="resetDateFilter">重置日期筛选</el-button>
+      <el-button @click="resetAllFilter">重置所有筛选</el-button>
+    </el-card>
+    <el-table ref="filterTable" :data="AgentData" stripe border>
+      <el-table-column type="expand">
+        <template slot-scope="props">
+          <el-form label-position="left" inline class="clerk-table-expand">
+            <el-form-item label="账号">
+              <span>{{ props.row.phone }}</span>
+            </el-form-item>
+            <el-form-item label="余额">
+              <span>{{ props.row.my_balance }}</span>
+            </el-form-item>
+            <el-form-item label="总提成">
+              <span>{{ props.row.general_income }}</span>
+            </el-form-item>
+            <el-form-item label="当天提成">
+              <span>{{ props.row.general_income }}</span>
+            </el-form-item>
+            <el-form-item label="总接单">
+              <span>{{ props.row.orderData.length }}</span>
+            </el-form-item>
+            <el-form-item label="总成功订单">
+              <span>{{ props.row.orderData.length }}</span>
+            </el-form-item>
+            <el-form-item label="当天接单">
+              <span>{{ props.row.orderData.length }}</span>
+            </el-form-item>
+            <el-form-item label="当天成功订单">
+              <span>{{ props.row.orderData.length }}</span>
+            </el-form-item>
+            <el-form-item label="下级总接订单">
+              <span>{{ props.row.sonOrderData.length }}</span>
+            </el-form-item>
+            <el-form-item label="下级总成功订单">
+              <span>{{ props.row.sonOrderData.length }}</span>
+            </el-form-item>
+            <el-form-item label="下级当天接订单">
+              <span>{{ props.row.sonOrderData.length }}</span>
+            </el-form-item>
+            <el-form-item label="下级当天成功订单">
+              <span>{{ props.row.sonOrderData.length }}</span>
+            </el-form-item>
+          </el-form>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="reg_datetime"
+        label="注册日期"
+        sortable
+        width="180"
+        column-key="reg_datetime"
+        :filters="filtersData"
+        :filter-method="filterHandler"
+      >
+        <template slot-scope="scope">
+          <i class="el-icon-time"></i>
+          <span class="ml-10">{{ scope.row.reg_datetime }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="phone" label="账号" width="180"></el-table-column>
+      <el-table-column prop="is_valide" label="账号状态"></el-table-column>
+      <el-table-column label="操作">
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            icon="el-icon-edit"
+            type="primary"
+            @click="openEditPwd(scope.row.phone)"
+          >修改密码</el-button>
+          <el-button
+            size="mini"
+            icon="el-icon-warning"
+            type="danger"
+            @click="openBan(scope.row.phone)"
+          >禁止账号登录</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+  </div>
 </template>
 
 <script>
 export default {
   data() {
     return {
-      admin_users: []
+      AgentData: [
+        {
+          phone: 18172641474,
+          pwd: "18172641474",
+          my_balance: 78.04,
+          user_remark: "备注",
+          general_income: 100.5,
+          reg_datetime: "2019-12-04",
+          // 提成时间
+          extension_code: "ABCDEF",
+          is_valide: 1,
+          orderData: [
+            {
+              order_id: 45641523498631,
+              order_release_time: "2017-08-08",
+              order_state: 1
+            }
+          ],
+          sonOrderData: [
+            {
+              my_superior: "ABCDEF",
+              extension_code: "HHHHHH",
+              order_id: 45641523498631,
+              order_release_time: "2017-08-08",
+              order_state: 1
+            }
+          ]
+        }
+      ],
+      filtersData: [{ text: "", value: "" }]
     };
-  }
-  /* methods: {
-    async fetchAdminUsers() {
-      const res = await this.$http.get("rest/admin_users");
-      this.admin_users = res.data;
+  },
+  created() {
+    this.getFiltersData();
+  },
+  methods: {
+    getFiltersData() {
+      this.filtersData = this.AgentData.map(item => {
+        return {
+          text: item.reg_datetime,
+          value: item.reg_datetime
+        };
+      });
     },
-    editAdminUser(id) {
-      this.$router.push(`/admin_users/edit/${id}`);
+    getClerkData() {
+      // this.$http.get(`/api/admin/recv/get/${my_stratum}`);
     },
-    async removeAdminUser(admin_user) {
-      this.$confirm(`是否确定要删除管理员 "${admin_user.username}"`, "提示", {
+    resetDateFilter() {
+      this.$refs.filterTable.clearFilter("reg_datetime");
+    },
+    resetAllFilter() {
+      this.$refs.filterTable.clearFilter();
+    },
+    filterHandler(value, row, column) {
+      const property = column["property"];
+      return row[property] === value;
+    },
+    openEditPwd(phone) {
+      this.$prompt("请输入新密码", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "info",
+        inputType: "password"
+      })
+        .then(({ value }) => {
+          // this.$http.post(`/api/admin/give/changePwd/${phone}`);
+          this.$message({
+            type: "success",
+            message: phone + value
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "操作取消",
+            offset: 10
+          });
+        });
+    },
+    openBan(phone) {
+      this.$confirm("确定要禁止该账号登录吗？", "警告", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
-        .then(async () => {
-          await this.$http.delete(`rest/admin_users/${admin_user._id}`);
+        .then(() => {
+          // this.$http.post(`/api/admin/disableAccount/${phone}`);
           this.$message({
             type: "success",
-            message: "删除成功!"
+            message: "操作成功!" + phone
           });
-          this.fetchAdminUsers();
         })
-        .catch(() => {});
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消操作"
+          });
+        });
     }
-  },
-  created() {
-    this.fetchAdminUsers();
-  } */
+  }
 };
 </script>
+
+<style lang="scss" scoped>
+.clerk-card {
+  margin-bottom: 10px;
+  display: flex;
+  .el-input {
+    width: 300px;
+    margin-right: 30px;
+  }
+}
+
+.clerk-table-expand {
+  font-size: 0;
+  label {
+    width: 90px;
+    color: #99a9bf;
+  }
+  .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 50%;
+  }
+}
+</style>

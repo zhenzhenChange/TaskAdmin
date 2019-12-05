@@ -1,93 +1,178 @@
 <template>
-  <div>订单记录</div>
+  <div>
+    <el-card class="card">
+      <el-input size="medium" placeholder="输入关键字搜索" autofocus />
+      <el-button @click="resetDateFilter">重置日期筛选</el-button>
+      <el-button @click="resetAllFilter">重置所有筛选</el-button>
+    </el-card>
+    <el-table ref="filterTable" :data="recordData" stripe border>
+      <el-table-column type="expand">
+        <template slot-scope="props">
+          <el-form label-position="left" inline class="order-table-expand">
+            <el-form-item label="订单编号">
+              <span>{{ props.row.order_id }}</span>
+            </el-form-item>
+            <el-form-item label="有效时间">
+              <span>{{ props.row.order_effectPeriod }}</span>
+            </el-form-item>
+            <el-form-item label="二维码">
+              <span>{{ props.row.order_qrcode }}</span>
+            </el-form-item>
+            <el-form-item label="订单备注">
+              <span>{{ props.row.order_remark }}</span>
+            </el-form-item>
+            <el-form-item label="订单是否有效">
+              <span>{{ props.row.order_isValide }}</span>
+            </el-form-item>
+            <el-form-item label="上传成功确认图">
+              <span>{{ props.row.order_succPic }}</span>
+            </el-form-item>
+          </el-form>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="order_release_time"
+        label="发布日期"
+        sortable
+        width="180"
+        column-key="order_release_time"
+        :filters="timeData"
+        :filter-method="filterHandler"
+      >
+        <template slot-scope="scope">
+          <i class="el-icon-time"></i>
+          <span class="ml-10">{{ scope.row.order_release_time }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="发布账号" prop="uid_give"></el-table-column>
+      <el-table-column label="订单标题" prop="order_title"></el-table-column>
+      <el-table-column label="订单价格" prop="order_price"></el-table-column>
+      <el-table-column label="接单账号" prop="uid_recive"></el-table-column>
+      <el-table-column label="结单时间" prop="order_end_datetime"></el-table-column>
+      <el-table-column label="订单类型" prop="order_type"></el-table-column>
+      <el-table-column
+        prop="order_state"
+        label="订单状态"
+        width="120"
+        :filters="stateData"
+        :filter-method="filterHandler"
+        filter-placement="bottom-end"
+      >
+        <template slot-scope="scope">
+          <el-tag hit :type="stateType(scope.row.order_state)">{{scope.row.order_state}}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作">
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            icon="el-icon-warning"
+            type="danger"
+            @click="deleteRecord(scope.row.order_id)"
+          >删除该记录</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+  </div>
 </template>
 
 <script>
 export default {
-  props: {
-    id: {}
-  },
   data() {
     return {
-      Hero: {
-        name: "",
-        via: "",
-        scores: {
-          difficult: 0
-        },
-        skills: [],
-        partnerShip: []
-      },
-      categories: [],
-      items: [],
-      heroes: []
+      recordData: [
+        {
+          order_id: 45641523498631,
+          uid_give: "放单用户",
+          uid_recive: "结单用户",
+          order_title: "订单标题",
+          order_release_time: "发布日期2",
+          order_state: "订单状态",
+          order_type: "订单类型",
+          order_price: "订单价格",
+          order_remark: "订单备注",
+          order_effectPeriod: "有效时间",
+          // order_effectPeriod: "接单时间",
+          order_end_datetime: "结单时间",
+          order_isValide: "订单是否有效",
+          order_qrcode: "二维码地址",
+          order_succPic: "上传确认成功图"
+        }
+      ],
+      timeData: [{ text: "", value: "" }],
+      stateData: [{ text: "", value: "" }]
     };
-  }
-  /* methods: {
-    async save() {
-      if (this.id) {
-        await this.$http.put(`rest/heroes/${this.id}`, this.Hero);
-      } else {
-        await this.$http.post("rest/heroes", this.Hero);
-      }
-      this.$router.push("/heroes/list");
-      this.$message({
-        type: String,
-        message: "保存成功"
-      });
-    },
-    async fetch() {
-      const res = await this.$http.get(`rest/heroes/${this.id}`);
-      // 难点
-      this.Hero = Object.assign({}, this.Hero, res.data);
-    },
-    uploadViaSuccess(res) {
-      this.Hero.via = res.url;
-      // 显示赋值，icon属性事先未定义
-      // this.$set(this.Hero, "via", res.url);
-    },
-    uploadBannerSuccess(res) {
-      this.$set(this.Hero, "banner", res.url);
-    },
-    async fetchPosition() {
-      const res = await this.$http.get(`rest/categories`);
-      this.categories = res.data;
-    },
-    async fetchItems() {
-      const res = await this.$http.get(`rest/items`);
-      this.items = res.data;
-    },
-    async fetchHeroes() {
-      const res = await this.$http.get(`rest/heroes`);
-      this.heroes = res.data;
-    }
   },
   created() {
-    this.fetchItems();
-    this.fetchHeroes();
-    this.fetchPosition();
-    this.id && this.fetch();
-  } */
+    this.getFiltersData();
+  },
+  methods: {
+    stateType(type) {
+      return type === "成功" ? "success" : "primary";
+    },
+    getFiltersData() {
+      this.timeData = this.recordData.map(item => {
+        // 排除相同的项
+        return {
+          text: item.order_release_time,
+          value: item.order_release_time
+        };
+      });
+      this.stateData = this.recordData.map(item => {
+        return {
+          text: item.order_state,
+          value: item.order_state
+        };
+      });
+    },
+    getOrderData() {
+      // this.$http.get(`/api/admin/man/get`);
+    },
+    resetDateFilter() {
+      this.$refs.filterTable.clearFilter("order_release_time");
+    },
+    resetAllFilter() {
+      this.$refs.filterTable.clearFilter();
+    },
+    filterHandler(value, row, column) {
+      const property = column["property"];
+      return row[property] === value;
+    },
+    deleteRecord(id) {
+      this.$confirm("确定要删除该条记录吗？", "警告", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          // this.$http.post(`/api/admin/disableAccount/${id}`);
+          this.$message({
+            type: "success",
+            message: "操作成功!" + id
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消操作"
+          });
+        });
+    }
+  }
 };
 </script>
-<style scoped>
-.scores-rate {
-  margin-top: 0.64rem;
-}
 
-.el-col.el-col-24.el-col-md-12 {
-  border-bottom: 0.1rem #bfc1c4 dotted;
-}
-
-.checkItem {
-  width: 100%;
-}
-
-.w-100 >>> .el-input__inner {
-  width: 10rem;
-}
-
-.banner >>> .el-upload {
-  max-width: 20rem;
+<style lang="scss" scoped>
+.order-table-expand {
+  font-size: 0;
+  label {
+    width: 90px;
+    color: #99a9bf;
+  }
+  .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 50%;
+  }
 }
 </style>
