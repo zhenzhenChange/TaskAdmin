@@ -7,12 +7,7 @@
             <i class="el-icon-user"></i>会员中心
           </template>
           <el-menu-item-group>
-            <template slot="title">下单会员</template>
-            <el-menu-item index="/members/part">会员列表</el-menu-item>
-          </el-menu-item-group>
-          <el-menu-item-group>
-            <template slot="title">接单会员</template>
-            <el-menu-item index="/members/clerk">会员列表</el-menu-item>
+            <el-menu-item index="/members">会员列表</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
         <el-submenu index="2">

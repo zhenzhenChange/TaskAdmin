@@ -5,8 +5,7 @@ import Login from '../views/Login.vue'
 import Home from '../views/Home.vue'
 
 // 会员中心
-import Part from '../views/Member/Part.vue'
-import Clerk from '../views/Member/Clerk.vue'
+import MemberCenter from '../views/Member/MemberCenter.vue'
 
 // 订单管理
 import Record from '../views/Order/Record.vue'
@@ -35,16 +34,10 @@ const routes = [{
     name: 'home',
     component: Home,
     children: [{
-        path: '/members/part',
-        name: 'part',
-        component: Part
+        path: '/members',
+        name: 'MemberCenter',
+        component: MemberCenter
       },
-      {
-        path: '/members/clerk',
-        name: 'clerk',
-        component: Clerk
-      },
-
       {
         path: '/orders/record',
         name: 'record',

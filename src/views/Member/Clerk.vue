@@ -3,7 +3,6 @@
     <el-card class="card">
       <el-input size="medium" placeholder="输入关键字搜索" autofocus />
       <el-button @click="resetDateFilter">重置日期筛选</el-button>
-      <el-button @click="resetAllFilter">重置所有筛选</el-button>
     </el-card>
     <el-table ref="filterTable" :data="clerkData" stripe border>
       <el-table-column type="expand">
@@ -12,8 +11,14 @@
             <el-form-item label="账号">
               <span>{{ props.row.phone }}</span>
             </el-form-item>
+            <el-form-item label="备注">
+              <span>{{ props.row.user_remark }}</span>
+            </el-form-item>
             <el-form-item label="余额">
               <span>{{ props.row.my_balance }}</span>
+            </el-form-item>
+            <el-form-item label="推广码">
+              <span>{{ props.row.extension_code }}</span>
             </el-form-item>
             <el-form-item label="总提成">
               <span>{{ props.row.general_income }}</span>
@@ -50,9 +55,10 @@
       </el-table-column>
       <el-table-column
         prop="reg_datetime"
+        align="center"
         label="注册日期"
         sortable
-        width="180"
+        width="150"
         column-key="reg_datetime"
         :filters="timeData"
         :filter-method="filterHandler"
@@ -62,18 +68,23 @@
           <span class="ml-10">{{ scope.row.reg_datetime }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="phone" label="账号" width="180"></el-table-column>
-      <el-table-column prop="is_valide" label="账号状态"></el-table-column>
-      <el-table-column label="操作">
+      <el-table-column align="center" prop="phone" label="账号" width="140"></el-table-column>
+      <el-table-column align="center" prop="my_balance" label="余额" width="100"></el-table-column>
+      <el-table-column align="center" prop="general_income" label="总提成" width="100"></el-table-column>
+      <el-table-column align="center" prop="my_balance" label="总接单" width="100"></el-table-column>
+      <el-table-column align="center" prop="orderData.length" label="总成功" width="100"></el-table-column>
+      <el-table-column align="center" prop="extension_code" label="推广码" width="120"></el-table-column>
+      <el-table-column align="center" prop="is_valide" label="账号状态" width="100"></el-table-column>
+      <el-table-column align="center" label="操作">
         <template slot-scope="scope">
           <el-button
-            size="mini"
+            size="medium"
             icon="el-icon-edit"
             type="primary"
             @click="openEditPwd(scope.row.phone)"
           >修改密码</el-button>
           <el-button
-            size="mini"
+            size="medium"
             icon="el-icon-warning"
             type="danger"
             @click="openBan(scope.row.phone)"
@@ -94,9 +105,10 @@ export default {
           pwd: "18172641474",
           my_balance: 78.04,
           general_income: 100.5,
-          reg_datetime: "2019-12-04",
+          reg_datetime: "2019-12-01",
+          user_remark: "备注",
           // 提成时间
-          extension_code: "ABCDEF",
+          extension_code: "aaaaa",
           is_valide: 1,
           orderData: [
             {
@@ -107,7 +119,7 @@ export default {
           ],
           sonOrderData: [
             {
-              my_superior: "ABCDEF",
+              my_superior: "bbbbb",
               extension_code: "HHHHHH",
               order_id: 45641523498631,
               order_release_time: "2017-08-08",
@@ -137,34 +149,26 @@ export default {
     resetDateFilter() {
       this.$refs.filterTable.clearFilter("reg_datetime");
     },
-    resetAllFilter() {
-      this.$refs.filterTable.clearFilter();
-    },
     filterHandler(value, row, column) {
       const property = column["property"];
       return row[property] === value;
     },
     openEditPwd(phone) {
       this.$prompt("请输入新密码", "提示", {
-        confirmButtonText: "确定",
+        confirmButtonText: "提交",
         cancelButtonText: "取消",
         type: "info",
         inputType: "password"
       })
-        .then(() => {
+        .then(({ value }) => {
           // this.$http.post(`/api/admin/give/changePwd/${phone}`);
           this.$message({
             type: "success",
-            message: `${phone} 密码修改成功！`
-          });
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消操作~",
+            message: `${phone + value}  密码修改成功！`,
             offset: 10
           });
-        });
+        })
+        .catch(() => {});
     },
     openBan(phone) {
       this.$confirm("确定要禁止该账号登录吗？", "警告", {
@@ -176,15 +180,11 @@ export default {
           // this.$http.post(`/api/admin/disableAccount/${phone}`);
           this.$message({
             type: "success",
-            message: `操作成功!${phone}`
+            message: `禁止成功!${phone}`,
+            offset: 10
           });
         })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消操作~"
-          });
-        });
+        .catch(() => {});
     }
   }
 };
