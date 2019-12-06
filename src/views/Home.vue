@@ -36,7 +36,7 @@
           <el-menu-item-group>
             <template slot="title">财务管理</template>
             <el-menu-item index="/financial/capital">资金流水</el-menu-item>
-            <el-menu-item index="/financial/customer">人工通道</el-menu-item>
+            <el-menu-item index="/financial/customer">人工充值</el-menu-item>
             <el-menu-item index="/financial/withdrawal">提现处理</el-menu-item>
           </el-menu-item-group>
           <el-menu-item-group>

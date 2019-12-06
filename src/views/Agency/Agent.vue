@@ -12,6 +12,12 @@
             <el-form-item label="账号">
               <span>{{ props.row.phone }}</span>
             </el-form-item>
+            <el-form-item label="备注">
+              <span>{{ props.row.user_remark }}</span>
+            </el-form-item>
+            <el-form-item label="推广码">
+              <span>{{ props.row.extension_code }}</span>
+            </el-form-item>
             <el-form-item label="余额">
               <span>{{ props.row.my_balance }}</span>
             </el-form-item>

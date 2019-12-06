@@ -1,7 +1,6 @@
 <template>
   <div>
-    <el-card class="part-card">
-      <div>提现处理</div>
+    <el-card class="card">
       <el-button @click="resetDateFilter">重置日期筛选</el-button>
       <el-button @click="resetAllFilter">重置所有筛选</el-button>
     </el-card>
@@ -26,6 +25,12 @@
       <el-table-column prop="wb_state" label="交易状态"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
+          <el-button
+            size="mini"
+            icon="el-icon-thumb"
+            type="primary"
+            @click="openBan(scope.row.phone)"
+          >通过</el-button>
           <el-button
             size="mini"
             icon="el-icon-warning"
@@ -105,15 +110,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.part-card {
-  margin-bottom: 10px;
-  display: flex;
-  .el-input {
-    width: 300px;
-    margin-right: 30px;
-  }
-}
-
 .part-table-expand {
   font-size: 0;
   label {
