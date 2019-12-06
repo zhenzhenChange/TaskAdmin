@@ -4,10 +4,10 @@
       <el-menu router :default-active="$route.path" unique-opened>
         <el-submenu index="1">
           <template slot="title">
-            <i class="el-icon-user"></i>会员中心
+            <i class="el-icon-user"></i>会员管理
           </template>
           <el-menu-item-group>
-            <el-menu-item index="/members">会员列表</el-menu-item>
+            <el-menu-item index="/members">会员中心</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
         <el-submenu index="2">
@@ -15,9 +15,7 @@
             <i class="el-icon-shopping-bag-1"></i>订单管理
           </template>
           <el-menu-item-group>
-            <template slot="title">微信订单管理</template>
-            <el-menu-item index="/orders/record">订单记录</el-menu-item>
-            <el-menu-item index="/orders/appeal">申诉管理</el-menu-item>
+            <el-menu-item index="/orders">订单中心</el-menu-item>
           </el-menu-item-group>
           <el-menu-item-group class="solot">
             <template slot="title">仪表盘</template>
@@ -30,17 +28,14 @@
           </template>
           <el-menu-item-group>
             <template slot="title">财务管理</template>
-            <el-menu-item index="/financial/capital">资金流水</el-menu-item>
-            <el-menu-item index="/financial/customer">人工充值</el-menu-item>
-            <el-menu-item index="/financial/withdrawal">提现处理</el-menu-item>
+            <el-menu-item index="/financial">流水中心</el-menu-item>
           </el-menu-item-group>
           <el-menu-item-group>
             <template slot="title">总代管理</template>
-            <el-menu-item index="/agency/agent">总代中心</el-menu-item>
-            <el-menu-item index="/agency/create">添加总代</el-menu-item>
+            <el-menu-item index="/agency">总代中心</el-menu-item>
           </el-menu-item-group>
           <el-menu-item-group>
-            <template slot="title">系统设置</template>
+            <template slot="title">前端设置</template>
             <el-menu-item index="/settings/part">下单端设置</el-menu-item>
             <el-menu-item index="/settings/clerk">接单端设置</el-menu-item>
           </el-menu-item-group>

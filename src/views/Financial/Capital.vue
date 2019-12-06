@@ -20,12 +20,20 @@
           <span class="ml-10">{{ scope.row.wb_datetime }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="wb_uid" label="交易账号" width="180"></el-table-column>
-      <el-table-column prop="wb_type" label="交易类型" width="180"></el-table-column>
-      <el-table-column prop="wb_fee" label="交易费用" width="180"></el-table-column>
+      <el-table-column prop="wb_uid" label="交易账号" width="140"></el-table-column>
+      <el-table-column prop="wb_uid" label="支付宝账号" width="140"></el-table-column>
+      <el-table-column prop="wb_uid" label="支付宝姓名" width="140"></el-table-column>
+      <el-table-column prop="wb_type" label="交易类型" width="140"></el-table-column>
+      <el-table-column prop="wb_fee" label="交易费用" width="140"></el-table-column>
       <el-table-column prop="wb_state" label="交易状态"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
+          <el-button
+            size="mini"
+            icon="el-icon-edit"
+            type="primary"
+            @click="openBan(scope.row.phone)"
+          >修改支付宝账号</el-button>
           <el-button
             size="mini"
             icon="el-icon-warning"

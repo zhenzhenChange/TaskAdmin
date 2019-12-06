@@ -14,28 +14,13 @@
             <el-form-item label="备注">
               <span>{{ props.row.user_remark }}</span>
             </el-form-item>
-            <el-form-item label="总充值">
-              <span>{{ props.row.wb_fee }}</span>
-            </el-form-item>
             <el-form-item label="当天充值">
               <span>{{ props.row.wb_fee }}</span>
-            </el-form-item>
-            <el-form-item label="总下订单">
-              <span>{{ props.row.orderData.length }}</span>
-            </el-form-item>
-            <el-form-item label="总成功订单">
-              <span>{{ props.row.orderData.length }}</span>
             </el-form-item>
             <el-form-item label="当天下订单">
               <span>{{ props.row.orderData.length }}</span>
             </el-form-item>
             <el-form-item label="当天成功订单">
-              <span>{{ props.row.orderData.length }}</span>
-            </el-form-item>
-            <el-form-item label="余额">
-              <span>{{ props.row.orderData.length }}</span>
-            </el-form-item>
-            <el-form-item label="账号状态">
               <span>{{ props.row.orderData.length }}</span>
             </el-form-item>
           </el-form>
@@ -59,8 +44,11 @@
       <el-table-column align="center" prop="phone" label="账号" width="140"></el-table-column>
       <el-table-column align="center" prop="my_balance" label="余额" width="100"></el-table-column>
       <el-table-column align="center" prop="wb_fee" label="总充值" width="100"></el-table-column>
-      <el-table-column align="center" prop="my_balance" label="总下订单" width="100"></el-table-column>
-      <el-table-column align="center" prop="my_balance" label="总成功订单" width="100"></el-table-column>
+      <el-table-column align="center" prop="orderData.length" label="总下订单" width="100"></el-table-column>
+      <el-table-column align="center" label="总成功订单" width="100">
+        <!-- <template slot-scope="scope">{{scope.row.orderSucc}}</template> -->
+        <template slot-scope="scope">{{scope.row.orderData.map(item=>item.order_state).toString()}}</template>
+      </el-table-column>
       <el-table-column align="center" prop="is_valide" label="账号状态" width="100"></el-table-column>
       <el-table-column align="center" label="操作">
         <template slot-scope="scope">
@@ -104,20 +92,19 @@ export default {
     return {
       partData: [
         {
-          phone: 18278459466,
-          pwd: "18278459466",
-          my_balance: 78.04,
-          wb_fee: 1304.5,
-          user_remark: "beizhu",
-          wb_datetime: "2019-12-04",
-          reg_datetime: "2019-12-04",
-          is_valide: 1,
+          phone: "账号",
+          pwd: "密码",
+          my_balance: "余额",
+          wb_fee: "总充值",
+          user_remark: "备注",
+          wb_datetime: "充值日期",
+          reg_datetime: "注册日期",
+          is_valide: "账号是否可用",
           orderData: [
             {
-              order_id: 45641523498631,
-              order_price: 100,
-              order_release_time: "2017-08-08",
-              order_state: 1
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
             }
           ]
         }
@@ -149,7 +136,7 @@ export default {
       });
     },
     getPartData() {
-      // this.$http.get(`/api/admin/give/get/${my_stratum}`);
+      // this.$http.get(`/api/admin/give/get/`);
     },
     resetDateFilter() {
       this.$refs.filterTable.clearFilter("reg_datetime");

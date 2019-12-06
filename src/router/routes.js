@@ -7,19 +7,15 @@ import Home from '../views/Home.vue'
 // 会员中心
 import MemberCenter from '../views/Member/MemberCenter.vue'
 
-// 订单管理
-import Record from '../views/Order/Record.vue'
-import Appeal from '../views/Order/Appeal.vue'
+// 订单中心
+import OrderCenter from '../views/Order/OrderCenter.vue'
 
 import Data from '../views/Chart/Data.vue'
 
 // 系统设置
-import Capital from '../views/Financial/Capital.vue'
-import Customer from '../views/Financial/Customer.vue'
-import Withdrawal from '../views/Financial/Withdrawal.vue'
+import FinancialCenter from '../views/Financial/FinancialCenter.vue'
 
-import Agent from '../views/Agency/Agent.vue'
-import Create from '../views/Agency/Create.vue'
+import AgencyCenter from '../views/Agency/AgencyCenter.vue'
 
 import SetPart from '../views/Set/Part.vue'
 import SetClerk from '../views/Set/Clerk.vue'
@@ -39,49 +35,25 @@ const routes = [{
         component: MemberCenter
       },
       {
-        path: '/orders/record',
-        name: 'record',
-        component: Record
+        path: '/orders',
+        name: 'OrderCenter',
+        component: OrderCenter
       },
-      {
-        path: '/orders/appeal',
-        name: 'appeal',
-        component: Appeal
-      },
-
       {
         path: '/charts/data',
         name: 'data',
         component: Data
       },
-
       {
-        path: '/financial/capital',
-        name: 'capital',
-        component: Capital
+        path: '/financial',
+        name: 'FinancialCenter',
+        component: FinancialCenter
       },
       {
-        path: '/financial/customer',
-        name: 'customer',
-        component: Customer
+        path: '/agency',
+        name: 'AgencyCenter',
+        component: AgencyCenter
       },
-      {
-        path: '/financial/withdrawal',
-        name: 'withdrawal',
-        component: Withdrawal
-      },
-
-      {
-        path: '/agency/agent',
-        name: 'agent',
-        component: Agent
-      },
-      {
-        path: '/agency/create',
-        name: 'create',
-        component: Create
-      },
-
       {
         path: '/settings/part',
         name: 'setPart',

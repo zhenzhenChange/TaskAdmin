@@ -15,17 +15,11 @@
             <el-form-item label="有效时间">
               <span>{{ props.row.order_effectPeriod }}</span>
             </el-form-item>
-            <el-form-item label="二维码">
-              <span>{{ props.row.order_qrcode }}</span>
+            <el-form-item label="订单类型">
+              <span>{{ props.row.order_type }}</span>
             </el-form-item>
             <el-form-item label="订单备注">
               <span>{{ props.row.order_remark }}</span>
-            </el-form-item>
-            <el-form-item label="订单是否有效">
-              <span>{{ props.row.order_isValide }}</span>
-            </el-form-item>
-            <el-form-item label="上传成功确认图">
-              <span>{{ props.row.order_succPic }}</span>
             </el-form-item>
           </el-form>
         </template>
@@ -45,11 +39,12 @@
         </template>
       </el-table-column>
       <el-table-column label="发布账号" prop="uid_give"></el-table-column>
+      <el-table-column label="订单编号" prop="order_id"></el-table-column>
       <el-table-column label="订单标题" prop="order_title"></el-table-column>
       <el-table-column label="订单价格" prop="order_price"></el-table-column>
       <el-table-column label="接单账号" prop="uid_recive"></el-table-column>
+      <el-table-column label="接单时间" prop="uid_recive"></el-table-column>
       <el-table-column label="结单时间" prop="order_end_datetime"></el-table-column>
-      <el-table-column label="订单类型" prop="order_type"></el-table-column>
       <el-table-column
         prop="order_state"
         label="订单状态"
@@ -62,6 +57,7 @@
           <el-tag hit :type="stateType(scope.row.order_state)">{{scope.row.order_state}}</el-tag>
         </template>
       </el-table-column>
+      <el-table-column label="平台利润" prop="order_end_datetime"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button
@@ -80,23 +76,25 @@
 export default {
   data() {
     return {
+      /**
+       * /api/admin/man/get
+       */
       recordData: [
         {
-          order_id: 45641523498631,
+          order_id: "订单编号",
           uid_give: "放单用户",
           uid_recive: "结单用户",
+          action_resState: "接单状态",
+          action_datetime: "接单时间",
+          order_end_datetime: "结单时间",
           order_title: "订单标题",
-          order_release_time: "发布日期2",
+          order_release_time: "发布日期",
           order_state: "订单状态",
           order_type: "订单类型",
           order_price: "订单价格",
           order_remark: "订单备注",
           order_effectPeriod: "有效时间",
-          // order_effectPeriod: "接单时间",
-          order_end_datetime: "结单时间",
-          order_isValide: "订单是否有效",
-          order_qrcode: "二维码地址",
-          order_succPic: "上传确认成功图"
+          profits: "平台利润"
         }
       ],
       timeData: [{ text: "", value: "" }],

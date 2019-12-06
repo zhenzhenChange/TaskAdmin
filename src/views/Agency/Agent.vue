@@ -4,6 +4,7 @@
       <el-input size="medium" placeholder="输入关键字搜索" autofocus />
       <el-button @click="resetDateFilter">重置日期筛选</el-button>
       <el-button @click="resetAllFilter">重置所有筛选</el-button>
+      <el-button @click="resetAllFilter">总代提成默认设置</el-button>
     </el-card>
     <el-table ref="filterTable" :data="AgentData" stripe border>
       <el-table-column type="expand">
@@ -12,26 +13,8 @@
             <el-form-item label="账号">
               <span>{{ props.row.phone }}</span>
             </el-form-item>
-            <el-form-item label="备注">
-              <span>{{ props.row.user_remark }}</span>
-            </el-form-item>
-            <el-form-item label="推广码">
-              <span>{{ props.row.extension_code }}</span>
-            </el-form-item>
-            <el-form-item label="余额">
-              <span>{{ props.row.my_balance }}</span>
-            </el-form-item>
-            <el-form-item label="总提成">
-              <span>{{ props.row.general_income }}</span>
-            </el-form-item>
             <el-form-item label="当天提成">
               <span>{{ props.row.general_income }}</span>
-            </el-form-item>
-            <el-form-item label="总接单">
-              <span>{{ props.row.orderData.length }}</span>
-            </el-form-item>
-            <el-form-item label="总成功订单">
-              <span>{{ props.row.orderData.length }}</span>
             </el-form-item>
             <el-form-item label="当天接单">
               <span>{{ props.row.orderData.length }}</span>
@@ -58,7 +41,7 @@
         prop="reg_datetime"
         label="注册日期"
         sortable
-        width="180"
+        width="120"
         column-key="reg_datetime"
         :filters="filtersData"
         :filter-method="filterHandler"
@@ -68,8 +51,14 @@
           <span class="ml-10">{{ scope.row.reg_datetime }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="phone" label="账号" width="180"></el-table-column>
-      <el-table-column prop="is_valide" label="账号状态"></el-table-column>
+      <el-table-column prop="phone" label="账号" width="120"></el-table-column>
+      <el-table-column prop="extension_code" label="推广码" width="120"></el-table-column>
+      <el-table-column prop="phone" label="余额" width="120"></el-table-column>
+      <el-table-column prop="phone" label="备注" width="120"></el-table-column>
+      <el-table-column prop="phone" label="总提成" width="120"></el-table-column>
+      <el-table-column prop="phone" label="总领取订单" width="120"></el-table-column>
+      <el-table-column prop="phone" label="总成功订单" width="120"></el-table-column>
+      <el-table-column prop="is_valide" label="账号状态" width="120"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button
@@ -78,6 +67,12 @@
             type="primary"
             @click="openEditPwd(scope.row.phone)"
           >修改密码</el-button>
+          <el-button
+            size="mini"
+            icon="el-icon-edit"
+            type="primary"
+            @click="openEditPwd(scope.row.phone)"
+          >修改总代提成</el-button>
           <el-button
             size="mini"
             icon="el-icon-warning"

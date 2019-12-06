@@ -1,6 +1,12 @@
 <template>
-  <el-form label-width="80px" :model="customerData">
-    <el-form-item label="充值账户">
+  <el-form label-width="120px" :model="customerData">
+    <el-form-item label="充值账号">
+      <el-input v-model="customerData.phone"></el-input>
+    </el-form-item>
+    <el-form-item label="支付宝账号">
+      <el-input v-model="customerData.phone"></el-input>
+    </el-form-item>
+    <el-form-item label="支付宝姓名">
       <el-input v-model="customerData.phone"></el-input>
     </el-form-item>
     <el-form-item label="交易金额">

@@ -33,6 +33,12 @@
           >通过</el-button>
           <el-button
             size="mini"
+            icon="el-icon-thumb"
+            type="primary"
+            @click="openBan(scope.row.phone)"
+          >驳回</el-button>
+          <el-button
+            size="mini"
             icon="el-icon-warning"
             type="danger"
             @click="openBan(scope.row.phone)"

@@ -2,7 +2,6 @@
   <div>
     <el-card class="card">
       <el-button @click="resetDateFilter">重置日期筛选</el-button>
-      <el-button @click="resetAllFilter">重置所有筛选</el-button>
     </el-card>
     <el-table ref="filterTable" :data="appealOrderData" stripe border>
       <el-table-column
@@ -19,10 +18,10 @@
           <span class="ml-10">{{ scope.row.order_release_time }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="失败时间" prop="order_end_datetime"></el-table-column>
+      <el-table-column label="结单时间" prop="order_end_datetime"></el-table-column>
       <el-table-column label="申诉时间" prop="order_end_datetime"></el-table-column>
       <el-table-column label="发布账号" prop="uid_give"></el-table-column>
-      <el-table-column label="订 单 号" prop="order_id"></el-table-column>
+      <el-table-column label="订单编号" prop="order_id"></el-table-column>
       <el-table-column label="订单价格" prop="order_price"></el-table-column>
       <el-table-column label="接单账号" prop="uid_recive"></el-table-column>
       <el-table-column label="申诉证据" prop="order_type"></el-table-column>
@@ -45,18 +44,23 @@
 export default {
   data() {
     return {
+      /**
+       * 仅查申诉的订单
+       * 参数：action_resState === 申诉
+       * /api/admin/man/get/${action_resState}
+       */
       appealOrderData: [
         {
-          order_id: 45641523498631,
+          order_id: "订单编号",
           uid_give: "发布账号",
           order_release_time: "发布日期",
           order_price: "订单价格",
           uid_recive: "接单账号",
           order_end_datetime: "失败时间",
-          order_state: "申诉",
+          order_state: "订单状态（申诉）",
           action_datetime: "申诉时间",
-          action_resState: "申诉状态"
-          // order_remark: "申诉证据",
+          action_resState: "申诉状态",
+          order_apply_proof: "申诉证据"
         }
       ],
       timeData: [{ text: "", value: "" }],
@@ -86,9 +90,6 @@ export default {
     },
     resetDateFilter() {
       this.$refs.filterTable.clearFilter("order_release_time");
-    },
-    resetAllFilter() {
-      this.$refs.filterTable.clearFilter();
     },
     filterHandler(value, row, column) {
       const property = column["property"];

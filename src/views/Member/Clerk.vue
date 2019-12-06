@@ -14,23 +14,8 @@
             <el-form-item label="备注">
               <span>{{ props.row.user_remark }}</span>
             </el-form-item>
-            <el-form-item label="余额">
-              <span>{{ props.row.my_balance }}</span>
-            </el-form-item>
-            <el-form-item label="推广码">
-              <span>{{ props.row.extension_code }}</span>
-            </el-form-item>
-            <el-form-item label="总提成">
-              <span>{{ props.row.general_income }}</span>
-            </el-form-item>
             <el-form-item label="当天提成">
               <span>{{ props.row.general_income }}</span>
-            </el-form-item>
-            <el-form-item label="总接单">
-              <span>{{ props.row.orderData.length }}</span>
-            </el-form-item>
-            <el-form-item label="总成功订单">
-              <span>{{ props.row.orderData.length }}</span>
             </el-form-item>
             <el-form-item label="当天接单">
               <span>{{ props.row.orderData.length }}</span>
@@ -99,31 +84,43 @@
 export default {
   data() {
     return {
+      /**
+       * /api/admin/recv/get/
+       */
       clerkData: [
         {
-          phone: 18172641474,
-          pwd: "18172641474",
-          my_balance: 78.04,
-          general_income: 100.5,
-          reg_datetime: "2019-12-01",
+          phone: "手机号",
+          pwd: "密码",
+          my_balance: "余额",
+          general_income: "总提成",
+          reg_datetime: "注册时间",
           user_remark: "备注",
-          // 提成时间
-          extension_code: "aaaaa",
-          is_valide: 1,
-          orderData: [
+          extension_code: "推广码",
+          is_valide: "账号是否可用",
+          incomeData: [
+            // 流水数据
             {
-              order_id: 45641523498631,
-              order_release_time: "2017-08-08",
-              order_state: 1
+              wb_id: "流水编号",
+              wb_uid: "流水账号",
+              wb_datetime: "流水时间"
+            }
+          ],
+          orderData: [
+            //自身订单数据
+            {
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
             }
           ],
           sonOrderData: [
+            //下级订单数据
             {
-              my_superior: "bbbbb",
-              extension_code: "HHHHHH",
-              order_id: 45641523498631,
-              order_release_time: "2017-08-08",
-              order_state: 1
+              my_superior: "上级推广码",
+              extension_code: "自身推广码",
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
             }
           ]
         }
@@ -144,7 +141,7 @@ export default {
       });
     },
     getClerkData() {
-      // this.$http.get(`/api/admin/recv/get/${my_stratum}`);
+      // this.$http.get(`/api/admin/recv/get/`);
     },
     resetDateFilter() {
       this.$refs.filterTable.clearFilter("reg_datetime");
