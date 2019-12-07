@@ -20,22 +20,22 @@
           <span class="ml-10">{{ scope.row.wb_datetime }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="wb_uid" label="交易账号" width="140"></el-table-column>
-      <el-table-column align="center" prop="Alipay_account" label="支付宝账号" width="140"></el-table-column>
-      <el-table-column align="center" prop="Alipay_name" label="支付宝姓名" width="140"></el-table-column>
-      <el-table-column align="center" prop="wb_type" label="交易类型" width="140"></el-table-column>
-      <el-table-column align="center" prop="wb_fee" label="交易费用" width="140"></el-table-column>
-      <el-table-column align="center" prop="wb_state" label="交易状态" width="140"></el-table-column>
-      <el-table-column align="center" label="操作">
+      <el-table-column align="center" prop="wb_uid" label="交易账号"></el-table-column>
+      <el-table-column align="center" prop="Alipay_account" label="支付宝账号"></el-table-column>
+      <el-table-column align="center" prop="Alipay_name" label="支付宝姓名"></el-table-column>
+      <el-table-column align="center" prop="wb_type" label="交易类型"></el-table-column>
+      <el-table-column align="center" prop="wb_fee" label="交易费用"></el-table-column>
+      <el-table-column align="center" prop="wb_state" label="交易状态"></el-table-column>
+      <el-table-column align="center" label="操作" width="450">
         <template slot-scope="scope">
           <el-button
-            size="medium"
+            size="mini"
             icon="el-icon-edit"
             type="primary"
             @click="openEditAlipayAccount(scope.row.wb_uid)"
           >修改支付宝账号</el-button>
           <el-button
-            size="medium"
+            size="mini"
             icon="el-icon-warning"
             type="danger"
             @click="openDeleteRecord(scope.row.wb_id)"

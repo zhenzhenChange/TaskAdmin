@@ -1,5 +1,5 @@
 <template>
-  <el-tabs :tab-position="'left'" class="vh-100">
+  <el-tabs :tab-position="'top'" class="vh-80">
     <el-tab-pane label="流水中心">
       <financial-capital></financial-capital>
     </el-tab-pane>

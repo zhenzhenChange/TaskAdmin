@@ -41,31 +41,31 @@
           <span class="ml-10">{{ scope.row.reg_datetime }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="phone" label="账号" width="140"></el-table-column>
-      <el-table-column align="center" prop="my_balance" label="余额" width="100"></el-table-column>
-      <el-table-column align="center" prop="wb_fee" label="总充值" width="100"></el-table-column>
-      <el-table-column align="center" prop="orderData.length" label="总下订单" width="100"></el-table-column>
-      <el-table-column align="center" label="总成功订单" width="100">
+      <el-table-column align="center" prop="phone" label="账号"></el-table-column>
+      <el-table-column align="center" prop="my_balance" label="余额"></el-table-column>
+      <el-table-column align="center" prop="wb_fee" label="总充值"></el-table-column>
+      <el-table-column align="center" prop="orderData.length" label="总下订单"></el-table-column>
+      <el-table-column align="center" label="总成功订单">
         <!-- <template slot-scope="scope">{{scope.row.orderSucc}}</template> -->
         <template slot-scope="scope">{{scope.row.orderData.map(item=>item.order_state).toString()}}</template>
       </el-table-column>
-      <el-table-column align="center" prop="is_valide" label="账号状态" width="100"></el-table-column>
-      <el-table-column align="center" label="操作">
+      <el-table-column align="center" prop="is_valide" label="账号状态"></el-table-column>
+      <el-table-column align="center" label="操作" width="450">
         <template slot-scope="scope">
           <el-button
-            size="medium"
+            size="mini"
             icon="el-icon-edit"
             type="primary"
             @click="openEditPrice(scope.row.phone)"
           >修改微信下单价格</el-button>
           <el-button
-            size="medium"
+            size="mini"
             icon="el-icon-edit"
             type="primary"
             @click="openEditPwd(scope.row.phone)"
           >修改密码</el-button>
           <el-button
-            size="medium"
+            size="mini"
             icon="el-icon-warning"
             type="danger"
             @click="openBan(scope.row.phone)"

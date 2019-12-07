@@ -1,10 +1,5 @@
 <template>
-  <el-form
-    label-width="120px"
-    :model="agencyData"
-    @submit.native.prevent="createAgency"
-    class="ml-50"
-  >
+  <el-form label-width="120px" :model="agencyData" @submit.native.prevent="createAgency">
     <el-row>
       <el-col :span="6">
         <el-form-item label="手机号码" required>

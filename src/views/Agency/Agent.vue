@@ -58,7 +58,7 @@
       <el-table-column align="center" prop="orderData.length" label="总领取订单"></el-table-column>
       <el-table-column align="center" prop="orderData.length" label="总成功订单"></el-table-column>
       <el-table-column align="center" prop="is_valide" label="账号状态"></el-table-column>
-      <el-table-column align="center" label="操作" width="400">
+      <el-table-column align="center" label="操作" width="450">
         <template slot-scope="scope">
           <el-button
             size="mini"

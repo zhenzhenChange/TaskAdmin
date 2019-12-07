@@ -1,5 +1,5 @@
 <template>
-  <el-tabs :tab-position="'left'" class="vh-100">
+  <el-tabs :tab-position="'top'" class="vh-80">
     <el-tab-pane label="接单会员中心">
       <member-clerk></member-clerk>
     </el-tab-pane>

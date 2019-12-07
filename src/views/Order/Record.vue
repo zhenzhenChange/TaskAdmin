@@ -39,13 +39,13 @@
           <span class="ml-10">{{ scope.row.order_release_time }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" width="130" label="发布账号" prop="uid_give"></el-table-column>
-      <el-table-column align="center" width="130" label="订单编号" prop="order_id"></el-table-column>
-      <el-table-column align="center" width="150" label="订单标题" prop="order_title"></el-table-column>
-      <el-table-column align="center" width="130" label="订单价格" prop="order_price"></el-table-column>
-      <el-table-column align="center" width="130" label="接单账号" prop="uid_recive"></el-table-column>
-      <el-table-column align="center" width="130" label="接单时间" prop="uid_recive"></el-table-column>
-      <el-table-column align="center" width="130" label="结单时间" prop="order_end_datetime"></el-table-column>
+      <el-table-column align="center" label="发布账号" prop="uid_give"></el-table-column>
+      <el-table-column align="center" label="订单编号" prop="order_id"></el-table-column>
+      <el-table-column align="center" label="订单标题" prop="order_title"></el-table-column>
+      <el-table-column align="center" label="订单价格" prop="order_price"></el-table-column>
+      <el-table-column align="center" label="接单账号" prop="uid_recive"></el-table-column>
+      <el-table-column align="center" label="接单时间" prop="uid_recive"></el-table-column>
+      <el-table-column align="center" label="结单时间" prop="order_end_datetime"></el-table-column>
       <el-table-column
         prop="order_state"
         label="订单状态"
@@ -60,7 +60,7 @@
         </template>
       </el-table-column>
       <el-table-column align="center" label="平台利润" prop="order_end_datetime"></el-table-column>
-      <el-table-column align="center" label="操作">
+      <el-table-column align="center" label="操作" width="250">
         <template slot-scope="scope">
           <el-button
             size="mini"

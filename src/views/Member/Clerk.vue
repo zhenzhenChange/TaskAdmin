@@ -53,23 +53,23 @@
           <span class="ml-10">{{ scope.row.reg_datetime }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="phone" label="账号" width="140"></el-table-column>
-      <el-table-column align="center" prop="my_balance" label="余额" width="100"></el-table-column>
-      <el-table-column align="center" prop="general_income" label="总提成" width="100"></el-table-column>
-      <el-table-column align="center" prop="my_balance" label="总接单" width="100"></el-table-column>
-      <el-table-column align="center" prop="orderData.length" label="总成功" width="100"></el-table-column>
-      <el-table-column align="center" prop="extension_code" label="推广码" width="120"></el-table-column>
-      <el-table-column align="center" prop="is_valide" label="账号状态" width="100"></el-table-column>
-      <el-table-column align="center" label="操作">
+      <el-table-column align="center" prop="phone" label="账号"></el-table-column>
+      <el-table-column align="center" prop="my_balance" label="余额"></el-table-column>
+      <el-table-column align="center" prop="general_income" label="总提成"></el-table-column>
+      <el-table-column align="center" prop="my_balance" label="总接单"></el-table-column>
+      <el-table-column align="center" prop="orderData.length" label="总成功"></el-table-column>
+      <el-table-column align="center" prop="extension_code" label="推广码"></el-table-column>
+      <el-table-column align="center" prop="is_valide" label="账号状态"></el-table-column>
+      <el-table-column align="center" label="操作" width="450">
         <template slot-scope="scope">
           <el-button
-            size="medium"
+            size="mini"
             icon="el-icon-edit"
             type="primary"
             @click="openEditPwd(scope.row.phone)"
           >修改密码</el-button>
           <el-button
-            size="medium"
+            size="mini"
             icon="el-icon-warning"
             type="danger"
             @click="openBan(scope.row.phone)"

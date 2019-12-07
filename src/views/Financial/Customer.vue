@@ -1,10 +1,5 @@
 <template>
-  <el-form
-    label-width="120px"
-    :model="customerData"
-    @submit.native.prevent="postCustomerData"
-    class="ml-50"
-  >
+  <el-form label-width="120px" :model="customerData" @submit.native.prevent="postCustomerData">
     <el-row>
       <el-col :span="6">
         <el-form-item label="充值账号" required>

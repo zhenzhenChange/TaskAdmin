@@ -27,19 +27,19 @@
       <el-table-column align="center" label="操作">
         <template slot-scope="scope">
           <el-button
-            size="medium"
+            size="mini"
             icon="el-icon-success"
             type="primary"
             @click="openAgreed(scope.row.wb_id)"
           >同意申请</el-button>
           <el-button
-            size="medium"
+            size="mini"
             icon="el-icon-error"
             type="danger"
             @click="openRejected(scope.row.wb_id)"
           >驳回申请</el-button>
           <el-button
-            size="medium"
+            size="mini"
             icon="el-icon-warning"
             type="danger"
             @click="openDeleteRecord(scope.row.wb_id)"

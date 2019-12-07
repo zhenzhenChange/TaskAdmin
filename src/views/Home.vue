@@ -18,7 +18,6 @@
             <el-menu-item index="/orders">订单中心</el-menu-item>
           </el-menu-item-group>
           <el-menu-item-group class="solot">
-            <template slot="title">仪表盘</template>
             <el-menu-item index="/charts/data">数据总控</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
@@ -27,15 +26,12 @@
             <i class="el-icon-setting"></i>系统设置
           </template>
           <el-menu-item-group>
-            <template slot="title">财务管理</template>
             <el-menu-item index="/financial">流水中心</el-menu-item>
           </el-menu-item-group>
           <el-menu-item-group>
-            <template slot="title">总代管理</template>
             <el-menu-item index="/agency">总代中心</el-menu-item>
           </el-menu-item-group>
           <el-menu-item-group>
-            <template slot="title">前端设置</template>
             <el-menu-item index="/settings/part">下单端设置</el-menu-item>
             <el-menu-item index="/settings/clerk">接单端设置</el-menu-item>
           </el-menu-item-group>
@@ -76,6 +72,10 @@ export default {
   color: #333;
   line-height: 60px;
   text-align: right;
+  font-size: 12px;
+}
+.el-menu-item {
+  color: gray;
   font-size: 12px;
 }
 </style>

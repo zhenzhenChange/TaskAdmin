@@ -19,18 +19,18 @@
           <span class="ml-10">{{ scope.row.order_release_time }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="结单时间" width="140" prop="order_end_datetime"></el-table-column>
-      <el-table-column align="center" label="申诉时间" width="140" prop="action_datetime"></el-table-column>
-      <el-table-column align="center" label="发布账号" width="140" prop="uid_give"></el-table-column>
-      <el-table-column align="center" label="订单编号" width="140" prop="order_id"></el-table-column>
-      <el-table-column align="center" label="订单价格" width="140" prop="order_price"></el-table-column>
-      <el-table-column align="center" label="接单账号" width="140" prop="uid_recive"></el-table-column>
-      <el-table-column align="center" label="申诉证据" width="180" prop="order_apply_proof"></el-table-column>
-      <el-table-column align="center" label="申诉状态" width="140" prop="action_resState"></el-table-column>
-      <el-table-column align="center" label="操作">
+      <el-table-column align="center" label="结单时间" prop="order_end_datetime"></el-table-column>
+      <el-table-column align="center" label="申诉时间" prop="action_datetime"></el-table-column>
+      <el-table-column align="center" label="发布账号" prop="uid_give"></el-table-column>
+      <el-table-column align="center" label="订单编号" prop="order_id"></el-table-column>
+      <el-table-column align="center" label="订单价格" prop="order_price"></el-table-column>
+      <el-table-column align="center" label="接单账号" prop="uid_recive"></el-table-column>
+      <el-table-column align="center" label="申诉证据" prop="order_apply_proof"></el-table-column>
+      <el-table-column align="center" label="申诉状态" prop="action_resState"></el-table-column>
+      <el-table-column align="center" label="操作" width="250">
         <template slot-scope="scope">
           <el-button
-            size="medium"
+            size="mini"
             icon="el-icon-warning"
             type="danger"
             @click="deleteRecord(scope.row.order_id)"

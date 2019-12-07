@@ -1,5 +1,5 @@
 <template>
-  <el-tabs :tab-position="'left'" class="vh-100">
+  <el-tabs :tab-position="'top'" class="vh-80">
     <el-tab-pane label="订单中心">
       <order-record></order-record>
     </el-tab-pane>

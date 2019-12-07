@@ -1,5 +1,5 @@
 <template>
-  <el-tabs :tab-position="'left'" class="vh-100">
+  <el-tabs :tab-position="'left'" class="vh-80">
     <el-tab-pane label="下单会员初始参数设置">
       <el-form
         ref="form"
