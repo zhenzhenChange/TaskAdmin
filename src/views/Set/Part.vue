@@ -1,19 +1,41 @@
 <template>
   <el-tabs :tab-position="'left'" class="vh-100">
     <el-tab-pane label="下单会员初始参数设置">
-      <el-form ref="form" :model="form" label-width="140px">
-        <el-form-item label="会员注册初始价格">
-          <el-input v-model="form.name"></el-input>
-        </el-form-item>
-        <el-form-item label="邀请奖励初始设置">
-          <el-input v-model="form.name"></el-input>
-        </el-form-item>
-        <el-form-item label="邀请码是否为必填项">
-          <el-switch v-model="form.delivery"></el-switch>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="onSubmit">保存</el-button>
-        </el-form-item>
+      <el-form
+        ref="form"
+        :model="form"
+        label-width="140px"
+        class="ml-50"
+        @submit.native.prevent="partSetting"
+      >
+        <el-row>
+          <el-col :span="6">
+            <el-form-item label="会员注册初始价格">
+              <el-input v-model="form.su_vipInitPrice"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="6">
+            <el-form-item label="邀请奖励初始设置">
+              <el-input v-model="form.su_extensionAward"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="1">
+            <el-form-item label="邀请码是否为必填项">
+              <el-switch v-model="form.su_isExtensionCodeReq"></el-switch>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="6">
+            <el-form-item>
+              <el-button type="primary" native-type="submit">保存</el-button>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
     </el-tab-pane>
     <el-tab-pane label="批量调节价格百分比">
@@ -49,52 +71,16 @@ export default {
           date: "2016-05-03",
           name: "王小虎",
           address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-08",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-06",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-07",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
         }
       ],
       multipleSelection: [],
       form: {
-        name: "",
-        region: "",
-        date1: "",
-        date2: "",
-        delivery: false,
-        type: [],
-        resource: "",
-        desc: ""
+        su_vipInitPrice: "",
+        su_extensionAward: "",
+        su_isExtensionCodeReq: ""
       }
     };
   },
-
   methods: {
     toggleSelection(rows) {
       if (rows) {
@@ -108,8 +94,8 @@ export default {
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
-    onSubmit() {
-      console.log("submit!");
+    partSetting() {
+      // console.log("submit!");
     }
   }
 };

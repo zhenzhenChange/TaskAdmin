@@ -7,8 +7,9 @@
       <el-table-column
         prop="order_release_time"
         label="发布日期"
+        align="center"
         sortable
-        width="180"
+        width="140"
         column-key="order_release_time"
         :filters="timeData"
         :filter-method="filterHandler"
@@ -18,18 +19,18 @@
           <span class="ml-10">{{ scope.row.order_release_time }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="结单时间" prop="order_end_datetime"></el-table-column>
-      <el-table-column label="申诉时间" prop="order_end_datetime"></el-table-column>
-      <el-table-column label="发布账号" prop="uid_give"></el-table-column>
-      <el-table-column label="订单编号" prop="order_id"></el-table-column>
-      <el-table-column label="订单价格" prop="order_price"></el-table-column>
-      <el-table-column label="接单账号" prop="uid_recive"></el-table-column>
-      <el-table-column label="申诉证据" prop="order_type"></el-table-column>
-      <el-table-column label="申诉状态" prop="action_resState"></el-table-column>
-      <el-table-column label="操作">
+      <el-table-column align="center" label="结单时间" width="140" prop="order_end_datetime"></el-table-column>
+      <el-table-column align="center" label="申诉时间" width="140" prop="action_datetime"></el-table-column>
+      <el-table-column align="center" label="发布账号" width="140" prop="uid_give"></el-table-column>
+      <el-table-column align="center" label="订单编号" width="140" prop="order_id"></el-table-column>
+      <el-table-column align="center" label="订单价格" width="140" prop="order_price"></el-table-column>
+      <el-table-column align="center" label="接单账号" width="140" prop="uid_recive"></el-table-column>
+      <el-table-column align="center" label="申诉证据" width="180" prop="order_apply_proof"></el-table-column>
+      <el-table-column align="center" label="申诉状态" width="140" prop="action_resState"></el-table-column>
+      <el-table-column align="center" label="操作">
         <template slot-scope="scope">
           <el-button
-            size="mini"
+            size="medium"
             icon="el-icon-warning"
             type="danger"
             @click="deleteRecord(scope.row.order_id)"
@@ -44,11 +45,6 @@
 export default {
   data() {
     return {
-      /**
-       * 仅查申诉的订单
-       * 参数：action_resState === 申诉
-       * /api/admin/man/get/${action_resState}
-       */
       appealOrderData: [
         {
           order_id: "订单编号",

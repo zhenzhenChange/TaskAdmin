@@ -1,15 +1,14 @@
 <template>
   <div>
-    <el-card class="clerk-card">
+    <el-card class="card">
       <el-input size="medium" placeholder="输入关键字搜索" autofocus />
       <el-button @click="resetDateFilter">重置日期筛选</el-button>
-      <el-button @click="resetAllFilter">重置所有筛选</el-button>
-      <el-button @click="resetAllFilter">总代提成默认设置</el-button>
+      <el-button @click="openEditDefaultIncome" icon="el-icon-edit" type="primary">总代提成默认设置</el-button>
     </el-card>
     <el-table ref="filterTable" :data="AgentData" stripe border>
       <el-table-column type="expand">
         <template slot-scope="props">
-          <el-form label-position="left" inline class="clerk-table-expand">
+          <el-form label-position="left" inline class="agent-table-expand">
             <el-form-item label="账号">
               <span>{{ props.row.phone }}</span>
             </el-form-item>
@@ -41,9 +40,9 @@
         prop="reg_datetime"
         label="注册日期"
         sortable
-        width="120"
+        align="center"
         column-key="reg_datetime"
-        :filters="filtersData"
+        :filters="timeData"
         :filter-method="filterHandler"
       >
         <template slot-scope="scope">
@@ -51,15 +50,15 @@
           <span class="ml-10">{{ scope.row.reg_datetime }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="phone" label="账号" width="120"></el-table-column>
-      <el-table-column prop="extension_code" label="推广码" width="120"></el-table-column>
-      <el-table-column prop="phone" label="余额" width="120"></el-table-column>
-      <el-table-column prop="phone" label="备注" width="120"></el-table-column>
-      <el-table-column prop="phone" label="总提成" width="120"></el-table-column>
-      <el-table-column prop="phone" label="总领取订单" width="120"></el-table-column>
-      <el-table-column prop="phone" label="总成功订单" width="120"></el-table-column>
-      <el-table-column prop="is_valide" label="账号状态" width="120"></el-table-column>
-      <el-table-column label="操作">
+      <el-table-column align="center" prop="phone" label="账号"></el-table-column>
+      <el-table-column align="center" prop="extension_code" label="推广码"></el-table-column>
+      <el-table-column align="center" prop="my_balance" label="余额"></el-table-column>
+      <el-table-column align="center" prop="user_remark" label="备注"></el-table-column>
+      <el-table-column align="center" prop="general_income" label="总提成"></el-table-column>
+      <el-table-column align="center" prop="orderData.length" label="总领取订单"></el-table-column>
+      <el-table-column align="center" prop="orderData.length" label="总成功订单"></el-table-column>
+      <el-table-column align="center" prop="is_valide" label="账号状态"></el-table-column>
+      <el-table-column align="center" label="操作" width="400">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -71,7 +70,7 @@
             size="mini"
             icon="el-icon-edit"
             type="primary"
-            @click="openEditPwd(scope.row.phone)"
+            @click="openEditIncome(scope.row.phone)"
           >修改总代提成</el-button>
           <el-button
             size="mini"
@@ -97,7 +96,7 @@ export default {
           user_remark: "备注",
           general_income: 100.5,
           reg_datetime: "2019-12-04",
-          // 提成时间
+          wb_datetime: "提成时间",
           extension_code: "ABCDEF",
           is_valide: 1,
           orderData: [
@@ -118,7 +117,7 @@ export default {
           ]
         }
       ],
-      filtersData: [{ text: "", value: "" }]
+      timeData: [{ text: "", value: "" }]
     };
   },
   created() {
@@ -126,7 +125,7 @@ export default {
   },
   methods: {
     getFiltersData() {
-      this.filtersData = this.AgentData.map(item => {
+      this.timeData = this.AgentData.map(item => {
         return {
           text: item.reg_datetime,
           value: item.reg_datetime
@@ -138,9 +137,6 @@ export default {
     },
     resetDateFilter() {
       this.$refs.filterTable.clearFilter("reg_datetime");
-    },
-    resetAllFilter() {
-      this.$refs.filterTable.clearFilter();
     },
     filterHandler(value, row, column) {
       const property = column["property"];
@@ -157,16 +153,11 @@ export default {
           // this.$http.post(`/api/admin/give/changePwd/${phone}`);
           this.$message({
             type: "success",
-            message: phone + value
-          });
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "操作取消",
+            message: phone + value,
             offset: 10
           });
-        });
+        })
+        .catch(() => {});
     },
     openBan(phone) {
       this.$confirm("确定要禁止该账号登录吗？", "警告", {
@@ -178,31 +169,50 @@ export default {
           // this.$http.post(`/api/admin/disableAccount/${phone}`);
           this.$message({
             type: "success",
-            message: "操作成功!" + phone
+            message: "操作成功!" + phone,
+            offset: 10
           });
         })
-        .catch(() => {
+        .catch(() => {});
+    },
+    openEditIncome(phone) {
+      this.$prompt("请重新设置提成", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "info"
+      })
+        .then(({ value }) => {
+          // this.$http.post(`/api/admin/give/changePwd/${phone}`);
           this.$message({
-            type: "info",
-            message: "已取消操作"
+            type: "success",
+            message: phone + value,
+            offset: 10
           });
-        });
+        })
+        .catch(() => {});
+    },
+    openEditDefaultIncome() {
+      this.$prompt("请设置默认提成", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "info"
+      })
+        .then(({ value }) => {
+          // this.$http.post(`/api/admin/give/changePwd/${phone}`);
+          this.$message({
+            type: "success",
+            message: value,
+            offset: 10
+          });
+        })
+        .catch(() => {});
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-.clerk-card {
-  margin-bottom: 10px;
-  display: flex;
-  .el-input {
-    width: 300px;
-    margin-right: 30px;
-  }
-}
-
-.clerk-table-expand {
+.agent-table-expand {
   font-size: 0;
   label {
     width: 90px;

@@ -1,29 +1,60 @@
 <template>
-  <el-form label-width="120px" :model="agencyData">
-    <el-form-item label="手机号码">
-      <el-input v-model="agencyData.phone"></el-input>
-    </el-form-item>
-    <el-form-item label="密码">
-      <el-input v-model="agencyData.pwd"></el-input>
-    </el-form-item>
-    <el-form-item label="确认密码">
-      <el-input v-model="pwd"></el-input>
-    </el-form-item>
-    <el-form-item label="支付宝姓名">
-      <el-input v-model="agencyData.Alipay_name"></el-input>
-    </el-form-item>
-    <el-form-item label="支付宝账号">
-      <el-input v-model="agencyData.Alipay_account"></el-input>
-    </el-form-item>
-    <el-form-item label="QQ">
-      <el-input v-model="agencyData.qq_account"></el-input>
-    </el-form-item>
-    <el-form-item label="备注">
-      <el-input v-model="agencyData.user_remark"></el-input>
-    </el-form-item>
-    <el-form-item>
-      <el-button native-type="submit">生成</el-button>
-    </el-form-item>
+  <el-form
+    label-width="120px"
+    :model="agencyData"
+    @submit.native.prevent="createAgency"
+    class="ml-50"
+  >
+    <el-row>
+      <el-col :span="6">
+        <el-form-item label="手机号码" required>
+          <el-input v-model="agencyData.phone" placeholder="请输入手机号码"></el-input>
+        </el-form-item>
+      </el-col>
+      <el-col :span="6">
+        <el-form-item label="支付宝账号" required>
+          <el-input v-model="agencyData.Alipay_account" placeholder="请输入支付宝账号（收款）"></el-input>
+        </el-form-item>
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col :span="6">
+        <el-form-item label="密码" required>
+          <el-input v-model="agencyData.pwd" placeholder="请输入密码"></el-input>
+        </el-form-item>
+      </el-col>
+      <el-col :span="6">
+        <el-form-item label="支付宝姓名" required>
+          <el-input v-model="agencyData.Alipay_name" placeholder="请输入支付宝真实姓名"></el-input>
+        </el-form-item>
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col :span="6">
+        <el-form-item label="确认密码" required>
+          <el-input v-model="agencyData.pwd" placeholder="请再次输入密码"></el-input>
+        </el-form-item>
+      </el-col>
+      <el-col :span="6">
+        <el-form-item label="QQ">
+          <el-input v-model="agencyData.qq_account" placeholder="请输入QQ"></el-input>
+        </el-form-item>
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col :span="12">
+        <el-form-item label="备注">
+          <el-input v-model="agencyData.user_remark" placeholder="推广码自动生成"></el-input>
+        </el-form-item>
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col :span="12">
+        <el-form-item>
+          <el-button native-type="submit">添加</el-button>
+        </el-form-item>
+      </el-col>
+    </el-row>
   </el-form>
 </template>
 <script>
@@ -37,6 +68,9 @@ export default {
       },
       pwd: ""
     };
+  },
+  methods: {
+    createAgency() {}
   }
 };
 </script>

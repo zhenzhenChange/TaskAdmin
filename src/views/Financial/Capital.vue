@@ -1,18 +1,18 @@
 <template>
   <div>
-    <el-card class="part-card">
+    <el-card class="card">
       <el-input size="medium" placeholder="输入关键字搜索" autofocus />
       <el-button @click="resetDateFilter">重置日期筛选</el-button>
-      <el-button @click="resetAllFilter">重置所有筛选</el-button>
     </el-card>
     <el-table ref="filterTable" :data="wasteBookData" stripe border>
       <el-table-column
         prop="wb_datetime"
         label="流水日期"
         sortable
-        width="180"
+        align="center"
+        width="140"
         column-key="wb_datetime"
-        :filters="filtersData"
+        :filters="timeData"
         :filter-method="filterHandler"
       >
         <template slot-scope="scope">
@@ -20,25 +20,25 @@
           <span class="ml-10">{{ scope.row.wb_datetime }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="wb_uid" label="交易账号" width="140"></el-table-column>
-      <el-table-column prop="wb_uid" label="支付宝账号" width="140"></el-table-column>
-      <el-table-column prop="wb_uid" label="支付宝姓名" width="140"></el-table-column>
-      <el-table-column prop="wb_type" label="交易类型" width="140"></el-table-column>
-      <el-table-column prop="wb_fee" label="交易费用" width="140"></el-table-column>
-      <el-table-column prop="wb_state" label="交易状态"></el-table-column>
-      <el-table-column label="操作">
+      <el-table-column align="center" prop="wb_uid" label="交易账号" width="140"></el-table-column>
+      <el-table-column align="center" prop="Alipay_account" label="支付宝账号" width="140"></el-table-column>
+      <el-table-column align="center" prop="Alipay_name" label="支付宝姓名" width="140"></el-table-column>
+      <el-table-column align="center" prop="wb_type" label="交易类型" width="140"></el-table-column>
+      <el-table-column align="center" prop="wb_fee" label="交易费用" width="140"></el-table-column>
+      <el-table-column align="center" prop="wb_state" label="交易状态" width="140"></el-table-column>
+      <el-table-column align="center" label="操作">
         <template slot-scope="scope">
           <el-button
-            size="mini"
+            size="medium"
             icon="el-icon-edit"
             type="primary"
-            @click="openBan(scope.row.phone)"
+            @click="openEditAlipayAccount(scope.row.wb_uid)"
           >修改支付宝账号</el-button>
           <el-button
-            size="mini"
+            size="medium"
             icon="el-icon-warning"
             type="danger"
-            @click="openBan(scope.row.phone)"
+            @click="openDeleteRecord(scope.row.wb_id)"
           >删除该记录</el-button>
         </template>
       </el-table-column>
@@ -56,11 +56,13 @@ export default {
           wb_fee: "交易费用",
           wb_type: "交易类型",
           wb_uid: "交易账号",
+          Alipay_account: "支付宝账号",
+          Alipay_name: "支付宝姓名",
           wb_datetime: "2019-12-04",
           wb_state: "交易状态"
         }
       ],
-      filtersData: [{ text: "", value: "" }]
+      timeData: [{ text: "", value: "" }]
     };
   },
   created() {
@@ -68,7 +70,7 @@ export default {
   },
   methods: {
     getFiltersData() {
-      this.filtersData = this.wasteBookData.map(item => {
+      this.timeData = this.wasteBookData.map(item => {
         return {
           text: item.reg_datetime,
           value: item.reg_datetime
@@ -81,47 +83,47 @@ export default {
     resetDateFilter() {
       this.$refs.filterTable.clearFilter("reg_datetime");
     },
-    resetAllFilter() {
-      this.$refs.filterTable.clearFilter();
-    },
     filterHandler(value, row, column) {
       const property = column["property"];
       return row[property] === value;
     },
-    openBan(phone) {
-      this.$confirm("确定要禁止该账号登录吗？", "警告", {
+    openEditAlipayAccount(uid) {
+      this.$prompt("请输入新的支付宝账号", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "info"
+      })
+        .then(({ value }) => {
+          // this.$http.post(`/api/admin/give/changePwd/${phone}`);
+          this.$message({
+            type: "success",
+            message: uid + value,
+            offset: 10
+          });
+        })
+        .catch(() => {});
+    },
+    openDeleteRecord(id) {
+      this.$confirm("确定要删除该条记录吗？", "警告", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
         .then(() => {
-          // this.$http.post(`/api/admin/disableAccount/${phone}`);
+          // this.$http.post(`/api/admin/disableAccount/${id}`);
           this.$message({
             type: "success",
-            message: "操作成功!" + phone
+            message: "操作成功!" + id,
+            offset: 10
           });
         })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消操作"
-          });
-        });
+        .catch(() => {});
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-.part-card {
-  margin-bottom: 10px;
-  display: flex;
-  .el-input {
-    width: 300px;
-    margin-right: 30px;
-  }
-}
-
 .part-table-expand {
   font-size: 0;
   label {

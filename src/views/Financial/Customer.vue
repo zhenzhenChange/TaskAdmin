@@ -1,23 +1,48 @@
 <template>
-  <el-form label-width="120px" :model="customerData">
-    <el-form-item label="充值账号">
-      <el-input v-model="customerData.phone"></el-input>
-    </el-form-item>
-    <el-form-item label="支付宝账号">
-      <el-input v-model="customerData.phone"></el-input>
-    </el-form-item>
-    <el-form-item label="支付宝姓名">
-      <el-input v-model="customerData.phone"></el-input>
-    </el-form-item>
-    <el-form-item label="交易金额">
-      <el-input v-model="customerData.wb_fee"></el-input>
-    </el-form-item>
-    <el-form-item label="备注">
-      <el-input v-model="customerData.wb_remark"></el-input>
-    </el-form-item>
-    <el-form-item>
-      <el-button native-type="submit">确定</el-button>
-    </el-form-item>
+  <el-form
+    label-width="120px"
+    :model="customerData"
+    @submit.native.prevent="postCustomerData"
+    class="ml-50"
+  >
+    <el-row>
+      <el-col :span="6">
+        <el-form-item label="充值账号" required>
+          <el-input v-model="customerData.phone" placeholder="请输入手机号"></el-input>
+        </el-form-item>
+      </el-col>
+      <el-col :span="6">
+        <el-form-item label="支付宝账号" required>
+          <el-input v-model="customerData.Alipay_account" placeholder="请输入支付宝账号"></el-input>
+        </el-form-item>
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col :span="6">
+        <el-form-item label="支付宝姓名" required>
+          <el-input v-model="customerData.Alipay_name" placeholder="请输入支付宝姓名"></el-input>
+        </el-form-item>
+      </el-col>
+      <el-col :span="6">
+        <el-form-item label="交易金额" required>
+          <el-input v-model="customerData.wb_fee" placeholder="请输入充值金额"></el-input>
+        </el-form-item>
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col :span="12">
+        <el-form-item label="备注">
+          <el-input v-model="customerData.wb_remark" placeholder="请输入备注"></el-input>
+        </el-form-item>
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col :span="12">
+        <el-form-item>
+          <el-button native-type="submit">充值</el-button>
+        </el-form-item>
+      </el-col>
+    </el-row>
   </el-form>
 </template>
 <script>
@@ -26,6 +51,8 @@ export default {
     return {
       customerData: {
         phone: "",
+        Alipay_account: "",
+        Alipay_name: "",
         wb_fee: "",
         wb_remark: ""
       }

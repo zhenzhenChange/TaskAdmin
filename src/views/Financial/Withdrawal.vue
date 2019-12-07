@@ -2,47 +2,48 @@
   <div>
     <el-card class="card">
       <el-button @click="resetDateFilter">重置日期筛选</el-button>
-      <el-button @click="resetAllFilter">重置所有筛选</el-button>
     </el-card>
     <el-table ref="filterTable" :data="wasteBookData" stripe border>
       <el-table-column
         prop="wb_datetime"
-        label="流水日期"
-        sortable
-        width="180"
+        label="提现日期"
+        align="center"
+        width="140"
         column-key="wb_datetime"
-        :filters="filtersData"
+        :filters="timeData"
         :filter-method="filterHandler"
+        sortable
       >
         <template slot-scope="scope">
           <i class="el-icon-time"></i>
           <span class="ml-10">{{ scope.row.wb_datetime }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="wb_uid" label="交易账号" width="180"></el-table-column>
-      <el-table-column prop="wb_type" label="交易类型" width="180"></el-table-column>
-      <el-table-column prop="wb_fee" label="交易费用" width="180"></el-table-column>
-      <el-table-column prop="wb_state" label="交易状态"></el-table-column>
-      <el-table-column label="操作">
+      <el-table-column align="center" width="140" prop="wb_uid" label="提现账号"></el-table-column>
+      <el-table-column align="center" width="140" prop="Alipay_account" label="支付宝账号"></el-table-column>
+      <el-table-column align="center" width="140" prop="Alipay_name" label="支付宝姓名"></el-table-column>
+      <el-table-column align="center" width="140" prop="wb_fee" label="提现金额"></el-table-column>
+      <el-table-column align="center" width="140" prop="wb_state" label="提现状态"></el-table-column>
+      <el-table-column align="center" label="操作">
         <template slot-scope="scope">
           <el-button
-            size="mini"
-            icon="el-icon-thumb"
+            size="medium"
+            icon="el-icon-success"
             type="primary"
-            @click="openBan(scope.row.phone)"
-          >通过</el-button>
+            @click="openAgreed(scope.row.wb_id)"
+          >同意申请</el-button>
           <el-button
-            size="mini"
-            icon="el-icon-thumb"
-            type="primary"
-            @click="openBan(scope.row.phone)"
-          >驳回</el-button>
+            size="medium"
+            icon="el-icon-error"
+            type="danger"
+            @click="openRejected(scope.row.wb_id)"
+          >驳回申请</el-button>
           <el-button
-            size="mini"
+            size="medium"
             icon="el-icon-warning"
             type="danger"
-            @click="openBan(scope.row.phone)"
-          >删除该记录</el-button>
+            @click="openDeleteRecord(scope.row.wb_id)"
+          >删除该条记录</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -56,14 +57,15 @@ export default {
       wasteBookData: [
         {
           wb_id: "流水号",
-          wb_fee: "交易费用",
-          wb_type: "交易类型",
-          wb_uid: "交易账号",
-          wb_datetime: "2019-12-04",
-          wb_state: "交易状态"
+          wb_fee: "提现金额",
+          wb_uid: "提现账号",
+          Alipay_account: "支付宝账号",
+          Alipay_name: "支付宝姓名",
+          wb_state: "提现状态",
+          wb_datetime: "提现日期"
         }
       ],
-      filtersData: [{ text: "", value: "" }]
+      timeData: [{ text: "", value: "" }]
     };
   },
   created() {
@@ -71,7 +73,7 @@ export default {
   },
   methods: {
     getFiltersData() {
-      this.filtersData = this.wasteBookData.map(item => {
+      this.timeData = this.wasteBookData.map(item => {
         return {
           text: item.reg_datetime,
           value: item.reg_datetime
@@ -84,15 +86,44 @@ export default {
     resetDateFilter() {
       this.$refs.filterTable.clearFilter("reg_datetime");
     },
-    resetAllFilter() {
-      this.$refs.filterTable.clearFilter();
-    },
     filterHandler(value, row, column) {
       const property = column["property"];
       return row[property] === value;
     },
-    openBan(phone) {
-      this.$confirm("确定要禁止该账号登录吗？", "警告", {
+    openAgreed(id) {
+      this.$confirm("确定同意提现申请吗？", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "info"
+      })
+        .then(() => {
+          // this.$http.post(`/api/admin/disableAccount/${phone}`);
+          this.$message({
+            type: "success",
+            message: "操作成功!" + id,
+            offset: 10
+          });
+        })
+        .catch(() => {});
+    },
+    openRejected(id) {
+      this.$confirm("确定驳回提现申请吗？", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "info"
+      })
+        .then(() => {
+          // this.$http.post(`/api/admin/disableAccount/${phone}`);
+          this.$message({
+            type: "success",
+            message: "操作成功!" + id,
+            offset: 10
+          });
+        })
+        .catch(() => {});
+    },
+    openDeleteRecord(id) {
+      this.$confirm("确定删除该条记录吗？", "警告", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
@@ -101,15 +132,11 @@ export default {
           // this.$http.post(`/api/admin/disableAccount/${phone}`);
           this.$message({
             type: "success",
-            message: "操作成功!" + phone
+            message: "操作成功!" + id,
+            offset: 10
           });
         })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消操作"
-          });
-        });
+        .catch(() => {});
     }
   }
 };
