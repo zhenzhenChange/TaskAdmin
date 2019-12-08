@@ -3,7 +3,12 @@
     <el-card class="card">
       <el-button @click="resetDateFilter">重置日期筛选</el-button>
     </el-card>
-    <el-table ref="filterTable" :data="wasteBookData" stripe border>
+    <el-table
+      ref="filterTable"
+      :data="wasteBookData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+      stripe
+      border
+    >
       <el-table-column
         prop="wb_datetime"
         label="提现日期"
@@ -47,6 +52,16 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination
+      @size-change="sizeChange"
+      @current-change="currentChange"
+      :page-size="pageSize"
+      :page-sizes="pageSizes"
+      :current-page="currentPage"
+      :total="wasteBookData.length"
+      layout="total, sizes, prev, pager, next, jumper"
+      class="mt-20"
+    ></el-pagination>
   </div>
 </template>
 
@@ -63,9 +78,75 @@ export default {
           Alipay_name: "支付宝姓名",
           wb_state: "提现状态",
           wb_datetime: "提现日期"
+        },
+        {
+          wb_id: "流水号",
+          wb_fee: "提现金额",
+          wb_uid: "提现账号",
+          Alipay_account: "支付宝账号",
+          Alipay_name: "支付宝姓名",
+          wb_state: "提现状态",
+          wb_datetime: "提现日期"
+        },
+        {
+          wb_id: "流水号",
+          wb_fee: "提现金额",
+          wb_uid: "提现账号",
+          Alipay_account: "支付宝账号",
+          Alipay_name: "支付宝姓名",
+          wb_state: "提现状态",
+          wb_datetime: "提现日期"
+        },
+        {
+          wb_id: "流水号",
+          wb_fee: "提现金额",
+          wb_uid: "提现账号",
+          Alipay_account: "支付宝账号",
+          Alipay_name: "支付宝姓名",
+          wb_state: "提现状态",
+          wb_datetime: "提现日期"
+        },
+        {
+          wb_id: "流水号",
+          wb_fee: "提现金额",
+          wb_uid: "提现账号",
+          Alipay_account: "支付宝账号",
+          Alipay_name: "支付宝姓名",
+          wb_state: "提现状态",
+          wb_datetime: "提现日期"
+        },
+        {
+          wb_id: "流水号",
+          wb_fee: "提现金额",
+          wb_uid: "提现账号",
+          Alipay_account: "支付宝账号",
+          Alipay_name: "支付宝姓名",
+          wb_state: "提现状态",
+          wb_datetime: "提现日期"
+        },
+        {
+          wb_id: "流水号",
+          wb_fee: "提现金额",
+          wb_uid: "提现账号",
+          Alipay_account: "支付宝账号",
+          Alipay_name: "支付宝姓名",
+          wb_state: "提现状态",
+          wb_datetime: "提现日期"
+        },
+        {
+          wb_id: "流水号",
+          wb_fee: "提现金额",
+          wb_uid: "提现账号",
+          Alipay_account: "支付宝账号",
+          Alipay_name: "支付宝姓名",
+          wb_state: "提现状态",
+          wb_datetime: "提现日期"
         }
       ],
-      timeData: [{ text: "", value: "" }]
+      timeData: [{ text: "", value: "" }],
+      currentPage: 1,
+      pageSize: 10,
+      pageSizes: [10, 20, 50, 100, 200, 300, 400]
     };
   },
   created() {
@@ -80,8 +161,15 @@ export default {
         };
       });
     },
-    getPartData() {
+    getData() {
       // this.$http.get(`/api/admin/give/get/${my_stratum}`);
+    },
+    sizeChange(val) {
+      this.pageSize = val;
+      this.currentPage = 1;
+    },
+    currentChange(val) {
+      this.currentPage = val;
     },
     resetDateFilter() {
       this.$refs.filterTable.clearFilter("reg_datetime");

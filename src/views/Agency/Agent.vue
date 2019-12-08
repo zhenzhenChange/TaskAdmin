@@ -1,11 +1,18 @@
 <template>
   <div>
     <el-card class="card">
-      <el-input size="medium" placeholder="输入关键字搜索" autofocus />
+      <el-input size="medium" placeholder="输入关键字搜索" v-model="search">
+        <i slot="prefix" class="el-input__icon el-icon-search"></i>
+      </el-input>
       <el-button @click="resetDateFilter">重置日期筛选</el-button>
       <el-button @click="openEditDefaultIncome" icon="el-icon-edit" type="primary">总代提成默认设置</el-button>
     </el-card>
-    <el-table ref="filterTable" :data="AgentData" stripe border>
+    <el-table
+      ref="filterTable"
+      :data="searchData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+      stripe
+      border
+    >
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-form label-position="left" inline class="agent-table-expand">
@@ -81,6 +88,16 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination
+      @size-change="sizeChange"
+      @current-change="currentChange"
+      :page-size="pageSize"
+      :page-sizes="pageSizes"
+      :current-page="currentPage"
+      :total="data.length"
+      layout="total, sizes, prev, pager, next, jumper"
+      class="mt-20"
+    ></el-pagination>
   </div>
 </template>
 
@@ -88,7 +105,7 @@
 export default {
   data() {
     return {
-      AgentData: [
+      data: [
         {
           phone: 18172641474,
           pwd: "18172641474",
@@ -117,23 +134,54 @@ export default {
           ]
         }
       ],
-      timeData: [{ text: "", value: "" }]
+      timeData: [{ text: "", value: "" }],
+      search: "",
+      currentPage: 1,
+      pageSize: 10,
+      pageSizes: [10, 20, 50, 100, 200, 300, 400]
     };
   },
   created() {
     this.getFiltersData();
   },
+  computed: {
+    searchData() {
+      if (this.search) {
+        return this.data.filter(data => {
+          return Object.keys(data).some(key => {
+            return String(data[key]).indexOf(this.search) > -1;
+          });
+        });
+      }
+      return this.data;
+    }
+  },
   methods: {
     getFiltersData() {
-      this.timeData = this.AgentData.map(item => {
-        return {
-          text: item.reg_datetime,
-          value: item.reg_datetime
-        };
-      });
+      let hash = {};
+      this.timeData = this.data
+        .map(item => {
+          return {
+            text: item.reg_datetime,
+            value: item.reg_datetime
+          };
+        })
+        .reduce((arr, current) => {
+          hash[current.text]
+            ? ""
+            : (hash[current.text] = true && arr.push(current));
+          return arr;
+        }, []);
     },
-    getClerkData() {
+    getData() {
       // this.$http.get(`/api/admin/recv/get/${my_stratum}`);
+    },
+    sizeChange(val) {
+      this.pageSize = val;
+      this.currentPage = 1;
+    },
+    currentChange(val) {
+      this.currentPage = val;
     },
     resetDateFilter() {
       this.$refs.filterTable.clearFilter("reg_datetime");

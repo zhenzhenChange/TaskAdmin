@@ -1,10 +1,17 @@
 <template>
   <div>
     <el-card class="card">
-      <el-input size="medium" placeholder="输入关键字搜索" autofocus />
+      <el-input size="medium" placeholder="输入关键字搜索" v-model="search">
+        <i slot="prefix" class="el-input__icon el-icon-search"></i>
+      </el-input>
       <el-button @click="resetDateFilter">重置日期筛选</el-button>
     </el-card>
-    <el-table ref="filterTable" :data="wasteBookData" stripe border>
+    <el-table
+      ref="filterTable"
+      :data="searchData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+      stripe
+      border
+    >
       <el-table-column
         prop="wb_datetime"
         label="流水日期"
@@ -43,6 +50,16 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination
+      @size-change="sizeChange"
+      @current-change="currentChange"
+      :page-size="pageSize"
+      :page-sizes="pageSizes"
+      :current-page="currentPage"
+      :total="data.length"
+      layout="total, sizes, prev, pager, next, jumper"
+      class="mt-20"
+    ></el-pagination>
   </div>
 </template>
 
@@ -50,7 +67,7 @@
 export default {
   data() {
     return {
-      wasteBookData: [
+      data: [
         {
           wb_id: "流水号",
           wb_fee: "交易费用",
@@ -60,17 +77,113 @@ export default {
           Alipay_name: "支付宝姓名",
           wb_datetime: "2019-12-04",
           wb_state: "交易状态"
+        },
+        {
+          wb_id: "流水号",
+          wb_fee: "交易费用",
+          wb_type: "交易类型",
+          wb_uid: "交易账号",
+          Alipay_account: "支付宝账号",
+          Alipay_name: "支付宝姓名",
+          wb_datetime: "2019-12-04",
+          wb_state: "交易状态"
+        },
+        {
+          wb_id: "流水号",
+          wb_fee: "交易费用",
+          wb_type: "交易类型",
+          wb_uid: "交易账号",
+          Alipay_account: "支付宝账号",
+          Alipay_name: "支付宝姓名",
+          wb_datetime: "2019-12-04",
+          wb_state: "交易状态"
+        },
+        {
+          wb_id: "流水号",
+          wb_fee: "交易费用",
+          wb_type: "交易类型",
+          wb_uid: "交易账号",
+          Alipay_account: "支付宝账号",
+          Alipay_name: "支付宝姓名",
+          wb_datetime: "2019-12-04",
+          wb_state: "交易状态"
+        },
+        {
+          wb_id: "流水号",
+          wb_fee: "交易费用",
+          wb_type: "交易类型",
+          wb_uid: "交易账号",
+          Alipay_account: "22222222",
+          Alipay_name: "支付宝姓名",
+          wb_datetime: "2019-12-04",
+          wb_state: "交易状态"
+        },
+        {
+          wb_id: "流水号",
+          wb_fee: "交易费用",
+          wb_type: "交易类型",
+          wb_uid: "交易账号",
+          Alipay_account: "支付宝2222222账号",
+          Alipay_name: "支付宝姓名",
+          wb_datetime: "2019-12-04",
+          wb_state: "交易状态"
+        },
+        {
+          wb_id: "流水号",
+          wb_fee: "交易费用",
+          wb_type: "交易类型",
+          wb_uid: "交易账号",
+          Alipay_account: "支付宝账号",
+          Alipay_name: "支付宝姓名",
+          wb_datetime: "2019-12-04",
+          wb_state: "交易状态"
+        },
+        {
+          wb_id: "流水号",
+          wb_fee: "交易费用",
+          wb_type: "交易类型",
+          wb_uid: "交易账号",
+          Alipay_account: "支付宝账号",
+          Alipay_name: "支付宝姓名",
+          wb_datetime: "2019-12-04",
+          wb_state: "交易状态"
+        },
+        {
+          wb_id: "流水号",
+          wb_fee: "交易费用",
+          wb_type: "交易类型",
+          wb_uid: "交易账号",
+          Alipay_account: "4444444444",
+          Alipay_name: "支付宝姓名",
+          wb_datetime: "2019-12-04",
+          wb_state: "交易状态"
         }
       ],
-      timeData: [{ text: "", value: "" }]
+      timeData: [{ text: "", value: "" }],
+      search: "",
+      currentPage: 1,
+      pageSize: 10,
+      pageSizes: [10, 20, 50, 100, 200, 300, 400]
     };
   },
   created() {
     this.getFiltersData();
   },
+  computed: {
+    searchData() {
+      if (this.search) {
+        return this.data.filter(data => {
+          return Object.keys(data).some(key => {
+            return String(data[key]).indexOf(this.search) > -1;
+          });
+        });
+      }
+      return this.data;
+    }
+  },
   methods: {
     getFiltersData() {
-      this.timeData = this.wasteBookData.map(item => {
+      this.timeData = this.data.map(item => {
         return {
           text: item.reg_datetime,
           value: item.reg_datetime
@@ -79,6 +192,13 @@ export default {
     },
     getPartData() {
       // this.$http.get(`/api/admin/give/get/${my_stratum}`);
+    },
+    sizeChange(val) {
+      this.pageSize = val;
+      this.currentPage = 1;
+    },
+    currentChange(val) {
+      this.currentPage = val;
     },
     resetDateFilter() {
       this.$refs.filterTable.clearFilter("reg_datetime");

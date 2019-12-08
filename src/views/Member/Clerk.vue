@@ -1,10 +1,17 @@
 <template>
   <div>
     <el-card class="card">
-      <el-input size="medium" placeholder="输入关键字搜索" autofocus />
+      <el-input size="medium" placeholder="输入关键字搜索" v-model="search">
+        <i slot="prefix" class="el-input__icon el-icon-search"></i>
+      </el-input>
       <el-button @click="resetDateFilter">重置日期筛选</el-button>
     </el-card>
-    <el-table ref="filterTable" :data="clerkData" stripe border>
+    <el-table
+      ref="filterTable"
+      :data="searchData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+      stripe
+      border
+    >
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-form label-position="left" inline class="clerk-table-expand">
@@ -77,6 +84,16 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination
+      @size-change="sizeChange"
+      @current-change="currentChange"
+      :page-size="pageSize"
+      :page-sizes="pageSizes"
+      :current-page="currentPage"
+      :total="data.length"
+      layout="total, sizes, prev, pager, next, jumper"
+      class="mt-20"
+    ></el-pagination>
   </div>
 </template>
 
@@ -84,21 +101,17 @@
 export default {
   data() {
     return {
-      /**
-       * /api/admin/recv/get/
-       */
-      clerkData: [
+      data: [
         {
-          phone: "手机号",
+          phone: "JI",
           pwd: "密码",
-          my_balance: "余额",
+          my_balance: "JS",
           general_income: "总提成",
           reg_datetime: "注册时间",
           user_remark: "备注",
           extension_code: "推广码",
           is_valide: "账号是否可用",
           incomeData: [
-            // 流水数据
             {
               wb_id: "流水编号",
               wb_uid: "流水账号",
@@ -106,7 +119,6 @@ export default {
             }
           ],
           orderData: [
-            //自身订单数据
             {
               order_id: "订单编号",
               order_release_time: "生成日期",
@@ -114,7 +126,501 @@ export default {
             }
           ],
           sonOrderData: [
-            //下级订单数据
+            {
+              my_superior: "上级推广码",
+              extension_code: "自身推广码",
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ]
+        },
+        {
+          phone: "JI",
+          pwd: "密码",
+          my_balance: "JS",
+          general_income: "总提成",
+          reg_datetime: "注册时间",
+          user_remark: "备注",
+          extension_code: "推广码",
+          is_valide: "账号是否可用",
+          incomeData: [
+            {
+              wb_id: "流水编号",
+              wb_uid: "流水账号",
+              wb_datetime: "流水时间"
+            }
+          ],
+          orderData: [
+            {
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ],
+          sonOrderData: [
+            {
+              my_superior: "上级推广码",
+              extension_code: "自身推广码",
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ]
+        },
+        {
+          phone: "JI",
+          pwd: "密码",
+          my_balance: "JS",
+          general_income: "总提成",
+          reg_datetime: "注册时间",
+          user_remark: "备注",
+          extension_code: "推广码",
+          is_valide: "账号是否可用",
+          incomeData: [
+            {
+              wb_id: "流水编号",
+              wb_uid: "流水账号",
+              wb_datetime: "流水时间"
+            }
+          ],
+          orderData: [
+            {
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ],
+          sonOrderData: [
+            {
+              my_superior: "上级推广码",
+              extension_code: "自身推广码",
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ]
+        },
+        {
+          phone: "JI",
+          pwd: "密码",
+          my_balance: "JS",
+          general_income: "总提成",
+          reg_datetime: "注册时间",
+          user_remark: "备注",
+          extension_code: "推广码",
+          is_valide: "账号是否可用",
+          incomeData: [
+            {
+              wb_id: "流水编号",
+              wb_uid: "流水账号",
+              wb_datetime: "流水时间"
+            }
+          ],
+          orderData: [
+            {
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ],
+          sonOrderData: [
+            {
+              my_superior: "上级推广码",
+              extension_code: "自身推广码",
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ]
+        },
+        {
+          phone: "J22222I",
+          pwd: "密码",
+          my_balance: "JS",
+          general_income: "总提成",
+          reg_datetime: "注册时间",
+          user_remark: "备注",
+          extension_code: "推广码",
+          is_valide: "账号是否可用",
+          incomeData: [
+            {
+              wb_id: "流水编号",
+              wb_uid: "流水账号",
+              wb_datetime: "流水时间"
+            }
+          ],
+          orderData: [
+            {
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ],
+          sonOrderData: [
+            {
+              my_superior: "上级推广码",
+              extension_code: "自身推广码",
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ]
+        },
+        {
+          phone: "J22222I",
+          pwd: "密码",
+          my_balance: "JS",
+          general_income: "总提成",
+          reg_datetime: "注册时间",
+          user_remark: "备注",
+          extension_code: "推广码",
+          is_valide: "账号是否可用",
+          incomeData: [
+            {
+              wb_id: "流水编号",
+              wb_uid: "流水账号",
+              wb_datetime: "流水时间"
+            }
+          ],
+          orderData: [
+            {
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ],
+          sonOrderData: [
+            {
+              my_superior: "上级推广码",
+              extension_code: "自身推广码",
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ]
+        },
+        {
+          phone: "J22222I",
+          pwd: "密码",
+          my_balance: "JS",
+          general_income: "总提成",
+          reg_datetime: "注册时间",
+          user_remark: "备注",
+          extension_code: "推广码",
+          is_valide: "账号是否可用",
+          incomeData: [
+            {
+              wb_id: "流水编号",
+              wb_uid: "流水账号",
+              wb_datetime: "流水时间"
+            }
+          ],
+          orderData: [
+            {
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ],
+          sonOrderData: [
+            {
+              my_superior: "上级推广码",
+              extension_code: "自身推广码",
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ]
+        },
+        {
+          phone: "J22222I",
+          pwd: "密码",
+          my_balance: "JS",
+          general_income: "总提成",
+          reg_datetime: "注册时间",
+          user_remark: "备注",
+          extension_code: "推广码",
+          is_valide: "账号是否可用",
+          incomeData: [
+            {
+              wb_id: "流水编号",
+              wb_uid: "流水账号",
+              wb_datetime: "流水时间"
+            }
+          ],
+          orderData: [
+            {
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ],
+          sonOrderData: [
+            {
+              my_superior: "上级推广码",
+              extension_code: "自身推广码",
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ]
+        },
+        {
+          phone: "J22222I",
+          pwd: "密码",
+          my_balance: "JS",
+          general_income: "总提成",
+          reg_datetime: "注册时间",
+          user_remark: "备注",
+          extension_code: "推广码",
+          is_valide: "账号是否可用",
+          incomeData: [
+            {
+              wb_id: "流水编号",
+              wb_uid: "流水账号",
+              wb_datetime: "流水时间"
+            }
+          ],
+          orderData: [
+            {
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ],
+          sonOrderData: [
+            {
+              my_superior: "上级推广码",
+              extension_code: "自身推广码",
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ]
+        },
+        {
+          phone: "J22222I",
+          pwd: "密码",
+          my_balance: "JS",
+          general_income: "总提成",
+          reg_datetime: "注册时间",
+          user_remark: "备注",
+          extension_code: "推广码",
+          is_valide: "账号是否可用",
+          incomeData: [
+            {
+              wb_id: "流水编号",
+              wb_uid: "流水账号",
+              wb_datetime: "流水时间"
+            }
+          ],
+          orderData: [
+            {
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ],
+          sonOrderData: [
+            {
+              my_superior: "上级推广码",
+              extension_code: "自身推广码",
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ]
+        },
+        {
+          phone: "J22222I",
+          pwd: "密码",
+          my_balance: "JS",
+          general_income: "总提成",
+          reg_datetime: "注册时间",
+          user_remark: "备注",
+          extension_code: "推广码",
+          is_valide: "账号是否可用",
+          incomeData: [
+            {
+              wb_id: "流水编号",
+              wb_uid: "流水账号",
+              wb_datetime: "流水时间"
+            }
+          ],
+          orderData: [
+            {
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ],
+          sonOrderData: [
+            {
+              my_superior: "上级推广码",
+              extension_code: "自身推广码",
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ]
+        },
+        {
+          phone: "J22222I",
+          pwd: "密码",
+          my_balance: "JS",
+          general_income: "总提成",
+          reg_datetime: "注册时间",
+          user_remark: "备注",
+          extension_code: "推广码",
+          is_valide: "账号是否可用",
+          incomeData: [
+            {
+              wb_id: "流水编号",
+              wb_uid: "流水账号",
+              wb_datetime: "流水时间"
+            }
+          ],
+          orderData: [
+            {
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ],
+          sonOrderData: [
+            {
+              my_superior: "上级推广码",
+              extension_code: "自身推广码",
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ]
+        },
+        {
+          phone: "J22222I",
+          pwd: "密码",
+          my_balance: "JS",
+          general_income: "总提成",
+          reg_datetime: "注册时间",
+          user_remark: "备注",
+          extension_code: "推广码",
+          is_valide: "账号是否可用",
+          incomeData: [
+            {
+              wb_id: "流水编号",
+              wb_uid: "流水账号",
+              wb_datetime: "流水时间"
+            }
+          ],
+          orderData: [
+            {
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ],
+          sonOrderData: [
+            {
+              my_superior: "上级推广码",
+              extension_code: "自身推广码",
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ]
+        },
+        {
+          phone: "J22222I",
+          pwd: "密码",
+          my_balance: "JS",
+          general_income: "总提成",
+          reg_datetime: "注册时间",
+          user_remark: "备注",
+          extension_code: "推广码",
+          is_valide: "账号是否可用",
+          incomeData: [
+            {
+              wb_id: "流水编号",
+              wb_uid: "流水账号",
+              wb_datetime: "流水时间"
+            }
+          ],
+          orderData: [
+            {
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ],
+          sonOrderData: [
+            {
+              my_superior: "上级推广码",
+              extension_code: "自身推广码",
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ]
+        },
+        {
+          phone: "J22222I",
+          pwd: "密码",
+          my_balance: "JS",
+          general_income: "总提成",
+          reg_datetime: "注册时间",
+          user_remark: "备注",
+          extension_code: "推广码",
+          is_valide: "账号是否可用",
+          incomeData: [
+            {
+              wb_id: "流水编号",
+              wb_uid: "流水账号",
+              wb_datetime: "流水时间"
+            }
+          ],
+          orderData: [
+            {
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ],
+          sonOrderData: [
+            {
+              my_superior: "上级推广码",
+              extension_code: "自身推广码",
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ]
+        },
+        {
+          phone: "J22222I",
+          pwd: "密码",
+          my_balance: "JS",
+          general_income: "总提成",
+          reg_datetime: "注册时间",
+          user_remark: "备注",
+          extension_code: "推广码",
+          is_valide: "账号是否可用",
+          incomeData: [
+            {
+              wb_id: "流水编号",
+              wb_uid: "流水账号",
+              wb_datetime: "流水时间"
+            }
+          ],
+          orderData: [
+            {
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ],
+          sonOrderData: [
             {
               my_superior: "上级推广码",
               extension_code: "自身推广码",
@@ -125,23 +631,54 @@ export default {
           ]
         }
       ],
-      timeData: [{ text: "", value: "" }]
+      timeData: [{ text: "", value: "" }],
+      search: "",
+      currentPage: 1,
+      pageSize: 10,
+      pageSizes: [10, 20, 50, 100, 200, 300, 400]
     };
   },
   created() {
     this.getFiltersData();
   },
+  computed: {
+    searchData() {
+      if (this.search) {
+        return this.data.filter(data => {
+          return Object.keys(data).some(key => {
+            return String(data[key]).indexOf(this.search) > -1;
+          });
+        });
+      }
+      return this.data;
+    }
+  },
   methods: {
     getFiltersData() {
-      this.timeData = this.clerkData.map(item => {
-        return {
-          text: item.reg_datetime,
-          value: item.reg_datetime
-        };
-      });
+      let hash = {};
+      this.timeData = this.data
+        .map(item => {
+          return {
+            text: item.reg_datetime,
+            value: item.reg_datetime
+          };
+        })
+        .reduce((arr, current) => {
+          hash[current.text]
+            ? ""
+            : (hash[current.text] = true && arr.push(current));
+          return arr;
+        }, []);
     },
-    getClerkData() {
+    getData() {
       // this.$http.get(`/api/admin/recv/get/`);
+    },
+    sizeChange(val) {
+      this.pageSize = val;
+      this.currentPage = 1;
+    },
+    currentChange(val) {
+      this.currentPage = val;
     },
     resetDateFilter() {
       this.$refs.filterTable.clearFilter("reg_datetime");

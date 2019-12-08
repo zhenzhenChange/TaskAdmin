@@ -1,10 +1,17 @@
 <template>
   <div>
     <el-card class="card">
-      <el-input size="medium" placeholder="输入关键字搜索" autofocus />
+      <el-input size="medium" placeholder="输入关键字搜索" v-model="search">
+        <i slot="prefix" class="el-input__icon el-icon-search"></i>
+      </el-input>
       <el-button @click="resetDateFilter">重置日期筛选</el-button>
     </el-card>
-    <el-table ref="filterTable" :data="partData" stripe border>
+    <el-table
+      ref="filterTable"
+      :data="searchData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+      stripe
+      border
+    >
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-form label-position="left" inline class="part-table-expand">
@@ -46,7 +53,6 @@
       <el-table-column align="center" prop="wb_fee" label="总充值"></el-table-column>
       <el-table-column align="center" prop="orderData.length" label="总下订单"></el-table-column>
       <el-table-column align="center" label="总成功订单">
-        <!-- <template slot-scope="scope">{{scope.row.orderSucc}}</template> -->
         <template slot-scope="scope">{{scope.row.orderData.map(item=>item.order_state).toString()}}</template>
       </el-table-column>
       <el-table-column align="center" prop="is_valide" label="账号状态"></el-table-column>
@@ -74,11 +80,13 @@
       </el-table-column>
     </el-table>
     <el-pagination
-      :current-page="currentPage4"
-      :page-sizes="[100, 200, 300, 400]"
-      :page-size="100"
+      @size-change="sizeChange"
+      @current-change="currentChange"
+      :page-size="pageSize"
+      :page-sizes="pageSizes"
+      :current-page="currentPage"
+      :total="data.length"
       layout="total, sizes, prev, pager, next, jumper"
-      :total="400"
       class="mt-20"
     ></el-pagination>
   </div>
@@ -88,7 +96,7 @@
 export default {
   data() {
     return {
-      partData: [
+      data: [
         {
           phone: "账号",
           pwd: "密码",
@@ -105,29 +113,396 @@ export default {
               order_state: "订单状态"
             }
           ]
+        },
+        {
+          phone: "账号",
+          pwd: "密码",
+          my_balance: "余额",
+          wb_fee: "总充值",
+          user_remark: "备注",
+          wb_datetime: "充值日期",
+          reg_datetime: "注册日期",
+          is_valide: "账号是否可用",
+          orderData: [
+            {
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ]
+        },
+        {
+          phone: "账号",
+          pwd: "密码",
+          my_balance: "余额",
+          wb_fee: "总充值",
+          user_remark: "备注",
+          wb_datetime: "充值日期",
+          reg_datetime: "注册日期",
+          is_valide: "账号是否可用",
+          orderData: [
+            {
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ]
+        },
+        {
+          phone: "账号",
+          pwd: "密码",
+          my_balance: "余额",
+          wb_fee: "总充值",
+          user_remark: "备注",
+          wb_datetime: "充值日期",
+          reg_datetime: "注册日期",
+          is_valide: "账号是否可用",
+          orderData: [
+            {
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ]
+        },
+        {
+          phone: "账号",
+          pwd: "密码",
+          my_balance: "余额",
+          wb_fee: "总充值",
+          user_remark: "备注",
+          wb_datetime: "充值日期",
+          reg_datetime: "注册日期",
+          is_valide: "账号是否可用",
+          orderData: [
+            {
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ]
+        },
+        {
+          phone: "账号",
+          pwd: "密码",
+          my_balance: "余额",
+          wb_fee: "总充值",
+          user_remark: "备注",
+          wb_datetime: "充值日期",
+          reg_datetime: "注册日期",
+          is_valide: "账号是否可用",
+          orderData: [
+            {
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ]
+        },
+        {
+          phone: "账号",
+          pwd: "密码",
+          my_balance: "余额",
+          wb_fee: "总充值",
+          user_remark: "备注",
+          wb_datetime: "充值日期",
+          reg_datetime: "注册日期",
+          is_valide: "账号是否可用",
+          orderData: [
+            {
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ]
+        },
+        {
+          phone: "账号",
+          pwd: "密码",
+          my_balance: "余额",
+          wb_fee: "总充值",
+          user_remark: "备注",
+          wb_datetime: "充值日期",
+          reg_datetime: "注册日期",
+          is_valide: "账号是否可用",
+          orderData: [
+            {
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ]
+        },
+        {
+          phone: "账号",
+          pwd: "密码",
+          my_balance: "余额",
+          wb_fee: "总充值",
+          user_remark: "备注",
+          wb_datetime: "充值日期",
+          reg_datetime: "注册日期",
+          is_valide: "账号是否可用",
+          orderData: [
+            {
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ]
+        },
+        {
+          phone: "222",
+          pwd: "密码",
+          my_balance: "余额",
+          wb_fee: "222",
+          user_remark: "222",
+          wb_datetime: "222",
+          reg_datetime: "222",
+          is_valide: "账号是否可用",
+          orderData: [
+            {
+              order_id: "222",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ]
+        },
+        {
+          phone: "222",
+          pwd: "密码",
+          my_balance: "余额",
+          wb_fee: "222",
+          user_remark: "222",
+          wb_datetime: "222",
+          reg_datetime: "222",
+          is_valide: "账号是否可用",
+          orderData: [
+            {
+              order_id: "222",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ]
+        },
+        {
+          phone: "账号",
+          pwd: "密码",
+          my_balance: "余额",
+          wb_fee: "总充值",
+          user_remark: "备注",
+          wb_datetime: "充值日期",
+          reg_datetime: "注册日期",
+          is_valide: "账号是否可用",
+          orderData: [
+            {
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ]
+        },
+        {
+          phone: "账号",
+          pwd: "密码",
+          my_balance: "余额",
+          wb_fee: "总充值",
+          user_remark: "备注",
+          wb_datetime: "充值日期",
+          reg_datetime: "注册日期",
+          is_valide: "账号是否可用",
+          orderData: [
+            {
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ]
+        },
+        {
+          phone: "账号",
+          pwd: "密码",
+          my_balance: "余额",
+          wb_fee: "总充值",
+          user_remark: "备注",
+          wb_datetime: "充值日期",
+          reg_datetime: "注册日期",
+          is_valide: "账号是否可用",
+          orderData: [
+            {
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ]
+        },
+        {
+          phone: "222",
+          pwd: "222",
+          my_balance: "222",
+          wb_fee: "总充值",
+          user_remark: "222",
+          wb_datetime: "222",
+          reg_datetime: "222",
+          is_valide: "222",
+          orderData: [
+            {
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ]
+        },
+        {
+          phone: "账号",
+          pwd: "密码",
+          my_balance: "余额",
+          wb_fee: "总充值",
+          user_remark: "备注",
+          wb_datetime: "充值日期",
+          reg_datetime: "注册日期",
+          is_valide: "账号是否可用",
+          orderData: [
+            {
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ]
+        },
+        {
+          phone: "账号",
+          pwd: "密码",
+          my_balance: "余额",
+          wb_fee: "总充值",
+          user_remark: "备注",
+          wb_datetime: "充值日期",
+          reg_datetime: "注册日期",
+          is_valide: "账号是否可用",
+          orderData: [
+            {
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ]
+        },
+        {
+          phone: "账号",
+          pwd: "密码",
+          my_balance: "余额",
+          wb_fee: "总充值",
+          user_remark: "备注",
+          wb_datetime: "充值日期",
+          reg_datetime: "注册日期",
+          is_valide: "账号是否可用",
+          orderData: [
+            {
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ]
+        },
+        {
+          phone: "账号",
+          pwd: "密码",
+          my_balance: "余额",
+          wb_fee: "总充值",
+          user_remark: "备注",
+          wb_datetime: "充值日期",
+          reg_datetime: "注册日期",
+          is_valide: "账号是否可用",
+          orderData: [
+            {
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ]
+        },
+        {
+          phone: "账号",
+          pwd: "密码",
+          my_balance: "余额",
+          wb_fee: "总充值",
+          user_remark: "备注",
+          wb_datetime: "充值日期",
+          reg_datetime: "注册日期",
+          is_valide: "账号是否可用",
+          orderData: [
+            {
+              order_id: "订单编号",
+              order_release_time: "生成日期",
+              order_state: "订单状态"
+            }
+          ]
+        },
+        {
+          phone: "666",
+          pwd: "222",
+          my_balance: "222",
+          wb_fee: "222",
+          user_remark: "222",
+          wb_datetime: "222",
+          reg_datetime: "222",
+          is_valide: "222",
+          orderData: [
+            {
+              order_id: "222",
+              order_release_time: "222",
+              order_state: "222"
+            }
+          ]
         }
       ],
       timeData: [{ text: "", value: "" }],
-      currentPage1: 5,
-      currentPage2: 5,
-      currentPage3: 5,
-      currentPage4: 4
+      search: "",
+      currentPage: 1,
+      pageSize: 10,
+      pageSizes: [10, 20, 50, 100, 200, 300, 400]
     };
   },
   created() {
     this.getFiltersData();
   },
+  computed: {
+    searchData() {
+      if (this.search) {
+        return this.data.filter(data => {
+          return Object.keys(data).some(key => {
+            return String(data[key]).includes(this.search);
+          });
+        });
+      }
+      return this.data;
+    }
+  },
   methods: {
     getFiltersData() {
-      this.timeData = this.partData.map(item => {
-        return {
-          text: item.reg_datetime,
-          value: item.reg_datetime
-        };
-      });
+      let hash = {};
+      this.timeData = this.data
+        .map(item => {
+          return {
+            text: item.reg_datetime,
+            value: item.reg_datetime
+          };
+        })
+        .reduce((arr, current) => {
+          hash[current.text]
+            ? ""
+            : (hash[current.text] = true && arr.push(current));
+          return arr;
+        }, []);
     },
-    getPartData() {
+    getData() {
       // this.$http.get(`/api/admin/give/get/`);
+    },
+    sizeChange(val) {
+      this.pageSize = val;
+      this.currentPage = 1;
+    },
+    currentChange(val) {
+      this.currentPage = val;
     },
     resetDateFilter() {
       this.$refs.filterTable.clearFilter("reg_datetime");

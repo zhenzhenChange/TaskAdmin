@@ -3,7 +3,12 @@
     <el-card class="card">
       <el-button @click="resetDateFilter">重置日期筛选</el-button>
     </el-card>
-    <el-table ref="filterTable" :data="appealOrderData" stripe border>
+    <el-table
+      ref="filterTable"
+      :data="appealOrderData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+      stripe
+      border
+    >
       <el-table-column
         prop="order_release_time"
         label="发布日期"
@@ -38,6 +43,16 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination
+      @size-change="sizeChange"
+      @current-change="currentChange"
+      :page-size="pageSize"
+      :page-sizes="pageSizes"
+      :current-page="currentPage"
+      :total="appealOrderData.length"
+      layout="total, sizes, prev, pager, next, jumper"
+      class="mt-20"
+    ></el-pagination>
   </div>
 </template>
 
@@ -57,10 +72,97 @@ export default {
           action_datetime: "申诉时间",
           action_resState: "申诉状态",
           order_apply_proof: "申诉证据"
+        },
+        {
+          order_id: "订单编号",
+          uid_give: "发布账号",
+          order_release_time: "发布日期",
+          order_price: "订单价格",
+          uid_recive: "接单账号",
+          order_end_datetime: "失败时间",
+          order_state: "订单状态（申诉）",
+          action_datetime: "申诉时间",
+          action_resState: "申诉状态",
+          order_apply_proof: "申诉证据"
+        },
+        {
+          order_id: "订单编号",
+          uid_give: "发布账号",
+          order_release_time: "发布日期",
+          order_price: "订单价格",
+          uid_recive: "接单账号",
+          order_end_datetime: "失败时间",
+          order_state: "订单状态（申诉）",
+          action_datetime: "申诉时间",
+          action_resState: "申诉状态",
+          order_apply_proof: "申诉证据"
+        },
+        {
+          order_id: "订单编号",
+          uid_give: "发布账号",
+          order_release_time: "发布日期",
+          order_price: "订单价格",
+          uid_recive: "接单账号",
+          order_end_datetime: "失败时间",
+          order_state: "订单状态（申诉）",
+          action_datetime: "申诉时间",
+          action_resState: "申诉状态",
+          order_apply_proof: "申诉证据"
+        },
+        {
+          order_id: "订单编号",
+          uid_give: "发布账号",
+          order_release_time: "发布日期",
+          order_price: "订单价格",
+          uid_recive: "接单账号",
+          order_end_datetime: "失败时间",
+          order_state: "订单状态（申诉）",
+          action_datetime: "申诉时间",
+          action_resState: "申诉状态",
+          order_apply_proof: "申诉证据"
+        },
+        {
+          order_id: "22",
+          uid_give: "22222",
+          order_release_time: "222",
+          order_price: "222",
+          uid_recive: "222",
+          order_end_datetime: "失败时间",
+          order_state: "订单状态（申诉）",
+          action_datetime: "申诉时间",
+          action_resState: "申诉状态",
+          order_apply_proof: "申诉证据"
+        },
+        {
+          order_id: "订单编号",
+          uid_give: "发布账号",
+          order_release_time: "发布日期",
+          order_price: "订单价格",
+          uid_recive: "接单账号",
+          order_end_datetime: "失败时间",
+          order_state: "订单状态（申诉）",
+          action_datetime: "申诉时间",
+          action_resState: "申诉状态",
+          order_apply_proof: "申诉证据"
+        },
+        {
+          order_id: "777",
+          uid_give: "发布账号",
+          order_release_time: "发布日期",
+          order_price: "888",
+          uid_recive: "接单账号",
+          order_end_datetime: "失败时间",
+          order_state: "订单状态（申诉）",
+          action_datetime: "申诉时间",
+          action_resState: "申诉状态",
+          order_apply_proof: "申诉证据"
         }
       ],
       timeData: [{ text: "", value: "" }],
-      stateData: [{ text: "", value: "" }]
+      stateData: [{ text: "", value: "" }],
+      currentPage: 1,
+      pageSize: 10,
+      pageSizes: [10, 20, 50, 100, 200, 300, 400]
     };
   },
   created() {
@@ -83,6 +185,13 @@ export default {
     },
     getAppealOrderData() {
       // this.$http.get(`/api/admin/man/get`);
+    },
+    sizeChange(val) {
+      this.pageSize = val;
+      this.currentPage = 1;
+    },
+    currentChange(val) {
+      this.currentPage = val;
     },
     resetDateFilter() {
       this.$refs.filterTable.clearFilter("order_release_time");
