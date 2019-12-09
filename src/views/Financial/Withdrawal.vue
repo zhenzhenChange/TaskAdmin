@@ -19,18 +19,19 @@
         :filter-method="filterHandler"
         sortable
       >
-        <template slot-scope="scope">
+        <template v-slot="scope">
           <i class="el-icon-time"></i>
           <span class="ml-10">{{ scope.row.wb_datetime }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" width="140" prop="wb_uid" label="提现账号"></el-table-column>
-      <el-table-column align="center" width="140" prop="Alipay_account" label="支付宝账号"></el-table-column>
-      <el-table-column align="center" width="140" prop="Alipay_name" label="支付宝姓名"></el-table-column>
-      <el-table-column align="center" width="140" prop="wb_fee" label="提现金额"></el-table-column>
-      <el-table-column align="center" width="140" prop="wb_state" label="提现状态"></el-table-column>
-      <el-table-column align="center" label="操作">
-        <template slot-scope="scope">
+      <el-table-column align="center" prop="wb_id" label="流水编号"></el-table-column>
+      <el-table-column align="center" prop="wb_uid" label="提现账号"></el-table-column>
+      <el-table-column align="center" prop="Alipay_account" label="支付宝账号"></el-table-column>
+      <el-table-column align="center" prop="Alipay_name" label="支付宝姓名"></el-table-column>
+      <el-table-column align="center" prop="wb_fee" label="提现金额"></el-table-column>
+      <el-table-column align="center" prop="wb_state" label="提现状态"></el-table-column>
+      <el-table-column align="center" label="操作" width="450">
+        <template v-slot="scope">
           <el-button
             size="mini"
             icon="el-icon-success"
@@ -39,13 +40,13 @@
           >同意申请</el-button>
           <el-button
             size="mini"
-            icon="el-icon-error"
-            type="danger"
+            icon="el-icon-warning"
+            type="warning"
             @click="openRejected(scope.row.wb_id)"
           >驳回申请</el-button>
           <el-button
             size="mini"
-            icon="el-icon-warning"
+            icon="el-icon-error"
             type="danger"
             @click="openDeleteRecord(scope.row.wb_id)"
           >删除该条记录</el-button>

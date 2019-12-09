@@ -81,7 +81,7 @@
       >
         <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column label="日期" width="120">
-          <template slot-scope="scope">{{ scope.row.date }}</template>
+          <template v-slot="scope">{{ scope.row.date }}</template>
         </el-table-column>
         <el-table-column prop="name" label="姓名" width="120"></el-table-column>
         <el-table-column prop="address" label="地址" show-overflow-tooltip></el-table-column>

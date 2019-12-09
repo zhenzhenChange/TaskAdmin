@@ -14,7 +14,7 @@
       border
     >
       <el-table-column type="expand">
-        <template slot-scope="props">
+        <template v-slot="props">
           <el-form label-position="left" inline class="order-table-expand">
             <el-form-item label="订单编号">
               <span>{{ props.row.order_id }}</span>
@@ -41,7 +41,7 @@
         :filters="timeData"
         :filter-method="filterHandler"
       >
-        <template slot-scope="scope">
+        <template v-slot="scope">
           <i class="el-icon-time"></i>
           <span class="ml-10">{{ scope.row.order_release_time }}</span>
         </template>
@@ -62,16 +62,16 @@
         :filter-method="filterHandler"
         filter-placement="bottom-end"
       >
-        <template slot-scope="scope">
+        <template v-slot="scope">
           <el-tag hit :type="stateType(scope.row.order_state)">{{scope.row.order_state}}</el-tag>
         </template>
       </el-table-column>
       <el-table-column align="center" label="平台利润" prop="order_end_datetime"></el-table-column>
       <el-table-column align="center" label="操作" width="250">
-        <template slot-scope="scope">
+        <template v-slot="scope">
           <el-button
             size="mini"
-            icon="el-icon-warning"
+            icon="el-icon-error"
             type="danger"
             @click="deleteRecord(scope.row.order_id)"
           >删除该记录</el-button>

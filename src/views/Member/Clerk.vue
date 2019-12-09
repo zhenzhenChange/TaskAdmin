@@ -13,7 +13,7 @@
       border
     >
       <el-table-column type="expand">
-        <template slot-scope="props">
+        <template v-slot="props">
           <el-form label-position="left" inline class="clerk-table-expand">
             <el-form-item label="账号">
               <span>{{ props.row.phone }}</span>
@@ -55,7 +55,7 @@
         :filters="timeData"
         :filter-method="filterHandler"
       >
-        <template slot-scope="scope">
+        <template v-slot="scope">
           <i class="el-icon-time"></i>
           <span class="ml-10">{{ scope.row.reg_datetime }}</span>
         </template>
@@ -68,7 +68,7 @@
       <el-table-column align="center" prop="extension_code" label="推广码"></el-table-column>
       <el-table-column align="center" prop="is_valide" label="账号状态"></el-table-column>
       <el-table-column align="center" label="操作" width="450">
-        <template slot-scope="scope">
+        <template v-slot="scope">
           <el-button
             size="mini"
             icon="el-icon-edit"
@@ -78,7 +78,7 @@
           <el-button
             size="mini"
             icon="el-icon-warning"
-            type="danger"
+            type="warning"
             @click="openBan(scope.row.phone)"
           >禁止账号登录</el-button>
         </template>

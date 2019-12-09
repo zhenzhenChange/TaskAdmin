@@ -40,8 +40,8 @@ const routes = [{
         component: OrderCenter
       },
       {
-        path: '/charts/data',
-        name: 'data',
+        path: '/chart',
+        name: 'chart',
         component: Data
       },
       {

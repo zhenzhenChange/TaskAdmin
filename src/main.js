@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import ElementUI from 'element-ui'
 import router from './router'
+import http from './http'
 
 import App from './App.vue'
 
@@ -35,6 +36,8 @@ Vue.component('agent-create', Create)
 
 Vue.use(ElementUI)
 Vue.config.productionTip = false
+
+Vue.prototype.$http = http
 
 new Vue({
   router,

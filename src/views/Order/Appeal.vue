@@ -19,7 +19,7 @@
         :filters="timeData"
         :filter-method="filterHandler"
       >
-        <template slot-scope="scope">
+        <template v-slot="scope">
           <i class="el-icon-time"></i>
           <span class="ml-10">{{ scope.row.order_release_time }}</span>
         </template>
@@ -33,10 +33,10 @@
       <el-table-column align="center" label="申诉证据" prop="order_apply_proof"></el-table-column>
       <el-table-column align="center" label="申诉状态" prop="action_resState"></el-table-column>
       <el-table-column align="center" label="操作" width="250">
-        <template slot-scope="scope">
+        <template v-slot="scope">
           <el-button
             size="mini"
-            icon="el-icon-warning"
+            icon="el-icon-error"
             type="danger"
             @click="deleteRecord(scope.row.order_id)"
           >删除该记录</el-button>

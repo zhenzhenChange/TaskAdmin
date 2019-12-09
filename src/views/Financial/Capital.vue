@@ -22,7 +22,7 @@
         :filters="timeData"
         :filter-method="filterHandler"
       >
-        <template slot-scope="scope">
+        <template v-slot="scope">
           <i class="el-icon-time"></i>
           <span class="ml-10">{{ scope.row.wb_datetime }}</span>
         </template>
@@ -34,7 +34,7 @@
       <el-table-column align="center" prop="wb_fee" label="交易费用"></el-table-column>
       <el-table-column align="center" prop="wb_state" label="交易状态"></el-table-column>
       <el-table-column align="center" label="操作" width="450">
-        <template slot-scope="scope">
+        <template v-slot="scope">
           <el-button
             size="mini"
             icon="el-icon-edit"
@@ -43,7 +43,7 @@
           >修改支付宝账号</el-button>
           <el-button
             size="mini"
-            icon="el-icon-warning"
+            icon="el-icon-error"
             type="danger"
             @click="openDeleteRecord(scope.row.wb_id)"
           >删除该记录</el-button>

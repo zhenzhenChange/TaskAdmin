@@ -17,8 +17,8 @@
           <el-menu-item-group>
             <el-menu-item index="/orders">订单中心</el-menu-item>
           </el-menu-item-group>
-          <el-menu-item-group class="solot">
-            <el-menu-item index="/charts/data">数据总控</el-menu-item>
+          <el-menu-item-group>
+            <el-menu-item index="/chart">数据总控</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
         <el-submenu index="3">
