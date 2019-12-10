@@ -79,10 +79,15 @@ export default {
     };
   },
   methods: {
-    ClerkSetting() {
-      // console.log("submit!");
+    async ClerkSetting() {
+      await this.$http.post(`/setup/limitHold/${this.form.su_holdLimit}`);
+      await this.$http.post(
+        `/setup/isExtCodeReq/${this.form.su_isExtensionCodeReq}`
+      );
     },
-    sendNotice() {}
+    async sendNotice() {
+      await this.$http.post(`/setup/setRelesAnno/${this.textarea}`);
+    }
   }
 };
 </script>

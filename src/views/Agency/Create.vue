@@ -15,7 +15,7 @@
     <el-row>
       <el-col :span="6">
         <el-form-item label="密码" required>
-          <el-input v-model="agencyData.pwd" placeholder="请输入密码"></el-input>
+          <el-input type="password" v-model="agencyData.pwd" placeholder="请输入密码"></el-input>
         </el-form-item>
       </el-col>
       <el-col :span="6">
@@ -27,7 +27,7 @@
     <el-row>
       <el-col :span="6">
         <el-form-item label="确认密码" required>
-          <el-input v-model="agencyData.pwd" placeholder="请再次输入密码"></el-input>
+          <el-input type="password" v-model="confirmPwd" placeholder="请再次输入密码"></el-input>
         </el-form-item>
       </el-col>
       <el-col :span="6">
@@ -57,15 +57,45 @@ export default {
   data() {
     return {
       agencyData: {
-        name: "",
-        region: "",
-        type: ""
+        phone: "",
+        Alipay_account: "",
+        pwd: "",
+        Alipay_name: "",
+        qq_account: "",
+        user_remark: ""
       },
-      pwd: ""
+      confirmPwd: ""
     };
   },
   methods: {
-    createAgency() {}
+    async createAgency() {
+      if (this.agencyData.pwd !== this.confirmPwd) {
+        this.$message({
+          type: "error",
+          message: "两次密码不一致~",
+          offset: 10
+        });
+        this.agencyData.pwd = "";
+        this.confirmPwd = "";
+        return;
+      }
+      const res = await this.$http.post(
+        `/api/admin/agent/genAgent/${this.agencyData}`
+      );
+      if (res.statusCode) {
+        this.$message({
+          type: "success",
+          message: `${this.agencyData.phone}添加成功~`,
+          offset: 10
+        });
+      } else {
+        this.$message({
+          type: "success",
+          message: `服务器超时，请稍后重试~~`,
+          offset: 10
+        });
+      }
+    }
   }
 };
 </script>

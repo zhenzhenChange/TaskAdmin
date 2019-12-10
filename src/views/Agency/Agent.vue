@@ -142,6 +142,7 @@ export default {
     };
   },
   created() {
+    this.getData();
     this.getFiltersData();
   },
   computed: {
@@ -149,7 +150,7 @@ export default {
       if (this.search) {
         return this.data.filter(data => {
           return Object.keys(data).some(key => {
-            return String(data[key]).indexOf(this.search) > -1;
+            return String(data[key]).includes(this.search);
           });
         });
       }
@@ -173,8 +174,9 @@ export default {
           return arr;
         }, []);
     },
-    getData() {
-      // this.$http.get(`/api/admin/recv/get/${my_stratum}`);
+    async getData() {
+      const res = await this.$http.get(`/api/admin/agent/get`);
+      this.data = res.data;
     },
     sizeChange(val) {
       this.pageSize = val;
@@ -197,11 +199,15 @@ export default {
         type: "info",
         inputType: "password"
       })
-        .then(({ value }) => {
-          // this.$http.post(`/api/admin/give/changePwd/${phone}`);
+        .then(async ({ value }) => {
+          const data = {
+            phone,
+            newPwd: value
+          };
+          const res = await this.$http.post(`/api/admin/changePwd/${data}`);
           this.$message({
             type: "success",
-            message: phone + value,
+            message: res,
             offset: 10
           });
         })
@@ -213,11 +219,13 @@ export default {
         cancelButtonText: "取消",
         type: "warning"
       })
-        .then(() => {
-          // this.$http.post(`/api/admin/disableAccount/${phone}`);
+        .then(async () => {
+          const res = await this.$http.post(
+            `/api/admin/disableAccount/${phone}`
+          );
           this.$message({
             type: "success",
-            message: "操作成功!" + phone,
+            message: "禁止成功!" + res,
             offset: 10
           });
         })
@@ -229,11 +237,17 @@ export default {
         cancelButtonText: "取消",
         type: "info"
       })
-        .then(({ value }) => {
-          // this.$http.post(`/api/admin/give/changePwd/${phone}`);
+        .then(async ({ value }) => {
+          const data = {
+            phone,
+            newAgRetRatio: value
+          };
+          const res = await this.$http.post(
+            `/api/admin/agent/modAgRetRatio${data}`
+          );
           this.$message({
             type: "success",
-            message: phone + value,
+            message: res,
             offset: 10
           });
         })
@@ -245,11 +259,13 @@ export default {
         cancelButtonText: "取消",
         type: "info"
       })
-        .then(({ value }) => {
-          // this.$http.post(`/api/admin/give/changePwd/${phone}`);
+        .then(async ({ value }) => {
+          const res = await this.$http.post(
+            `/api/admin/agent/setRetRatio/${value}`
+          );
           this.$message({
             type: "success",
-            message: value,
+            message: res,
             offset: 10
           });
         })
