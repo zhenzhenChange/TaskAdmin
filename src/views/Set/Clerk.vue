@@ -45,7 +45,7 @@
                 <el-form-item label="发布公告">
                   <el-input
                     type="textarea"
-                    autosize
+                    rows="5"
                     resize="none"
                     placeholder="请输入内容"
                     v-model="textarea"

@@ -19,25 +19,22 @@ export default {
         orient: "vertical",
         x: "left",
         data: [
-          "直达",
-          "营销广告",
-          "搜索引擎",
-          "邮件营销",
-          "联盟广告",
-          "视频广告",
-          "百度",
-          "谷歌",
-          "必应",
-          "其他"
+          "当天订单量",
+          "当天成功订单量",
+          "当天会员注册量",
+          "当天交易量",
+          "总订单量",
+          "总成功订单量",
+          "当天流水量",
+          "总流水量"
         ]
       },
       series: [
         {
-          name: "访问来源",
+          name: "数据中心",
           type: "pie",
           selectedMode: "single",
           radius: [0, "30%"],
-
           label: {
             normal: {
               position: "inner"
@@ -49,13 +46,13 @@ export default {
             }
           },
           data: [
-            { value: 335, name: "直达", selected: true },
-            { value: 679, name: "营销广告" },
-            { value: 1548, name: "搜索引擎" }
+            { value: 435, name: "会员量" },
+            { value: 679, name: "订单总成功量" },
+            { value: 1248, name: "订单总量", selected: true }
           ]
         },
         {
-          name: "访问来源",
+          name: "数据中心",
           type: "pie",
           radius: ["40%", "55%"],
           label: {
@@ -96,14 +93,14 @@ export default {
             }
           },
           data: [
-            { value: 335, name: "直达" },
-            { value: 310, name: "邮件营销" },
-            { value: 234, name: "联盟广告" },
-            { value: 135, name: "视频广告" },
-            { value: 1048, name: "百度" },
-            { value: 251, name: "谷歌" },
-            { value: 147, name: "必应" },
-            { value: 102, name: "其他" }
+            { value: 335, name: "当天订单量" },
+            { value: 310, name: "当天成功订单量" },
+            { value: 234, name: "当天会员注册量" },
+            { value: 135, name: "当天交易量" },
+            { value: 1048, name: "总订单量" },
+            { value: 251, name: "总成功订单量" },
+            { value: 147, name: "当天流水量" },
+            { value: 102, name: "总流水量" }
           ]
         }
       ]
@@ -114,7 +111,7 @@ export default {
 
 <style lang="scss" scoped>
 .pie {
-  width: 900px;
+  width: 1200px;
   height: 800px;
   margin: 0 auto;
 }
