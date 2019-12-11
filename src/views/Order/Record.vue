@@ -250,6 +250,7 @@ export default {
     };
   },
   created() {
+    this.getData();
     this.getFiltersData();
   },
   computed: {
@@ -257,7 +258,7 @@ export default {
       if (this.search) {
         return this.data.filter(data => {
           return Object.keys(data).some(key => {
-            return String(data[key]).indexOf(this.search) > -1;
+            return String(data[key]).includes(this.search);
           });
         });
       }
@@ -274,8 +275,8 @@ export default {
       this.timeData = this.data
         .map(item => {
           return {
-            text: item.reg_datetime,
-            value: item.reg_datetime
+            text: item.order_release_time,
+            value: item.order_release_time
           };
         })
         .reduce((arr, current) => {
@@ -298,8 +299,9 @@ export default {
           return arr;
         }, []);
     },
-    getData() {
-      // this.$http.get(`/api/admin/man/get`);
+    async getData() {
+      const res = await this.$http.get(`/man/get`);
+      this.data = res.data;
     },
     sizeChange(val) {
       this.pageSize = val;
@@ -324,11 +326,11 @@ export default {
         cancelButtonText: "取消",
         type: "warning"
       })
-        .then(() => {
-          // this.$http.post(`/api/admin/disableAccount/${id}`);
+        .then(async () => {
+          const res = await this.$http.post(`/man/delOrderRec/${id}`);
           this.$message({
             type: "success",
-            message: "操作成功!" + id
+            message: "操作成功!" + res
           });
         })
         .catch(() => {});

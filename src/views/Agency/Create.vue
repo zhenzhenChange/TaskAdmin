@@ -75,13 +75,10 @@ export default {
           message: "两次密码不一致~",
           offset: 10
         });
-        this.agencyData.pwd = "";
-        this.confirmPwd = "";
+        this.agencyData.pwd = this.confirmPwd = "";
         return;
       }
-      const res = await this.$http.post(
-        `/api/admin/agent/genAgent/${this.agencyData}`
-      );
+      const res = await this.$http.post(`/agent/genAgent/${this.agencyData}`);
       if (res.statusCode) {
         this.$message({
           type: "success",

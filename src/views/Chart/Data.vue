@@ -6,7 +6,9 @@
 const echarts = require("echarts");
 export default {
   data() {
-    return {};
+    return {
+      data: []
+    };
   },
   mounted() {
     var myChart = echarts.init(this.$refs.pieContainer);
@@ -105,6 +107,15 @@ export default {
         }
       ]
     });
+  },
+  created() {
+    this.getData();
+  },
+  methods: {
+    async getData() {
+      const res = await this.$http.get("/init");
+      this.data = res.data;
+    }
   }
 };
 </script>

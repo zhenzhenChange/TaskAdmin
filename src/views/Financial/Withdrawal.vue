@@ -217,11 +217,11 @@ export default {
         cancelButtonText: "取消",
         type: "warning"
       })
-        .then(() => {
-          // this.$http.post(`/api/admin/disableAccount/${phone}`);
+        .then(async () => {
+          const res = await this.$http.post(`/api/admin/finac/delWbRec/${id}`);
           this.$message({
             type: "success",
-            message: "操作成功!" + id,
+            message: "操作成功!" + res,
             offset: 10
           });
         })

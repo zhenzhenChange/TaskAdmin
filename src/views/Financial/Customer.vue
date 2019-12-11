@@ -40,10 +40,15 @@
     </el-row>
   </el-form>
 </template>
+
 <script>
 export default {
   data() {
     return {
+      /**
+       * 人工充值
+       * /recharge/${this.customerData}
+       */
       customerData: {
         phone: "",
         Alipay_account: "",
@@ -54,8 +59,15 @@ export default {
     };
   },
   methods: {
-    postCustomerData() {
-      // this.$http.post(`/api/admin/fee/${this.customerData}`);
+    async postCustomerData() {
+      const res = this.$http.post(`/recharge/${this.customerData}`);
+      if (res.statusCode) {
+        this.$message({
+          type: "success",
+          message: "充值成功！",
+          offset: 10
+        });
+      }
     }
   }
 };

@@ -639,6 +639,7 @@ export default {
     };
   },
   created() {
+    this.getData();
     this.getFiltersData();
   },
   computed: {
@@ -646,7 +647,7 @@ export default {
       if (this.search) {
         return this.data.filter(data => {
           return Object.keys(data).some(key => {
-            return String(data[key]).indexOf(this.search) > -1;
+            return String(data[key]).includes(this.search);
           });
         });
       }
@@ -670,8 +671,9 @@ export default {
           return arr;
         }, []);
     },
-    getData() {
-      // this.$http.get(`/api/admin/recv/get/`);
+    async getData() {
+      const res = await this.$http.get(`/recv/get`);
+      this.data = res.data;
     },
     sizeChange(val) {
       this.pageSize = val;
@@ -694,11 +696,15 @@ export default {
         type: "info",
         inputType: "password"
       })
-        .then(({ value }) => {
-          // this.$http.post(`/api/admin/give/changePwd/${phone}`);
+        .then(async ({ value }) => {
+          let data = {
+            phone,
+            newPwd: value
+          };
+          const res = await this.$http.post(`/give/changePwd/${data}`);
           this.$message({
             type: "success",
-            message: `${phone + value}  密码修改成功！`,
+            message: `${res}  密码修改成功！`,
             offset: 10
           });
         })
@@ -710,11 +716,11 @@ export default {
         cancelButtonText: "取消",
         type: "warning"
       })
-        .then(() => {
-          // this.$http.post(`/api/admin/disableAccount/${phone}`);
+        .then(async () => {
+          const res = await this.$http.post(`/disableAccount/${phone}`);
           this.$message({
             type: "success",
-            message: `禁止成功!${phone}`,
+            message: `禁止成功!${res}`,
             offset: 10
           });
         })

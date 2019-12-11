@@ -74,6 +74,7 @@ export default {
   text-align: right;
   font-size: 12px;
 }
+
 .el-menu-item {
   color: gray;
   font-size: 12px;

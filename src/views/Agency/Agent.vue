@@ -175,7 +175,7 @@ export default {
         }, []);
     },
     async getData() {
-      const res = await this.$http.get(`/api/admin/agent/get`);
+      const res = await this.$http.get(`/agent/get`);
       this.data = res.data;
     },
     sizeChange(val) {
@@ -204,7 +204,7 @@ export default {
             phone,
             newPwd: value
           };
-          const res = await this.$http.post(`/api/admin/changePwd/${data}`);
+          const res = await this.$http.post(`/changePwd/${data}`);
           this.$message({
             type: "success",
             message: res,
@@ -220,9 +220,7 @@ export default {
         type: "warning"
       })
         .then(async () => {
-          const res = await this.$http.post(
-            `/api/admin/disableAccount/${phone}`
-          );
+          const res = await this.$http.post(`/disableAccount/${phone}`);
           this.$message({
             type: "success",
             message: "禁止成功!" + res,
@@ -242,9 +240,7 @@ export default {
             phone,
             newAgRetRatio: value
           };
-          const res = await this.$http.post(
-            `/api/admin/agent/modAgRetRatio${data}`
-          );
+          const res = await this.$http.post(`/agent/modAgRetRatio/${data}`);
           this.$message({
             type: "success",
             message: res,
@@ -260,9 +256,7 @@ export default {
         type: "info"
       })
         .then(async ({ value }) => {
-          const res = await this.$http.post(
-            `/api/admin/agent/setRetRatio/${value}`
-          );
+          const res = await this.$http.post(`/agent/setRetRatio/${value}`);
           this.$message({
             type: "success",
             message: res,

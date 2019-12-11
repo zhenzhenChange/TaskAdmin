@@ -494,8 +494,9 @@ export default {
           return arr;
         }, []);
     },
-    getData() {
-      // this.$http.get(`/api/admin/give/get/`);
+    async getData() {
+      const res = await this.$http.get(`/give/get`);
+      this.data = res.data;
     },
     sizeChange(val) {
       this.pageSize = val;
@@ -517,11 +518,15 @@ export default {
         cancelButtonText: "取消",
         type: "info"
       })
-        .then(({ value }) => {
-          // this.$http.post(`/api/admin/give/modPrice/${phone}`);
+        .then(async ({ value }) => {
+          let data = {
+            phone,
+            newPro: value
+          };
+          const res = await this.$http.post(`/give/modPrice/${data}`);
           this.$message({
             type: "success",
-            message: "您修改的价格为: " + phone + value,
+            message: `您修改的价格为: ${res}`,
             offset: 10
           });
         })
@@ -534,11 +539,15 @@ export default {
         type: "info",
         inputType: "password"
       })
-        .then(({ value }) => {
-          // this.$http.post(`/api/admin/give/changePwd/${phone}`);
+        .then(async ({ value }) => {
+          let data = {
+            phone,
+            newPwd: value
+          };
+          const res = await this.$http.post(`/give/changePwd/${data}`);
           this.$message({
             type: "success",
-            message: phone + value,
+            message: res,
             offset: 10
           });
         })
@@ -550,11 +559,11 @@ export default {
         cancelButtonText: "取消",
         type: "warning"
       })
-        .then(() => {
-          // this.$http.post(`/api/admin/disableAccount/${phone}`);
+        .then(async () => {
+          const res = await this.$http.post(`/disableAccount/${phone}`);
           this.$message({
             type: "success",
-            message: "禁止成功!" + phone,
+            message: "禁止成功!" + res,
             offset: 10
           });
         })

@@ -5,7 +5,7 @@
     </el-card>
     <el-table
       ref="filterTable"
-      :data="appealOrderData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+      :data="data.slice((currentPage-1)*pageSize,currentPage*pageSize)"
       stripe
       border
     >
@@ -31,7 +31,19 @@
       <el-table-column align="center" label="订单价格" prop="order_price"></el-table-column>
       <el-table-column align="center" label="接单账号" prop="uid_recive"></el-table-column>
       <el-table-column align="center" label="申诉证据" prop="order_apply_proof"></el-table-column>
-      <el-table-column align="center" label="申诉状态" prop="action_resState"></el-table-column>
+      <el-table-column
+        prop="action_resState"
+        label="申诉状态"
+        align="center"
+        width="120"
+        :filters="stateData"
+        :filter-method="filterHandler"
+        filter-placement="bottom-end"
+      >
+        <template v-slot="scope">
+          <el-tag hit :type="stateType(scope.row.action_resState)">{{scope.row.action_resState}}</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column align="center" label="操作" width="250">
         <template v-slot="scope">
           <el-button
@@ -49,7 +61,7 @@
       :page-size="pageSize"
       :page-sizes="pageSizes"
       :current-page="currentPage"
-      :total="appealOrderData.length"
+      :total="data.length"
       layout="total, sizes, prev, pager, next, jumper"
       class="mt-20"
     ></el-pagination>
@@ -60,7 +72,55 @@
 export default {
   data() {
     return {
-      appealOrderData: [
+      data: [
+        {
+          order_id: "订单编号",
+          uid_give: "发布账号",
+          order_release_time: "发布日期",
+          order_price: "订单价格",
+          uid_recive: "接单账号",
+          order_end_datetime: "失败时间",
+          order_state: "订单状态（申诉）",
+          action_datetime: "申诉时间",
+          action_resState: "申诉状态",
+          order_apply_proof: "申诉证据"
+        },
+        {
+          order_id: "订单编号",
+          uid_give: "发布账号",
+          order_release_time: "发布日期",
+          order_price: "订单价格",
+          uid_recive: "接单账号",
+          order_end_datetime: "失败时间",
+          order_state: "订单状态（申诉）",
+          action_datetime: "申诉时间",
+          action_resState: "申诉状态",
+          order_apply_proof: "申诉证据"
+        },
+        {
+          order_id: "订单编号",
+          uid_give: "发布账号",
+          order_release_time: "发布日期",
+          order_price: "订单价格",
+          uid_recive: "接单账号",
+          order_end_datetime: "失败时间",
+          order_state: "订单状态（申诉）",
+          action_datetime: "申诉时间",
+          action_resState: "申诉状态",
+          order_apply_proof: "申诉证据"
+        },
+        {
+          order_id: "订单编号",
+          uid_give: "发布账号",
+          order_release_time: "发布日期",
+          order_price: "订单价格",
+          uid_recive: "接单账号",
+          order_end_datetime: "失败时间",
+          order_state: "订单状态（申诉）",
+          action_datetime: "申诉时间",
+          action_resState: "申诉状态",
+          order_apply_proof: "申诉证据"
+        },
         {
           order_id: "订单编号",
           uid_give: "发布账号",
@@ -166,25 +226,47 @@ export default {
     };
   },
   created() {
+    this.getData();
     this.getFiltersData();
   },
   methods: {
-    getFiltersData() {
-      this.timeData = this.appealOrderData.map(item => {
-        return {
-          text: item.order_release_time,
-          value: item.order_release_time
-        };
-      });
-      this.stateData = this.appealOrderData.map(item => {
-        return {
-          text: item.order_state,
-          value: item.order_state
-        };
-      });
+    stateType(type) {
+      return type === "成功" ? "success" : "primary";
     },
-    getAppealOrderData() {
-      // this.$http.get(`/api/admin/man/get`);
+    getFiltersData() {
+      let timeHash = {};
+      let stateHash = {};
+      this.timeData = this.data
+        .map(item => {
+          return {
+            text: item.order_release_time,
+            value: item.order_release_time
+          };
+        })
+        .reduce((arr, current) => {
+          timeHash[current.text]
+            ? ""
+            : (timeHash[current.text] = true && arr.push(current));
+          return arr;
+        }, []);
+      this.stateData = this.data
+        .map(item => {
+          return {
+            text: item.action_resState,
+            value: item.action_resState
+          };
+        })
+        .reduce((arr, current) => {
+          stateHash[current.text]
+            ? ""
+            : (stateHash[current.text] = true && arr.push(current));
+          return arr;
+        }, []);
+    },
+    async getData() {
+      let state = "申诉";
+      const res = await this.$http.get(`/man/get/${state}`);
+      this.data = res.data;
     },
     sizeChange(val) {
       this.pageSize = val;
@@ -200,17 +282,17 @@ export default {
       const property = column["property"];
       return row[property] === value;
     },
-    deleteRecord(order_id) {
+    deleteRecord(id) {
       this.$confirm("确定要删除此记录吗？", "警告", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
-        .then(() => {
-          // this.$http.post(`/api/admin/disableAccount/${phone}`);
+        .then(async () => {
+          const res = await this.$http.post(`/man/delOrderRec/${id}`);
           this.$message({
             type: "success",
-            message: `${order_id} 删除成功!`,
+            message: `${res} 删除成功!`,
             offset: 10
           });
         })
