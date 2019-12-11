@@ -133,7 +133,7 @@ export default {
     },
     async getData() {
       const data = {
-        order_state: "申诉"
+        action_resState: 3
       };
       const res = await this.$http.get(`/man/get/${data}`);
       this.data = res.data;

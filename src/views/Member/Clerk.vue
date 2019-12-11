@@ -104,7 +104,6 @@ export default {
       data: [
         {
           phone: "JI",
-          pwd: "密码",
           my_balance: "JS",
           general_income: "总提成",
           reg_datetime: "注册时间",

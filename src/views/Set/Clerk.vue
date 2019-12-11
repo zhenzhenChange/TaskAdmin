@@ -51,7 +51,7 @@ export default {
       su_holdLimit: "",
       su_isExtensionCodeReq: 1,
       textarea: "",
-      positon: "left"
+      positon: "top"
     };
   },
   methods: {
@@ -120,7 +120,6 @@ export default {
       padding: 3px 0;
     }
     .exCode {
-      display: inline-block;
       margin-top: 10px;
       float: left;
     }

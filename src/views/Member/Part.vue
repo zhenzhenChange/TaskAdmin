@@ -99,7 +99,6 @@ export default {
       data: [
         {
           phone: "账号",
-          pwd: "密码",
           my_balance: "余额",
           totalRecharge: "总充值",
           wb_datetime: "充值日期",
@@ -122,6 +121,7 @@ export default {
     };
   },
   created() {
+    this.getData();
     this.getFiltersData();
   },
   computed: {
