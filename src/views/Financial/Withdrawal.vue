@@ -5,7 +5,7 @@
     </el-card>
     <el-table
       ref="filterTable"
-      :data="wasteBookData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+      :data="data.slice((currentPage-1)*pageSize,currentPage*pageSize)"
       stripe
       border
     >
@@ -59,7 +59,7 @@
       :page-size="pageSize"
       :page-sizes="pageSizes"
       :current-page="currentPage"
-      :total="wasteBookData.length"
+      :total="data.length"
       layout="total, sizes, prev, pager, next, jumper"
       class="mt-20"
     ></el-pagination>
@@ -70,70 +70,7 @@
 export default {
   data() {
     return {
-      wasteBookData: [
-        {
-          wb_id: "流水号",
-          wb_fee: "提现金额",
-          wb_uid: "提现账号",
-          Alipay_account: "支付宝账号",
-          Alipay_name: "支付宝姓名",
-          wb_state: "提现状态",
-          wb_datetime: "提现日期"
-        },
-        {
-          wb_id: "流水号",
-          wb_fee: "提现金额",
-          wb_uid: "提现账号",
-          Alipay_account: "支付宝账号",
-          Alipay_name: "支付宝姓名",
-          wb_state: "提现状态",
-          wb_datetime: "提现日期"
-        },
-        {
-          wb_id: "流水号",
-          wb_fee: "提现金额",
-          wb_uid: "提现账号",
-          Alipay_account: "支付宝账号",
-          Alipay_name: "支付宝姓名",
-          wb_state: "提现状态",
-          wb_datetime: "提现日期"
-        },
-        {
-          wb_id: "流水号",
-          wb_fee: "提现金额",
-          wb_uid: "提现账号",
-          Alipay_account: "支付宝账号",
-          Alipay_name: "支付宝姓名",
-          wb_state: "提现状态",
-          wb_datetime: "提现日期"
-        },
-        {
-          wb_id: "流水号",
-          wb_fee: "提现金额",
-          wb_uid: "提现账号",
-          Alipay_account: "支付宝账号",
-          Alipay_name: "支付宝姓名",
-          wb_state: "提现状态",
-          wb_datetime: "提现日期"
-        },
-        {
-          wb_id: "流水号",
-          wb_fee: "提现金额",
-          wb_uid: "提现账号",
-          Alipay_account: "支付宝账号",
-          Alipay_name: "支付宝姓名",
-          wb_state: "提现状态",
-          wb_datetime: "提现日期"
-        },
-        {
-          wb_id: "流水号",
-          wb_fee: "提现金额",
-          wb_uid: "提现账号",
-          Alipay_account: "支付宝账号",
-          Alipay_name: "支付宝姓名",
-          wb_state: "提现状态",
-          wb_datetime: "提现日期"
-        },
+      data: [
         {
           wb_id: "流水号",
           wb_fee: "提现金额",
@@ -151,19 +88,24 @@ export default {
     };
   },
   created() {
+    this.getData();
     this.getFiltersData();
   },
   methods: {
     getFiltersData() {
-      this.timeData = this.wasteBookData.map(item => {
+      this.timeData = this.data.map(item => {
         return {
           text: item.reg_datetime,
           value: item.reg_datetime
         };
       });
     },
-    getData() {
-      // this.$http.get(`/api/admin/give/get/${my_stratum}`);
+    async getData() {
+      const data = {
+        wd_type: 1
+      };
+      const res = await this.$http.get(`/finac/get/${data}`);
+      this.data = res.data;
     },
     sizeChange(val) {
       this.pageSize = val;
@@ -185,11 +127,15 @@ export default {
         cancelButtonText: "取消",
         type: "info"
       })
-        .then(() => {
-          // this.$http.post(`/api/admin/disableAccount/${phone}`);
+        .then(async () => {
+          const data = {
+            wb_id: id,
+            wb_state: 1
+          };
+          const res = await this.$http.post(`/finac/doWithdraw/${data}`);
           this.$message({
             type: "success",
-            message: "操作成功!" + id,
+            message: "操作成功!" + res,
             offset: 10
           });
         })
@@ -201,11 +147,15 @@ export default {
         cancelButtonText: "取消",
         type: "info"
       })
-        .then(() => {
-          // this.$http.post(`/api/admin/disableAccount/${phone}`);
+        .then(async () => {
+          const data = {
+            wb_id: id,
+            wb_state: 0
+          };
+          const res = await this.$http.post(`/finac/doWithdraw/${data}`);
           this.$message({
             type: "success",
-            message: "操作成功!" + id,
+            message: "操作成功!" + res,
             offset: 10
           });
         })
@@ -218,7 +168,7 @@ export default {
         type: "warning"
       })
         .then(async () => {
-          const res = await this.$http.post(`/api/admin/finac/delWbRec/${id}`);
+          const res = await this.$http.post(`/finac/delWbRec/${id}`);
           this.$message({
             type: "success",
             message: "操作成功!" + res,

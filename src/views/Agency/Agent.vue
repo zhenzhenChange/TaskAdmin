@@ -6,6 +6,7 @@
       </el-input>
       <el-button @click="resetDateFilter">重置日期筛选</el-button>
       <el-button @click="openEditDefaultIncome" icon="el-icon-edit" type="primary">总代提成默认设置</el-button>
+      <span class="ml-10">总代默认提成：{{son_pumpRation}}</span>
     </el-card>
     <el-table
       ref="filterTable"
@@ -135,6 +136,7 @@ export default {
         }
       ],
       timeData: [{ text: "", value: "" }],
+      son_pumpRation: "下级抽层率",
       search: "",
       currentPage: 1,
       pageSize: 10,
@@ -250,13 +252,14 @@ export default {
         .catch(() => {});
     },
     openEditDefaultIncome() {
-      this.$prompt("请设置默认提成", "提示", {
+      this.$prompt("请重新设置总代默认提成", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "info"
       })
         .then(async ({ value }) => {
           const res = await this.$http.post(`/agent/setRetRatio/${value}`);
+          this.son_pumpRation = value;
           this.$message({
             type: "success",
             message: res,

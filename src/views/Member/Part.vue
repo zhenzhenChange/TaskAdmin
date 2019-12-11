@@ -22,7 +22,7 @@
               <span>{{ props.row.user_remark }}</span>
             </el-form-item>
             <el-form-item label="当天充值">
-              <span>{{ props.row.wb_fee }}</span>
+              <span>{{ props.row.totalRecharge }}</span>
             </el-form-item>
             <el-form-item label="当天下订单">
               <span>{{ props.row.orderData.length }}</span>
@@ -50,7 +50,7 @@
       </el-table-column>
       <el-table-column align="center" prop="phone" label="账号"></el-table-column>
       <el-table-column align="center" prop="my_balance" label="余额"></el-table-column>
-      <el-table-column align="center" prop="wb_fee" label="总充值"></el-table-column>
+      <el-table-column align="center" prop="totalRecharge" label="总充值"></el-table-column>
       <el-table-column align="center" prop="orderData.length" label="总下订单"></el-table-column>
       <el-table-column align="center" label="总成功订单">
         <template v-slot="scope">{{scope.row.orderData.map(item=>item.order_state).toString()}}</template>
@@ -101,8 +101,7 @@ export default {
           phone: "账号",
           pwd: "密码",
           my_balance: "余额",
-          wb_fee: "总充值",
-          user_remark: "备注",
+          totalRecharge: "总充值",
           wb_datetime: "充值日期",
           reg_datetime: "注册日期",
           is_valide: "账号是否可用",
@@ -111,346 +110,6 @@ export default {
               order_id: "订单编号",
               order_release_time: "生成日期",
               order_state: "订单状态"
-            }
-          ]
-        },
-        {
-          phone: "账号",
-          pwd: "密码",
-          my_balance: "余额",
-          wb_fee: "总充值",
-          user_remark: "备注",
-          wb_datetime: "充值日期",
-          reg_datetime: "注册日期",
-          is_valide: "账号是否可用",
-          orderData: [
-            {
-              order_id: "订单编号",
-              order_release_time: "生成日期",
-              order_state: "订单状态"
-            }
-          ]
-        },
-        {
-          phone: "账号",
-          pwd: "密码",
-          my_balance: "余额",
-          wb_fee: "总充值",
-          user_remark: "备注",
-          wb_datetime: "充值日期",
-          reg_datetime: "注册日期",
-          is_valide: "账号是否可用",
-          orderData: [
-            {
-              order_id: "订单编号",
-              order_release_time: "生成日期",
-              order_state: "订单状态"
-            }
-          ]
-        },
-        {
-          phone: "账号",
-          pwd: "密码",
-          my_balance: "余额",
-          wb_fee: "总充值",
-          user_remark: "备注",
-          wb_datetime: "充值日期",
-          reg_datetime: "注册日期",
-          is_valide: "账号是否可用",
-          orderData: [
-            {
-              order_id: "订单编号",
-              order_release_time: "生成日期",
-              order_state: "订单状态"
-            }
-          ]
-        },
-        {
-          phone: "账号",
-          pwd: "密码",
-          my_balance: "余额",
-          wb_fee: "总充值",
-          user_remark: "备注",
-          wb_datetime: "充值日期",
-          reg_datetime: "注册日期",
-          is_valide: "账号是否可用",
-          orderData: [
-            {
-              order_id: "订单编号",
-              order_release_time: "生成日期",
-              order_state: "订单状态"
-            }
-          ]
-        },
-        {
-          phone: "账号",
-          pwd: "密码",
-          my_balance: "余额",
-          wb_fee: "总充值",
-          user_remark: "备注",
-          wb_datetime: "充值日期",
-          reg_datetime: "注册日期",
-          is_valide: "账号是否可用",
-          orderData: [
-            {
-              order_id: "订单编号",
-              order_release_time: "生成日期",
-              order_state: "订单状态"
-            }
-          ]
-        },
-        {
-          phone: "账号",
-          pwd: "密码",
-          my_balance: "余额",
-          wb_fee: "总充值",
-          user_remark: "备注",
-          wb_datetime: "充值日期",
-          reg_datetime: "注册日期",
-          is_valide: "账号是否可用",
-          orderData: [
-            {
-              order_id: "订单编号",
-              order_release_time: "生成日期",
-              order_state: "订单状态"
-            }
-          ]
-        },
-        {
-          phone: "账号",
-          pwd: "密码",
-          my_balance: "余额",
-          wb_fee: "总充值",
-          user_remark: "备注",
-          wb_datetime: "充值日期",
-          reg_datetime: "注册日期",
-          is_valide: "账号是否可用",
-          orderData: [
-            {
-              order_id: "订单编号",
-              order_release_time: "生成日期",
-              order_state: "订单状态"
-            }
-          ]
-        },
-        {
-          phone: "账号",
-          pwd: "密码",
-          my_balance: "余额",
-          wb_fee: "总充值",
-          user_remark: "备注",
-          wb_datetime: "充值日期",
-          reg_datetime: "注册日期",
-          is_valide: "账号是否可用",
-          orderData: [
-            {
-              order_id: "订单编号",
-              order_release_time: "生成日期",
-              order_state: "订单状态"
-            }
-          ]
-        },
-        {
-          phone: "222",
-          pwd: "密码",
-          my_balance: "余额",
-          wb_fee: "222",
-          user_remark: "222",
-          wb_datetime: "222",
-          reg_datetime: "222",
-          is_valide: "账号是否可用",
-          orderData: [
-            {
-              order_id: "222",
-              order_release_time: "生成日期",
-              order_state: "订单状态"
-            }
-          ]
-        },
-        {
-          phone: "222",
-          pwd: "密码",
-          my_balance: "余额",
-          wb_fee: "222",
-          user_remark: "222",
-          wb_datetime: "222",
-          reg_datetime: "222",
-          is_valide: "账号是否可用",
-          orderData: [
-            {
-              order_id: "222",
-              order_release_time: "生成日期",
-              order_state: "订单状态"
-            }
-          ]
-        },
-        {
-          phone: "账号",
-          pwd: "密码",
-          my_balance: "余额",
-          wb_fee: "总充值",
-          user_remark: "备注",
-          wb_datetime: "充值日期",
-          reg_datetime: "注册日期",
-          is_valide: "账号是否可用",
-          orderData: [
-            {
-              order_id: "订单编号",
-              order_release_time: "生成日期",
-              order_state: "订单状态"
-            }
-          ]
-        },
-        {
-          phone: "账号",
-          pwd: "密码",
-          my_balance: "余额",
-          wb_fee: "总充值",
-          user_remark: "备注",
-          wb_datetime: "充值日期",
-          reg_datetime: "注册日期",
-          is_valide: "账号是否可用",
-          orderData: [
-            {
-              order_id: "订单编号",
-              order_release_time: "生成日期",
-              order_state: "订单状态"
-            }
-          ]
-        },
-        {
-          phone: "账号",
-          pwd: "密码",
-          my_balance: "余额",
-          wb_fee: "总充值",
-          user_remark: "备注",
-          wb_datetime: "充值日期",
-          reg_datetime: "注册日期",
-          is_valide: "账号是否可用",
-          orderData: [
-            {
-              order_id: "订单编号",
-              order_release_time: "生成日期",
-              order_state: "订单状态"
-            }
-          ]
-        },
-        {
-          phone: "222",
-          pwd: "222",
-          my_balance: "222",
-          wb_fee: "总充值",
-          user_remark: "222",
-          wb_datetime: "222",
-          reg_datetime: "222",
-          is_valide: "222",
-          orderData: [
-            {
-              order_id: "订单编号",
-              order_release_time: "生成日期",
-              order_state: "订单状态"
-            }
-          ]
-        },
-        {
-          phone: "账号",
-          pwd: "密码",
-          my_balance: "余额",
-          wb_fee: "总充值",
-          user_remark: "备注",
-          wb_datetime: "充值日期",
-          reg_datetime: "注册日期",
-          is_valide: "账号是否可用",
-          orderData: [
-            {
-              order_id: "订单编号",
-              order_release_time: "生成日期",
-              order_state: "订单状态"
-            }
-          ]
-        },
-        {
-          phone: "账号",
-          pwd: "密码",
-          my_balance: "余额",
-          wb_fee: "总充值",
-          user_remark: "备注",
-          wb_datetime: "充值日期",
-          reg_datetime: "注册日期",
-          is_valide: "账号是否可用",
-          orderData: [
-            {
-              order_id: "订单编号",
-              order_release_time: "生成日期",
-              order_state: "订单状态"
-            }
-          ]
-        },
-        {
-          phone: "账号",
-          pwd: "密码",
-          my_balance: "余额",
-          wb_fee: "总充值",
-          user_remark: "备注",
-          wb_datetime: "充值日期",
-          reg_datetime: "注册日期",
-          is_valide: "账号是否可用",
-          orderData: [
-            {
-              order_id: "订单编号",
-              order_release_time: "生成日期",
-              order_state: "订单状态"
-            }
-          ]
-        },
-        {
-          phone: "账号",
-          pwd: "密码",
-          my_balance: "余额",
-          wb_fee: "总充值",
-          user_remark: "备注",
-          wb_datetime: "充值日期",
-          reg_datetime: "注册日期",
-          is_valide: "账号是否可用",
-          orderData: [
-            {
-              order_id: "订单编号",
-              order_release_time: "生成日期",
-              order_state: "订单状态"
-            }
-          ]
-        },
-        {
-          phone: "账号",
-          pwd: "密码",
-          my_balance: "余额",
-          wb_fee: "总充值",
-          user_remark: "备注",
-          wb_datetime: "充值日期",
-          reg_datetime: "注册日期",
-          is_valide: "账号是否可用",
-          orderData: [
-            {
-              order_id: "订单编号",
-              order_release_time: "生成日期",
-              order_state: "订单状态"
-            }
-          ]
-        },
-        {
-          phone: "666",
-          pwd: "222",
-          my_balance: "222",
-          wb_fee: "222",
-          user_remark: "222",
-          wb_datetime: "222",
-          reg_datetime: "222",
-          is_valide: "222",
-          orderData: [
-            {
-              order_id: "222",
-              order_release_time: "222",
-              order_state: "222"
             }
           ]
         }
@@ -521,7 +180,7 @@ export default {
         .then(async ({ value }) => {
           let data = {
             phone,
-            newPro: value
+            newPrice: value
           };
           const res = await this.$http.post(`/give/modPrice/${data}`);
           this.$message({
@@ -544,7 +203,7 @@ export default {
             phone,
             newPwd: value
           };
-          const res = await this.$http.post(`/give/changePwd/${data}`);
+          const res = await this.$http.post(`/changePwd/${data}`);
           this.$message({
             type: "success",
             message: res,

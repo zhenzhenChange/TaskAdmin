@@ -50,7 +50,7 @@
             size="mini"
             icon="el-icon-error"
             type="danger"
-            @click="deleteRecord(scope.row.order_id)"
+            @click="openDeleteRecord(scope.row.order_id)"
           >删除该记录</el-button>
         </template>
       </el-table-column>
@@ -78,138 +78,6 @@ export default {
           uid_give: "发布账号",
           order_release_time: "发布日期",
           order_price: "订单价格",
-          uid_recive: "接单账号",
-          order_end_datetime: "失败时间",
-          order_state: "订单状态（申诉）",
-          action_datetime: "申诉时间",
-          action_resState: "申诉状态",
-          order_apply_proof: "申诉证据"
-        },
-        {
-          order_id: "订单编号",
-          uid_give: "发布账号",
-          order_release_time: "发布日期",
-          order_price: "订单价格",
-          uid_recive: "接单账号",
-          order_end_datetime: "失败时间",
-          order_state: "订单状态（申诉）",
-          action_datetime: "申诉时间",
-          action_resState: "申诉状态",
-          order_apply_proof: "申诉证据"
-        },
-        {
-          order_id: "订单编号",
-          uid_give: "发布账号",
-          order_release_time: "发布日期",
-          order_price: "订单价格",
-          uid_recive: "接单账号",
-          order_end_datetime: "失败时间",
-          order_state: "订单状态（申诉）",
-          action_datetime: "申诉时间",
-          action_resState: "申诉状态",
-          order_apply_proof: "申诉证据"
-        },
-        {
-          order_id: "订单编号",
-          uid_give: "发布账号",
-          order_release_time: "发布日期",
-          order_price: "订单价格",
-          uid_recive: "接单账号",
-          order_end_datetime: "失败时间",
-          order_state: "订单状态（申诉）",
-          action_datetime: "申诉时间",
-          action_resState: "申诉状态",
-          order_apply_proof: "申诉证据"
-        },
-        {
-          order_id: "订单编号",
-          uid_give: "发布账号",
-          order_release_time: "发布日期",
-          order_price: "订单价格",
-          uid_recive: "接单账号",
-          order_end_datetime: "失败时间",
-          order_state: "订单状态（申诉）",
-          action_datetime: "申诉时间",
-          action_resState: "申诉状态",
-          order_apply_proof: "申诉证据"
-        },
-        {
-          order_id: "订单编号",
-          uid_give: "发布账号",
-          order_release_time: "发布日期",
-          order_price: "订单价格",
-          uid_recive: "接单账号",
-          order_end_datetime: "失败时间",
-          order_state: "订单状态（申诉）",
-          action_datetime: "申诉时间",
-          action_resState: "申诉状态",
-          order_apply_proof: "申诉证据"
-        },
-        {
-          order_id: "订单编号",
-          uid_give: "发布账号",
-          order_release_time: "发布日期",
-          order_price: "订单价格",
-          uid_recive: "接单账号",
-          order_end_datetime: "失败时间",
-          order_state: "订单状态（申诉）",
-          action_datetime: "申诉时间",
-          action_resState: "申诉状态",
-          order_apply_proof: "申诉证据"
-        },
-        {
-          order_id: "订单编号",
-          uid_give: "发布账号",
-          order_release_time: "发布日期",
-          order_price: "订单价格",
-          uid_recive: "接单账号",
-          order_end_datetime: "失败时间",
-          order_state: "订单状态（申诉）",
-          action_datetime: "申诉时间",
-          action_resState: "申诉状态",
-          order_apply_proof: "申诉证据"
-        },
-        {
-          order_id: "订单编号",
-          uid_give: "发布账号",
-          order_release_time: "发布日期",
-          order_price: "订单价格",
-          uid_recive: "接单账号",
-          order_end_datetime: "失败时间",
-          order_state: "订单状态（申诉）",
-          action_datetime: "申诉时间",
-          action_resState: "申诉状态",
-          order_apply_proof: "申诉证据"
-        },
-        {
-          order_id: "22",
-          uid_give: "22222",
-          order_release_time: "222",
-          order_price: "222",
-          uid_recive: "222",
-          order_end_datetime: "失败时间",
-          order_state: "订单状态（申诉）",
-          action_datetime: "申诉时间",
-          action_resState: "申诉状态",
-          order_apply_proof: "申诉证据"
-        },
-        {
-          order_id: "订单编号",
-          uid_give: "发布账号",
-          order_release_time: "发布日期",
-          order_price: "订单价格",
-          uid_recive: "接单账号",
-          order_end_datetime: "失败时间",
-          order_state: "订单状态（申诉）",
-          action_datetime: "申诉时间",
-          action_resState: "申诉状态",
-          order_apply_proof: "申诉证据"
-        },
-        {
-          order_id: "777",
-          uid_give: "发布账号",
-          order_release_time: "发布日期",
-          order_price: "888",
           uid_recive: "接单账号",
           order_end_datetime: "失败时间",
           order_state: "订单状态（申诉）",
@@ -264,8 +132,10 @@ export default {
         }, []);
     },
     async getData() {
-      let state = "申诉";
-      const res = await this.$http.get(`/man/get/${state}`);
+      const data = {
+        order_state: "申诉"
+      };
+      const res = await this.$http.get(`/man/get/${data}`);
       this.data = res.data;
     },
     sizeChange(val) {
@@ -282,7 +152,7 @@ export default {
       const property = column["property"];
       return row[property] === value;
     },
-    deleteRecord(id) {
+    openDeleteRecord(id) {
       this.$confirm("确定要删除此记录吗？", "警告", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",

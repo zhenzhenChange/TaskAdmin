@@ -19,7 +19,7 @@
         </el-form-item>
       </el-col>
       <el-col :span="6">
-        <el-form-item label="交易金额" required>
+        <el-form-item label="充值金额" required>
           <el-input v-model="customerData.wb_fee" placeholder="请输入充值金额"></el-input>
         </el-form-item>
       </el-col>
@@ -27,7 +27,7 @@
     <el-row>
       <el-col :span="12">
         <el-form-item label="备注">
-          <el-input v-model="customerData.wb_remark" placeholder="请输入备注"></el-input>
+          <el-input v-model="customerData.wb_remark" placeholder="请输入备注（可选）"></el-input>
         </el-form-item>
       </el-col>
     </el-row>
@@ -45,10 +45,6 @@
 export default {
   data() {
     return {
-      /**
-       * 人工充值
-       * /recharge/${this.customerData}
-       */
       customerData: {
         phone: "",
         Alipay_account: "",
