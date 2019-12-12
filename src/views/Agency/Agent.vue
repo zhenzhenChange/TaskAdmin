@@ -30,16 +30,16 @@
               <span>{{ props.row.orderData.length }}</span>
             </el-form-item>
             <el-form-item label="下级总接订单">
-              <span>{{ props.row.sonOrderData.length }}</span>
+              <span>{{ props.row.sonData.length }}</span>
             </el-form-item>
             <el-form-item label="下级总成功订单">
-              <span>{{ props.row.sonOrderData.length }}</span>
+              <span>{{ props.row.sonData.length }}</span>
             </el-form-item>
             <el-form-item label="下级当天接订单">
-              <span>{{ props.row.sonOrderData.length }}</span>
+              <span>{{ props.row.sonData.length }}</span>
             </el-form-item>
             <el-form-item label="下级当天成功订单">
-              <span>{{ props.row.sonOrderData.length }}</span>
+              <span>{{ props.row.sonData.length }}</span>
             </el-form-item>
           </el-form>
         </template>
@@ -109,7 +109,6 @@ export default {
       data: [
         {
           phone: 18172641474,
-          pwd: "18172641474",
           my_balance: 78.04,
           user_remark: "备注",
           general_income: 100.5,
@@ -124,13 +123,17 @@ export default {
               order_state: 1
             }
           ],
-          sonOrderData: [
+          sonData: [
             {
               my_superior: "ABCDEF",
               extension_code: "HHHHHH",
-              order_id: 45641523498631,
-              order_release_time: "2017-08-08",
-              order_state: 1
+              orderData: [
+                {
+                  order_id: 45641523498631,
+                  order_release_time: "2017-08-08",
+                  order_state: 1
+                }
+              ]
             }
           ]
         }

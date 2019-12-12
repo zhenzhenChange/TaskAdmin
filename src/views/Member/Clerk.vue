@@ -31,16 +31,16 @@
               <span>{{ props.row.orderData.length }}</span>
             </el-form-item>
             <el-form-item label="下级总接订单">
-              <span>{{ props.row.sonOrderData.length }}</span>
+              <span>{{ props.row.sonData.length }}</span>
             </el-form-item>
             <el-form-item label="下级总成功订单">
-              <span>{{ props.row.sonOrderData.length }}</span>
+              <span>{{ props.row.sonData.length }}</span>
             </el-form-item>
             <el-form-item label="下级当天接订单">
-              <span>{{ props.row.sonOrderData.length }}</span>
+              <span>{{ props.row.sonData.length }}</span>
             </el-form-item>
             <el-form-item label="下级当天成功订单">
-              <span>{{ props.row.sonOrderData.length }}</span>
+              <span>{{ props.row.sonData.length }}</span>
             </el-form-item>
           </el-form>
         </template>
@@ -124,13 +124,17 @@ export default {
               order_state: "订单状态"
             }
           ],
-          sonOrderData: [
+          sonData: [
             {
               my_superior: "上级推广码",
               extension_code: "自身推广码",
-              order_id: "订单编号",
-              order_release_time: "生成日期",
-              order_state: "订单状态"
+              orderData: [
+                {
+                  order_id: "订单编号",
+                  order_release_time: "生成日期",
+                  order_state: "订单状态"
+                }
+              ]
             }
           ]
         }
