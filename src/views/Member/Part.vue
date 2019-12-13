@@ -137,9 +137,9 @@ export default {
         }, []);
     },
     async getData() {
-      const res = await this.$http.get(`/give/get`);
-      this.data = res.data.data;
-      this.getFiltersData();
+      // const res = await this.$http.get(`/give/get`);
+      // this.data = res.data.data;
+      // this.getFiltersData();
     },
     sizeChange(val) {
       this.pageSize = val;

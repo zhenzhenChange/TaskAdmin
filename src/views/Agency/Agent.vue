@@ -118,7 +118,6 @@ export default {
   },
   created() {
     this.getData();
-    this.getFiltersData();
   },
   computed: {
     searchData() {
@@ -152,6 +151,7 @@ export default {
     async getData() {
       const res = await this.$http.get(`/agent/get`);
       this.data = res.data.data;
+      this.getFiltersData();
     },
     sizeChange(val) {
       this.pageSize = val;

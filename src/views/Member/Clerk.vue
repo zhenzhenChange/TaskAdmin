@@ -4,7 +4,18 @@
       <el-input size="medium" placeholder="输入关键字搜索" v-model="search">
         <i slot="prefix" class="el-input__icon el-icon-search"></i>
       </el-input>
-      <el-button @click="resetDateFilter">重置日期筛选</el-button>
+      <el-date-picker
+        size="medium"
+        v-model="value"
+        type="daterange"
+        align="center"
+        unlink-panels
+        range-separator="至"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期"
+        :picker-options="pickerOptions"
+        @change="filterDate"
+      ></el-date-picker>
     </el-card>
     <el-table
       v-if="searchData"
@@ -53,8 +64,6 @@
         sortable
         width="180"
         column-key="reg_datetime"
-        :filters="timeData"
-        :filter-method="filterHandler"
       >
         <template v-slot="scope">
           <i class="el-icon-time"></i>
@@ -64,23 +73,29 @@
       <el-table-column align="center" prop="phone" label="账号"></el-table-column>
       <el-table-column align="center" prop="my_balance" label="余额"></el-table-column>
       <el-table-column align="center" prop="general_income" label="总提成"></el-table-column>
-      <el-table-column align="center" prop="my_balance" label="总接单"></el-table-column>
-      <el-table-column align="center" prop="mineOrder.length" label="总成功"></el-table-column>
+      <el-table-column align="center" label="总接单">
+        <template>{{ data.mineOrder.length }}</template>
+      </el-table-column>
+      <el-table-column align="center" label="总成功">
+        <template>{{ data.mineOrder.map(item => item.order_state).toString() }}</template>
+      </el-table-column>
       <el-table-column align="center" prop="extension_code" label="推广码"></el-table-column>
-      <el-table-column align="center" prop="is_valide" label="账号状态"></el-table-column>
+      <el-table-column align="center" label="账号状态">
+        <template v-slot="scope">{{ scope.row.is_valide === 1 ? "可用" : "已限制" }}</template>
+      </el-table-column>
       <el-table-column align="center" label="操作" width="450">
         <template v-slot="scope">
           <el-button
             size="mini"
             icon="el-icon-edit"
             type="primary"
-            @click="openEditPwd(scope.row.phone)"
+            @click="openEditPwd(scope.row.phstart)"
           >修改密码</el-button>
           <el-button
             size="mini"
             icon="el-icon-warning"
             type="warning"
-            @click="openBan(scope.row.phone)"
+            @click="openBan(scope.row.phstart)"
           >禁止账号登录</el-button>
         </template>
       </el-table-column>
@@ -104,11 +119,42 @@ export default {
   data() {
     return {
       data: [],
-      timeData: [],
       search: "",
       currentPage: 1,
       pageSize: 10,
-      pageSizes: [10, 20, 50, 100, 200, 300, 400]
+      pageSizes: [10, 20, 50, 100, 200, 300, 400],
+      pickerOptions: {
+        shortcuts: [
+          {
+            text: "最近一周",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit("pick", [start, end]);
+            }
+          },
+          {
+            text: "最近一个月",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit("pick", [start, end]);
+            }
+          },
+          {
+            text: "最近三个月",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit("pick", [start, end]);
+            }
+          }
+        ]
+      },
+      value: ""
     };
   },
   created() {
@@ -127,26 +173,30 @@ export default {
     }
   },
   methods: {
-    getFiltersData() {
-      let hash = {};
-      this.timeData = this.data.data
-        .map(item => {
-          return {
-            text: item.reg_datetime,
-            value: item.reg_datetime
-          };
-        })
-        .reduce((arr, current) => {
-          hash[current.text]
-            ? ""
-            : (hash[current.text] = true && arr.push(current));
-          return arr;
-        }, []);
-    },
     async getData() {
       const res = await this.$http.get(`/recv/get`);
       this.data = res.data;
-      this.getFiltersData();
+    },
+    filterDate(value) {
+      if (!value) {
+        this.getData();
+        return;
+      }
+      const start = this.$options.filters.onlyDate(value[0]); //开始时间
+      const end = this.$options.filters.onlyDate(value[1]); //结束时间
+      const resss = this.data.data.filter(data => {
+        let dataTime = this.$options.filters.onlyDate(data.reg_date);
+        console.log(start <= dataTime);
+        if (start <= dataTime && dataTime <= end) {
+          return dataTime;
+        }
+      });
+      console.log(resss);
+      // return this.data.data.filter(data => {
+      //   return Object.keys(data).some(key => {
+      //     return String(data[key]).includes(this.search);
+      //   });
+      // });
     },
     sizeChange(val) {
       this.pageSize = val;
@@ -155,14 +205,7 @@ export default {
     currentChange(val) {
       this.currentPage = val;
     },
-    resetDateFilter() {
-      this.$refs.filterTable.clearFilter("reg_datetime");
-    },
-    filterHandler(value, row, column) {
-      const property = column["property"];
-      return row[property] === value;
-    },
-    openEditPwd(phone) {
+    openEditPwd(phstart) {
       this.$prompt("请输入新密码", "提示", {
         confirmButtonText: "提交",
         cancelButtonText: "取消",
@@ -172,7 +215,7 @@ export default {
         .then(async ({ value }) => {
           const res = await this.$http.post("/admin/changePwd", {
             params: {
-              phone,
+              phstart,
               newPwd: value
             }
           });
@@ -184,7 +227,7 @@ export default {
         })
         .catch(() => {});
     },
-    openBan(phone) {
+    openBan(phstart) {
       this.$confirm("确定要禁止该账号登录吗？", "警告", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -193,7 +236,7 @@ export default {
         .then(async () => {
           const res = await this.$http.post("/admin/disableAccount", {
             params: {
-              phone
+              phstart
             }
           });
           this.$message({

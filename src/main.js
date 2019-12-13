@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import ElementUI from 'element-ui'
 import router from './router'
+import dayjs from "dayjs"
 import http from './http'
-import dayjs from "dayjs";
 
 import App from './App.vue'
 
@@ -36,13 +36,13 @@ Vue.component('agent-agent', Agent)
 Vue.component('agent-create', Create)
 
 Vue.use(ElementUI)
-Vue.config.productionTip = true
+Vue.config.productionTip = false
 
-Vue.filter("date", function (value) {
+Vue.filter("date", value => {
   return dayjs(value).format("YYYY-MM-DD HH:MM:ss");
 })
 
-Vue.filter("onlyDate", function (value) {
+Vue.filter("onlyDate", value => {
   return dayjs(value).format("YYYY-MM-DD");
 })
 
