@@ -132,10 +132,11 @@ export default {
         }, []);
     },
     async getData() {
-      const data = {
-        action_resState: 3
-      };
-      const res = await this.$http.get(`/man/get/${data}`);
+      const res = await this.$http.get(`/man/get`, {
+        params: {
+          action_resState: 3
+        }
+      });
       this.data = res.data;
     },
     sizeChange(val) {
@@ -159,7 +160,11 @@ export default {
         type: "warning"
       })
         .then(async () => {
-          const res = await this.$http.post(`/man/delOrderRec/${id}`);
+          const res = await this.$http.post(`/man/delOrderRec`, {
+            params: {
+              id
+            }
+          });
           this.$message({
             type: "success",
             message: `${res} 删除成功!`,

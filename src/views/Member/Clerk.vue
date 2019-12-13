@@ -7,6 +7,7 @@
       <el-button @click="resetDateFilter">重置日期筛选</el-button>
     </el-card>
     <el-table
+      v-if="searchData"
       ref="filterTable"
       :data="searchData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
       stripe
@@ -25,22 +26,22 @@
               <span>{{ props.row.general_income }}</span>
             </el-form-item>
             <el-form-item label="当天接单">
-              <span>{{ props.row.orderData.length }}</span>
+              <span>{{ props.row.orderData }}</span>
             </el-form-item>
             <el-form-item label="当天成功订单">
-              <span>{{ props.row.orderData.length }}</span>
+              <span>{{ props.row.orderData }}</span>
             </el-form-item>
             <el-form-item label="下级总接订单">
-              <span>{{ props.row.sonData.length }}</span>
+              <span>{{ props.row.sonData }}</span>
             </el-form-item>
             <el-form-item label="下级总成功订单">
-              <span>{{ props.row.sonData.length }}</span>
+              <span>{{ props.row.sonData }}</span>
             </el-form-item>
             <el-form-item label="下级当天接订单">
-              <span>{{ props.row.sonData.length }}</span>
+              <span>{{ props.row.sonData }}</span>
             </el-form-item>
             <el-form-item label="下级当天成功订单">
-              <span>{{ props.row.sonData.length }}</span>
+              <span>{{ props.row.sonData }}</span>
             </el-form-item>
           </el-form>
         </template>
@@ -50,21 +51,21 @@
         align="center"
         label="注册日期"
         sortable
-        width="150"
+        width="180"
         column-key="reg_datetime"
         :filters="timeData"
         :filter-method="filterHandler"
       >
         <template v-slot="scope">
           <i class="el-icon-time"></i>
-          <span class="ml-10">{{ scope.row.reg_datetime }}</span>
+          <span class="ml-10">{{ scope.row.reg_datetime | date }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="phone" label="账号"></el-table-column>
       <el-table-column align="center" prop="my_balance" label="余额"></el-table-column>
       <el-table-column align="center" prop="general_income" label="总提成"></el-table-column>
       <el-table-column align="center" prop="my_balance" label="总接单"></el-table-column>
-      <el-table-column align="center" prop="orderData.length" label="总成功"></el-table-column>
+      <el-table-column align="center" prop="mineOrder.length" label="总成功"></el-table-column>
       <el-table-column align="center" prop="extension_code" label="推广码"></el-table-column>
       <el-table-column align="center" prop="is_valide" label="账号状态"></el-table-column>
       <el-table-column align="center" label="操作" width="450">
@@ -85,12 +86,13 @@
       </el-table-column>
     </el-table>
     <el-pagination
+      v-if="data.data"
       @size-change="sizeChange"
       @current-change="currentChange"
       :page-size="pageSize"
       :page-sizes="pageSizes"
       :current-page="currentPage"
-      :total="data.length"
+      :total="data.data.length"
       layout="total, sizes, prev, pager, next, jumper"
       class="mt-20"
     ></el-pagination>
@@ -101,45 +103,8 @@
 export default {
   data() {
     return {
-      data: [
-        {
-          phone: "JI",
-          my_balance: "JS",
-          general_income: "总提成",
-          reg_datetime: "注册时间",
-          user_remark: "备注",
-          extension_code: "推广码",
-          is_valide: "账号是否可用",
-          incomeData: [
-            {
-              wb_id: "流水编号",
-              wb_uid: "流水账号",
-              wb_datetime: "流水时间"
-            }
-          ],
-          orderData: [
-            {
-              order_id: "订单编号",
-              order_release_time: "生成日期",
-              order_state: "订单状态"
-            }
-          ],
-          sonData: [
-            {
-              my_superior: "上级推广码",
-              extension_code: "自身推广码",
-              orderData: [
-                {
-                  order_id: "订单编号",
-                  order_release_time: "生成日期",
-                  order_state: "订单状态"
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      timeData: [{ text: "", value: "" }],
+      data: [],
+      timeData: [],
       search: "",
       currentPage: 1,
       pageSize: 10,
@@ -148,24 +113,23 @@ export default {
   },
   created() {
     this.getData();
-    this.getFiltersData();
   },
   computed: {
     searchData() {
       if (this.search) {
-        return this.data.filter(data => {
+        return this.data.data.filter(data => {
           return Object.keys(data).some(key => {
             return String(data[key]).includes(this.search);
           });
         });
       }
-      return this.data;
+      return this.data.data;
     }
   },
   methods: {
     getFiltersData() {
       let hash = {};
-      this.timeData = this.data
+      this.timeData = this.data.data
         .map(item => {
           return {
             text: item.reg_datetime,
@@ -182,6 +146,7 @@ export default {
     async getData() {
       const res = await this.$http.get(`/recv/get`);
       this.data = res.data;
+      this.getFiltersData();
     },
     sizeChange(val) {
       this.pageSize = val;
@@ -205,11 +170,12 @@ export default {
         inputType: "password"
       })
         .then(async ({ value }) => {
-          let data = {
-            phone,
-            newPwd: value
-          };
-          const res = await this.$http.post(`/changePwd/${data}`);
+          const res = await this.$http.post("/admin/changePwd", {
+            params: {
+              phone,
+              newPwd: value
+            }
+          });
           this.$message({
             type: "success",
             message: `${res}  密码修改成功！`,
@@ -225,7 +191,11 @@ export default {
         type: "warning"
       })
         .then(async () => {
-          const res = await this.$http.post(`/disableAccount/${phone}`);
+          const res = await this.$http.post("/admin/disableAccount", {
+            params: {
+              phone
+            }
+          });
           this.$message({
             type: "success",
             message: `禁止成功!${res}`,

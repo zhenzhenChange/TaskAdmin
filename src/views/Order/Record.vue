@@ -95,26 +95,9 @@
 export default {
   data() {
     return {
-      data: [
-        {
-          order_id: "订单编号",
-          uid_give: "放单用户",
-          uid_recive: "结单用户",
-          action_resState: "接单状态",
-          action_datetime: "接单时间",
-          order_end_datetime: "结单时间",
-          order_title: "订单标题",
-          order_release_time: "发布日期",
-          order_state: "订单状态",
-          order_type: "订单类型",
-          order_price: "订单价格",
-          order_remark: "订单备注",
-          order_effectPeriod: "有效时间",
-          profits: "平台利润"
-        }
-      ],
-      timeData: [{ text: "", value: "" }],
-      stateData: [{ text: "", value: "" }],
+      data: [],
+      timeData: [],
+      stateData: [],
       search: "",
       currentPage: 1,
       pageSize: 10,
@@ -199,7 +182,11 @@ export default {
         type: "warning"
       })
         .then(async () => {
-          const res = await this.$http.post(`/man/delOrderRec/${id}`);
+          const res = await this.$http.post(`/man/delOrderRec`, {
+            params: {
+              id
+            }
+          });
           this.$message({
             type: "success",
             message: "操作成功!" + res

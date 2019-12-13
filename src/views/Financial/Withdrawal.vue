@@ -13,7 +13,7 @@
         prop="wb_datetime"
         label="提现日期"
         align="center"
-        width="140"
+        width="180"
         column-key="wb_datetime"
         :filters="timeData"
         :filter-method="filterHandler"
@@ -21,7 +21,7 @@
       >
         <template v-slot="scope">
           <i class="el-icon-time"></i>
-          <span class="ml-10">{{ scope.row.wb_datetime }}</span>
+          <span class="ml-10">{{ scope.row.wb_datetime | date }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="wb_id" label="流水编号"></el-table-column>
@@ -70,17 +70,7 @@
 export default {
   data() {
     return {
-      data: [
-        {
-          wb_id: "流水号",
-          wb_fee: "提现金额",
-          wb_uid: "提现账号",
-          Alipay_account: "支付宝账号",
-          Alipay_name: "支付宝姓名",
-          wb_state: "提现状态",
-          wb_datetime: "提现日期"
-        }
-      ],
+      data: [],
       timeData: [{ text: "", value: "" }],
       currentPage: 1,
       pageSize: 10,
@@ -89,7 +79,6 @@ export default {
   },
   created() {
     this.getData();
-    this.getFiltersData();
   },
   methods: {
     getFiltersData() {
@@ -101,11 +90,14 @@ export default {
       });
     },
     async getData() {
-      const data = {
-        wd_type: 1
-      };
-      const res = await this.$http.get(`/finac/get/${data}`);
-      this.data = res.data;
+      const res = await this.$http.get(`/finac/get`, {
+        params: {
+          wd_type: 1
+        }
+      });
+      console.log(res.data.data);
+      this.data = res.data.data;
+      this.getFiltersData();
     },
     sizeChange(val) {
       this.pageSize = val;
@@ -128,11 +120,12 @@ export default {
         type: "info"
       })
         .then(async () => {
-          const data = {
-            wb_id: id,
-            wb_state: 1
-          };
-          const res = await this.$http.post(`/finac/doWithdraw/${data}`);
+          const res = await this.$http.post(`/finac/doWithdraw`, {
+            params: {
+              wb_id: id,
+              wb_state: 1
+            }
+          });
           this.$message({
             type: "success",
             message: "操作成功!" + res,

@@ -78,7 +78,10 @@ export default {
         this.agencyData.pwd = this.confirmPwd = "";
         return;
       }
-      const res = await this.$http.post(`/agent/genAgent/${this.agencyData}`);
+      const res = await this.$http.post(
+        `/admin/agent/genAgent`,
+        this.agencyData
+      );
       if (res.statusCode) {
         this.$message({
           type: "success",

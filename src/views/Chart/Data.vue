@@ -113,7 +113,7 @@ export default {
   },
   methods: {
     async getData() {
-      const res = await this.$http.get("/init");
+      const res = await this.$http.get("/admin/init");
       this.data = res.data;
     }
   }

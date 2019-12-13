@@ -24,22 +24,22 @@
               <span>{{ props.row.general_income }}</span>
             </el-form-item>
             <el-form-item label="当天接单">
-              <span>{{ props.row.orderData.length }}</span>
+              <span>{{ props.row.orderData }}</span>
             </el-form-item>
             <el-form-item label="当天成功订单">
-              <span>{{ props.row.orderData.length }}</span>
+              <span>{{ props.row.orderData }}</span>
             </el-form-item>
             <el-form-item label="下级总接订单">
-              <span>{{ props.row.sonData.length }}</span>
+              <span>{{ props.row.sonData }}</span>
             </el-form-item>
             <el-form-item label="下级总成功订单">
-              <span>{{ props.row.sonData.length }}</span>
+              <span>{{ props.row.sonData }}</span>
             </el-form-item>
             <el-form-item label="下级当天接订单">
-              <span>{{ props.row.sonData.length }}</span>
+              <span>{{ props.row.sonData }}</span>
             </el-form-item>
             <el-form-item label="下级当天成功订单">
-              <span>{{ props.row.sonData.length }}</span>
+              <span>{{ props.row.sonData }}</span>
             </el-form-item>
           </el-form>
         </template>
@@ -48,6 +48,7 @@
         prop="reg_datetime"
         label="注册日期"
         sortable
+        width="180"
         align="center"
         column-key="reg_datetime"
         :filters="timeData"
@@ -55,7 +56,7 @@
       >
         <template v-slot="scope">
           <i class="el-icon-time"></i>
-          <span class="ml-10">{{ scope.row.reg_datetime }}</span>
+          <span class="ml-10">{{ scope.row.reg_datetime | date }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="phone" label="账号"></el-table-column>
@@ -106,38 +107,7 @@
 export default {
   data() {
     return {
-      data: [
-        {
-          phone: 18172641474,
-          my_balance: 78.04,
-          user_remark: "备注",
-          general_income: 100.5,
-          reg_datetime: "2019-12-04",
-          wb_datetime: "提成时间",
-          extension_code: "ABCDEF",
-          is_valide: 1,
-          orderData: [
-            {
-              order_id: 45641523498631,
-              order_release_time: "2017-08-08",
-              order_state: 1
-            }
-          ],
-          sonData: [
-            {
-              my_superior: "ABCDEF",
-              extension_code: "HHHHHH",
-              orderData: [
-                {
-                  order_id: 45641523498631,
-                  order_release_time: "2017-08-08",
-                  order_state: 1
-                }
-              ]
-            }
-          ]
-        }
-      ],
+      data: [],
       timeData: [{ text: "", value: "" }],
       son_pumpRation: "下级抽层率",
       search: "",
@@ -181,7 +151,7 @@ export default {
     },
     async getData() {
       const res = await this.$http.get(`/agent/get`);
-      this.data = res.data;
+      this.data = res.data.data;
     },
     sizeChange(val) {
       this.pageSize = val;

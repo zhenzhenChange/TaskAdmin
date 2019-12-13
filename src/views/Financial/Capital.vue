@@ -7,6 +7,7 @@
       <el-button @click="resetDateFilter">重置日期筛选</el-button>
     </el-card>
     <el-table
+      v-if="searchData"
       ref="filterTable"
       :data="searchData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
       stripe
@@ -17,14 +18,14 @@
         label="流水日期"
         sortable
         align="center"
-        width="140"
+        width="180"
         column-key="wb_datetime"
         :filters="timeData"
         :filter-method="filterHandler"
       >
         <template v-slot="scope">
           <i class="el-icon-time"></i>
-          <span class="ml-10">{{ scope.row.wb_datetime }}</span>
+          <span class="ml-10">{{ scope.row.wb_datetime | date}}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="wb_uid" label="交易账号"></el-table-column>
@@ -67,19 +68,8 @@
 export default {
   data() {
     return {
-      data: [
-        {
-          wb_id: "流水号",
-          wb_fee: "交易费用",
-          wb_type: "交易类型",
-          wb_uid: "交易账号",
-          Alipay_account: "支付宝账号",
-          Alipay_name: "支付宝姓名",
-          wb_datetime: "2019-12-04",
-          wb_state: "交易状态"
-        }
-      ],
-      timeData: [{ text: "", value: "" }],
+      data: [],
+      timeData: [],
       search: "",
       currentPage: 1,
       pageSize: 10,
@@ -88,7 +78,6 @@ export default {
   },
   created() {
     this.getData();
-    this.getFiltersData();
   },
   computed: {
     searchData() {
@@ -113,7 +102,8 @@ export default {
     },
     async getData() {
       const res = await this.$http.get(`/finac/get`);
-      this.data = res.data;
+      this.data = res.data.data;
+      this.getFiltersData();
     },
     sizeChange(val) {
       this.pageSize = val;

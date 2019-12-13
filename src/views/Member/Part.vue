@@ -38,14 +38,14 @@
         prop="reg_datetime"
         label="注册日期"
         sortable
-        width="150"
+        width="180"
         column-key="reg_datetime"
         :filters="timeData"
         :filter-method="filterHandler"
       >
         <template v-slot="scope">
           <i class="el-icon-time"></i>
-          <span class="ml-10">{{ scope.row.reg_datetime }}</span>
+          <span class="ml-10">{{ scope.row.reg_datetime | date}}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="phone" label="账号"></el-table-column>
@@ -53,7 +53,7 @@
       <el-table-column align="center" prop="totalRecharge" label="总充值"></el-table-column>
       <el-table-column align="center" prop="orderData.length" label="总下订单"></el-table-column>
       <el-table-column align="center" label="总成功订单">
-        <template v-slot="scope">{{scope.row.orderData.map(item=>item.order_state).toString()}}</template>
+        <!-- <template v-slot="scope">{{scope.row.orderData.map(item=>item.order_state).toString()}}</template> -->
       </el-table-column>
       <el-table-column align="center" prop="is_valide" label="账号状态"></el-table-column>
       <el-table-column align="center" label="操作" width="450">
@@ -96,24 +96,8 @@
 export default {
   data() {
     return {
-      data: [
-        {
-          phone: "账号",
-          my_balance: "余额",
-          totalRecharge: "总充值",
-          wb_datetime: "充值日期",
-          reg_datetime: "注册日期",
-          is_valide: "账号是否可用",
-          orderData: [
-            {
-              order_id: "订单编号",
-              order_release_time: "生成日期",
-              order_state: "订单状态"
-            }
-          ]
-        }
-      ],
-      timeData: [{ text: "", value: "" }],
+      data: [],
+      timeData: [],
       search: "",
       currentPage: 1,
       pageSize: 10,
@@ -122,7 +106,6 @@ export default {
   },
   created() {
     this.getData();
-    this.getFiltersData();
   },
   computed: {
     searchData() {
@@ -155,7 +138,8 @@ export default {
     },
     async getData() {
       const res = await this.$http.get(`/give/get`);
-      this.data = res.data;
+      this.data = res.data.data;
+      this.getFiltersData();
     },
     sizeChange(val) {
       this.pageSize = val;
@@ -178,11 +162,12 @@ export default {
         type: "info"
       })
         .then(async ({ value }) => {
-          let data = {
-            phone,
-            newPrice: value
-          };
-          const res = await this.$http.post(`/give/modPrice/${data}`);
+          const res = await this.$http.post(`/give/modPrice`, {
+            params: {
+              phone,
+              newPrice: value
+            }
+          });
           this.$message({
             type: "success",
             message: `您修改的价格为: ${res}`,
@@ -199,11 +184,12 @@ export default {
         inputType: "password"
       })
         .then(async ({ value }) => {
-          let data = {
-            phone,
-            newPwd: value
-          };
-          const res = await this.$http.post(`/changePwd/${data}`);
+          const res = await this.$http.post(`/changePwd`, {
+            params: {
+              phone,
+              newPwd: value
+            }
+          });
           this.$message({
             type: "success",
             message: res,
@@ -219,7 +205,11 @@ export default {
         type: "warning"
       })
         .then(async () => {
-          const res = await this.$http.post(`/disableAccount/${phone}`);
+          const res = await this.$http.post(`/disableAccount`, {
+            params: {
+              phone
+            }
+          });
           this.$message({
             type: "success",
             message: "禁止成功!" + res,
