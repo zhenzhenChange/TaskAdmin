@@ -71,7 +71,7 @@ export default {
   data() {
     return {
       data: [],
-      timeData: [{ text: "", value: "" }],
+      timeData: [],
       currentPage: 1,
       pageSize: 10,
       pageSizes: [10, 20, 50, 100, 200, 300, 400]
@@ -90,13 +90,13 @@ export default {
       });
     },
     async getData() {
-      const res = await this.$http.get(`/finac/get`, {
-        params: {
-          wd_type: 1
+      const res = await this.$http.get(`/finac/get`);
+      console.log(res.data.data);
+      res.data.data.map(item => {
+        if (item.wb_type === 1) {
+          this.data.push(item);
         }
       });
-      console.log(res.data.data);
-      this.data = res.data.data;
       this.getFiltersData();
     },
     sizeChange(val) {
@@ -121,10 +121,8 @@ export default {
       })
         .then(async () => {
           const res = await this.$http.post(`/finac/doWithdraw`, {
-            params: {
-              wb_id: id,
-              wb_state: 1
-            }
+            wb_id: id,
+            wb_state: 1
           });
           this.$message({
             type: "success",
@@ -141,11 +139,10 @@ export default {
         type: "info"
       })
         .then(async () => {
-          const data = {
+          const res = await this.$http.post(`/finac/doWithdraw`, {
             wb_id: id,
             wb_state: 0
-          };
-          const res = await this.$http.post(`/finac/doWithdraw/${data}`);
+          });
           this.$message({
             type: "success",
             message: "操作成功!" + res,
@@ -161,7 +158,9 @@ export default {
         type: "warning"
       })
         .then(async () => {
-          const res = await this.$http.post(`/finac/delWbRec/${id}`);
+          const res = await this.$http.post(`/finac/delWbRec`, {
+            wb_id: id
+          });
           this.$message({
             type: "success",
             message: "操作成功!" + res,

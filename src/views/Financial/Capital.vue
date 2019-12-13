@@ -126,11 +126,10 @@ export default {
         type: "info"
       })
         .then(async ({ value }) => {
-          let data = {
+          const res = await this.$http.post(`/changeAlipayAccount`, {
             phone: uid,
             newAlipayAccount: value
-          };
-          const res = await this.$http.post(`/changeAlipayAccount/${data}`);
+          });
           this.$message({
             type: "success",
             message: res,
@@ -146,7 +145,9 @@ export default {
         type: "warning"
       })
         .then(async () => {
-          const res = await this.$http.post(`/finac/delWbRec/${id}`);
+          const res = await this.$http.post(`/finac/delWbRec`, {
+            wb_id: id
+          });
           this.$message({
             type: "success",
             message: "操作成功!" + res,

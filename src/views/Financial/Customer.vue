@@ -56,7 +56,8 @@ export default {
   },
   methods: {
     async postCustomerData() {
-      const res = this.$http.post(`/recharge/${this.customerData}`);
+      const res = this.$http.post(`/recharge`, this.customerData);
+      console.log(res)
       if (res.statusCode) {
         this.$message({
           type: "success",

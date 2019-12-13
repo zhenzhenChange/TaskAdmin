@@ -4,6 +4,7 @@
       <el-button @click="resetDateFilter">重置日期筛选</el-button>
     </el-card>
     <el-table
+      v-if="data"
       ref="filterTable"
       :data="data.slice((currentPage-1)*pageSize,currentPage*pageSize)"
       stripe
@@ -14,18 +15,28 @@
         label="发布日期"
         align="center"
         sortable
-        width="140"
+        width="180"
         column-key="order_release_time"
         :filters="timeData"
         :filter-method="filterHandler"
       >
         <template v-slot="scope">
           <i class="el-icon-time"></i>
-          <span class="ml-10">{{ scope.row.order_release_time }}</span>
+          <span class="ml-10">{{ scope.row.order_release_time | date }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="结单时间" prop="order_end_datetime"></el-table-column>
-      <el-table-column align="center" label="申诉时间" prop="action_datetime"></el-table-column>
+      <el-table-column align="center" label="结单时间" width="180">
+        <template v-slot="scope">
+          <i class="el-icon-time"></i>
+          <span class="ml-10">{{ scope.row.order_end_datetime | date }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="申诉时间" width="180">
+        <template v-slot="scope">
+          <i class="el-icon-time"></i>
+          <span class="ml-10">{{ scope.row.action_datetime | date }}</span>
+        </template>
+      </el-table-column>
       <el-table-column align="center" label="发布账号" prop="uid_give"></el-table-column>
       <el-table-column align="center" label="订单编号" prop="order_id"></el-table-column>
       <el-table-column align="center" label="订单价格" prop="order_price"></el-table-column>
@@ -72,22 +83,9 @@
 export default {
   data() {
     return {
-      data: [
-        {
-          order_id: "订单编号",
-          uid_give: "发布账号",
-          order_release_time: "发布日期",
-          order_price: "订单价格",
-          uid_recive: "接单账号",
-          order_end_datetime: "失败时间",
-          order_state: "订单状态（申诉）",
-          action_datetime: "申诉时间",
-          action_resState: "申诉状态",
-          order_apply_proof: "申诉证据"
-        }
-      ],
-      timeData: [{ text: "", value: "" }],
-      stateData: [{ text: "", value: "" }],
+      data: [],
+      timeData: [],
+      stateData: [],
       currentPage: 1,
       pageSize: 10,
       pageSizes: [10, 20, 50, 100, 200, 300, 400]
@@ -95,7 +93,6 @@ export default {
   },
   created() {
     this.getData();
-    this.getFiltersData();
   },
   methods: {
     stateType(type) {
@@ -132,12 +129,13 @@ export default {
         }, []);
     },
     async getData() {
-      const res = await this.$http.get(`/man/get`, {
-        params: {
-          action_resState: 3
+      const res = await this.$http.get(`/man/get`);
+      res.data.data.map(item => {
+        if (item.action_resState === 3) {
+          this.data.push(item);
         }
       });
-      this.data = res.data;
+      this.getFiltersData();
     },
     sizeChange(val) {
       this.pageSize = val;
@@ -161,9 +159,7 @@ export default {
       })
         .then(async () => {
           const res = await this.$http.post(`/man/delOrderRec`, {
-            params: {
-              id
-            }
+            order_id: id
           });
           this.$message({
             type: "success",
@@ -171,13 +167,7 @@ export default {
             offset: 10
           });
         })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消操作",
-            offset: 10
-          });
-        });
+        .catch(() => {});
     }
   }
 };

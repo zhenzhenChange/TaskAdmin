@@ -85,7 +85,7 @@
             size="mini"
             icon="el-icon-warning"
             type="warning"
-            @click="openBan(scope.row.phone)"
+            @click="openBan(scope.row.uid)"
           >禁止账号登录</el-button>
         </template>
       </el-table-column>
@@ -151,6 +151,7 @@ export default {
     async getData() {
       const res = await this.$http.get(`/agent/get`);
       this.data = res.data.data;
+      console.log(this.data);
       this.getFiltersData();
     },
     sizeChange(val) {
@@ -175,11 +176,10 @@ export default {
         inputType: "password"
       })
         .then(async ({ value }) => {
-          const data = {
+          const res = await this.$http.post(`/changePwd`, {
             phone,
-            newPwd: value
-          };
-          const res = await this.$http.post(`/changePwd/${data}`);
+            NewPwd: value
+          });
           this.$message({
             type: "success",
             message: res,
@@ -195,7 +195,9 @@ export default {
         type: "warning"
       })
         .then(async () => {
-          const res = await this.$http.post(`/disableAccount/${phone}`);
+          const res = await this.$http.post(`/disableAccount`, {
+            phone
+          });
           this.$message({
             type: "success",
             message: "禁止成功!" + res,
@@ -204,23 +206,24 @@ export default {
         })
         .catch(() => {});
     },
-    openEditIncome(phone) {
+    openEditIncome(uid) {
       this.$prompt("请重新设置提成", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "info"
       })
         .then(async ({ value }) => {
-          const data = {
-            phone,
-            newAgRetRatio: value
-          };
-          const res = await this.$http.post(`/agent/modAgRetRatio/${data}`);
-          this.$message({
-            type: "success",
-            message: res,
-            offset: 10
+          const res = await this.$http.post(`/agent/modAgRetRatio`, {
+            uid,
+            my_returnRatio: value
           });
+          if (res.data.status) {
+            this.$message({
+              type: "success",
+              message: `修改成功！`,
+              offset: 10
+            });
+          }
         })
         .catch(() => {});
     },
@@ -231,7 +234,9 @@ export default {
         type: "info"
       })
         .then(async ({ value }) => {
-          const res = await this.$http.post(`/agent/setRetRatio/${value}`);
+          const res = await this.$http.post(`/agent/setRetRatio`, {
+            retRatio: value
+          });
           this.son_pumpRation = value;
           this.$message({
             type: "success",

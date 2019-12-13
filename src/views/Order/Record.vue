@@ -8,6 +8,7 @@
       <el-button @click="resetAllFilter">重置所有筛选</el-button>
     </el-card>
     <el-table
+      v-if="searchData"
       ref="filterTable"
       :data="searchData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
       stripe
@@ -36,14 +37,14 @@
         label="发布日期"
         align="center"
         sortable
-        width="140"
+        width="180"
         column-key="order_release_time"
         :filters="timeData"
         :filter-method="filterHandler"
       >
         <template v-slot="scope">
           <i class="el-icon-time"></i>
-          <span class="ml-10">{{ scope.row.order_release_time }}</span>
+          <span class="ml-10">{{ scope.row.order_release_time | date }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="发布账号" prop="uid_give"></el-table-column>
@@ -51,8 +52,18 @@
       <el-table-column align="center" label="订单标题" prop="order_title"></el-table-column>
       <el-table-column align="center" label="订单价格" prop="order_price"></el-table-column>
       <el-table-column align="center" label="接单账号" prop="uid_recive"></el-table-column>
-      <el-table-column align="center" label="接单时间" prop="uid_recive"></el-table-column>
-      <el-table-column align="center" label="结单时间" prop="order_end_datetime"></el-table-column>
+      <el-table-column align="center" label="接单时间" width="180">
+        <template v-slot="scope">
+          <i class="el-icon-time"></i>
+          <span class="ml-10">{{ scope.row.action_datetime | date }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="结单时间" width="180">
+        <template v-slot="scope">
+          <i class="el-icon-time"></i>
+          <span class="ml-10">{{ scope.row.action_datetime | date }}</span>
+        </template>
+      </el-table-column>
       <el-table-column
         prop="order_state"
         label="订单状态"
@@ -66,7 +77,7 @@
           <el-tag hit :type="stateType(scope.row.order_state)">{{scope.row.order_state}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="平台利润" prop="order_end_datetime"></el-table-column>
+      <el-table-column align="center" label="平台利润" prop="son_pumpRation"></el-table-column>
       <el-table-column align="center" label="操作" width="250">
         <template v-slot="scope">
           <el-button
@@ -106,7 +117,6 @@ export default {
   },
   created() {
     this.getData();
-    this.getFiltersData();
   },
   computed: {
     searchData() {
@@ -156,7 +166,8 @@ export default {
     },
     async getData() {
       const res = await this.$http.get(`/man/get`);
-      this.data = res.data;
+      this.data = res.data.data;
+      this.getFiltersData();
     },
     sizeChange(val) {
       this.pageSize = val;
@@ -183,9 +194,7 @@ export default {
       })
         .then(async () => {
           const res = await this.$http.post(`/man/delOrderRec`, {
-            params: {
-              id
-            }
+            order_id: id
           });
           this.$message({
             type: "success",

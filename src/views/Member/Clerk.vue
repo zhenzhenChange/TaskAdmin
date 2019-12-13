@@ -6,8 +6,8 @@
       </el-input>
       <el-date-picker
         size="medium"
-        v-model="value"
         type="daterange"
+        v-model="value"
         align="center"
         unlink-panels
         range-separator="至"
@@ -89,13 +89,13 @@
             size="mini"
             icon="el-icon-edit"
             type="primary"
-            @click="openEditPwd(scope.row.phstart)"
+            @click="openEditPwd(scope.row.phone)"
           >修改密码</el-button>
           <el-button
             size="mini"
             icon="el-icon-warning"
             type="warning"
-            @click="openBan(scope.row.phstart)"
+            @click="openBan(scope.row.phone)"
           >禁止账号登录</el-button>
         </template>
       </el-table-column>
@@ -107,7 +107,7 @@
       :page-size="pageSize"
       :page-sizes="pageSizes"
       :current-page="currentPage"
-      :total="data.data.length"
+      :total="length || data.data.length"
       layout="total, sizes, prev, pager, next, jumper"
       class="mt-20"
     ></el-pagination>
@@ -154,7 +154,8 @@ export default {
           }
         ]
       },
-      value: ""
+      value: "",
+      length: ""
     };
   },
   created() {
@@ -182,21 +183,15 @@ export default {
         this.getData();
         return;
       }
-      const start = this.$options.filters.onlyDate(value[0]); //开始时间
-      const end = this.$options.filters.onlyDate(value[1]); //结束时间
-      const resss = this.data.data.filter(data => {
-        let dataTime = this.$options.filters.onlyDate(data.reg_date);
-        console.log(start <= dataTime);
-        if (start <= dataTime && dataTime <= end) {
-          return dataTime;
-        }
+      const start = value[0];
+      const end = value[1];
+      const dataTable = this.data.data.filter(dataTable => {
+        return (
+          new Date(dataTable.reg_datetime) >= new Date(start) &&
+          new Date(dataTable.reg_datetime) <= new Date(end)
+        );
       });
-      console.log(resss);
-      // return this.data.data.filter(data => {
-      //   return Object.keys(data).some(key => {
-      //     return String(data[key]).includes(this.search);
-      //   });
-      // });
+      this.data.data = dataTable;
     },
     sizeChange(val) {
       this.pageSize = val;
@@ -205,7 +200,7 @@ export default {
     currentChange(val) {
       this.currentPage = val;
     },
-    openEditPwd(phstart) {
+    openEditPwd(phone) {
       this.$prompt("请输入新密码", "提示", {
         confirmButtonText: "提交",
         cancelButtonText: "取消",
@@ -213,11 +208,9 @@ export default {
         inputType: "password"
       })
         .then(async ({ value }) => {
-          const res = await this.$http.post("/admin/changePwd", {
-            params: {
-              phstart,
-              newPwd: value
-            }
+          const res = await this.$http.post("/changePwd", {
+            phone,
+            NewPwd: value
           });
           this.$message({
             type: "success",
@@ -227,23 +220,24 @@ export default {
         })
         .catch(() => {});
     },
-    openBan(phstart) {
+    openBan(phone) {
       this.$confirm("确定要禁止该账号登录吗？", "警告", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
         .then(async () => {
-          const res = await this.$http.post("/admin/disableAccount", {
-            params: {
-              phstart
-            }
+          const res = await this.$http.post("/disableAccount", {
+            phone
           });
-          this.$message({
-            type: "success",
-            message: `禁止成功!${res}`,
-            offset: 10
-          });
+          if (res.data.status) {
+            this.getData();
+            this.$message({
+              type: "success",
+              message: `账号 ${phone} 已封禁!`,
+              offset: 10
+            });
+          }
         })
         .catch(() => {});
     }
