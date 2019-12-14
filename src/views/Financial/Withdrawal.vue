@@ -91,7 +91,6 @@ export default {
     },
     async getData() {
       const res = await this.$http.get(`/finac/get`);
-      console.log(res.data.data);
       res.data.data.map(item => {
         if (item.wb_type === 1) {
           this.data.push(item);

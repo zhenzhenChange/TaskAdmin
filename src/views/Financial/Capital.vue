@@ -4,7 +4,19 @@
       <el-input size="medium" placeholder="输入关键字搜索" v-model="search">
         <i slot="prefix" class="el-input__icon el-icon-search"></i>
       </el-input>
-      <el-button @click="resetDateFilter">重置日期筛选</el-button>
+      <el-date-picker
+        size="medium"
+        type="datetimerange"
+        v-model="value"
+        align="center"
+        unlink-panels
+        range-separator="至"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期"
+        :picker-options="pickerOptions"
+        @change="filterDate"
+        class="ml-20"
+      ></el-date-picker>
     </el-card>
     <el-table
       v-if="searchData"
@@ -20,8 +32,6 @@
         align="center"
         width="180"
         column-key="wb_datetime"
-        :filters="timeData"
-        :filter-method="filterHandler"
       >
         <template v-slot="scope">
           <i class="el-icon-time"></i>
@@ -69,11 +79,45 @@ export default {
   data() {
     return {
       data: [],
-      timeData: [],
+      daforeverDatata: [],
       search: "",
       currentPage: 1,
       pageSize: 10,
-      pageSizes: [10, 20, 50, 100, 200, 300, 400]
+      pageSizes: [10, 20, 50, 100, 200, 300, 400],
+      pickerOptions: {
+        shortcuts: [
+          {
+            text: "最近一周",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit("pick", [start, end]);
+            }
+          },
+          {
+            text: "最近一个月",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit("pick", [start, end]);
+            }
+          },
+          {
+            text: "最近三个月",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit("pick", [start, end]);
+            }
+          }
+        ]
+      },
+      value: "",
+      flag: false,
+      btnText: "点击查看详细信息"
     };
   },
   created() {
@@ -92,18 +136,26 @@ export default {
     }
   },
   methods: {
-    getFiltersData() {
-      this.timeData = this.data.map(item => {
-        return {
-          text: item.reg_datetime,
-          value: item.reg_datetime
-        };
-      });
-    },
     async getData() {
       const res = await this.$http.get(`/finac/get`);
       this.data = res.data.data;
-      this.getFiltersData();
+      this.foreverData = res.data.data;
+    },
+    filterDate(value) {
+      if (!value) {
+        this.data = this.foreverData;
+        return;
+      }
+      this.data = this.foreverData;
+      const start = value[0];
+      const end = value[1];
+      const dataTable = this.data.filter(dataTable => {
+        return (
+          new Date(dataTable.reg_datetime) >= new Date(start) &&
+          new Date(dataTable.reg_datetime) <= new Date(end)
+        );
+      });
+      this.data = dataTable;
     },
     sizeChange(val) {
       this.pageSize = val;
@@ -111,13 +163,6 @@ export default {
     },
     currentChange(val) {
       this.currentPage = val;
-    },
-    resetDateFilter() {
-      this.$refs.filterTable.clearFilter("reg_datetime");
-    },
-    filterHandler(value, row, column) {
-      const property = column["property"];
-      return row[property] === value;
     },
     openEditAlipayAccount(uid) {
       this.$prompt("请输入新的支付宝账号", "提示", {
@@ -127,8 +172,8 @@ export default {
       })
         .then(async ({ value }) => {
           const res = await this.$http.post(`/changeAlipayAccount`, {
-            phone: uid,
-            newAlipayAccount: value
+            wb_id: uid,
+            newAlipay_account: value
           });
           this.$message({
             type: "success",

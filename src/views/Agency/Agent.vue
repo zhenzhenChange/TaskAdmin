@@ -4,7 +4,19 @@
       <el-input size="medium" placeholder="输入关键字搜索" v-model="search">
         <i slot="prefix" class="el-input__icon el-icon-search"></i>
       </el-input>
-      <el-button @click="resetDateFilter">重置日期筛选</el-button>
+      <el-date-picker
+        size="medium"
+        type="datetimerange"
+        v-model="value"
+        align="center"
+        unlink-panels
+        range-separator="至"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期"
+        :picker-options="pickerOptions"
+        @change="filterDate"
+        class="mr-20"
+      ></el-date-picker>
       <el-button @click="openEditDefaultIncome" icon="el-icon-edit" type="primary">总代提成默认设置</el-button>
       <span class="ml-10">总代默认提成：{{son_pumpRation}}</span>
     </el-card>
@@ -18,9 +30,15 @@
         <template v-slot="props">
           <el-form label-position="left" inline class="agent-table-expand">
             <el-form-item label="账号">
-              <span>{{ props.row.phone }}</span>
+              <span class="mr-10">{{ props.row.phone }}</span>
+              <el-button
+                size="mini"
+                :loading="flag"
+                type="text"
+                @click="viewDetails(props.row.uid)"
+              >{{btnText}}</el-button>
             </el-form-item>
-            <el-form-item label="当天提成">
+            <!-- <el-form-item label="当天提成">
               <span>{{ props.row.general_income }}</span>
             </el-form-item>
             <el-form-item label="当天接单">
@@ -40,7 +58,7 @@
             </el-form-item>
             <el-form-item label="下级当天成功订单">
               <span>{{ props.row.sonData }}</span>
-            </el-form-item>
+            </el-form-item>-->
           </el-form>
         </template>
       </el-table-column>
@@ -51,8 +69,6 @@
         width="180"
         align="center"
         column-key="reg_datetime"
-        :filters="timeData"
-        :filter-method="filterHandler"
       >
         <template v-slot="scope">
           <i class="el-icon-time"></i>
@@ -80,13 +96,13 @@
             icon="el-icon-edit"
             type="primary"
             @click="openEditIncome(scope.row.phone)"
-          >修改总代提成</el-button>
+          >修改该总代提成</el-button>
           <el-button
             size="mini"
             icon="el-icon-warning"
             type="warning"
             @click="openBan(scope.row.uid)"
-          >禁止账号登录</el-button>
+          >禁止该账号登录</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -108,12 +124,46 @@ export default {
   data() {
     return {
       data: [],
-      timeData: [{ text: "", value: "" }],
+      foreverData: [],
       son_pumpRation: "下级抽层率",
+      pickerOptions: {
+        shortcuts: [
+          {
+            text: "最近一周",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit("pick", [start, end]);
+            }
+          },
+          {
+            text: "最近一个月",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit("pick", [start, end]);
+            }
+          },
+          {
+            text: "最近三个月",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit("pick", [start, end]);
+            }
+          }
+        ]
+      },
+      value: "",
       search: "",
       currentPage: 1,
       pageSize: 10,
-      pageSizes: [10, 20, 50, 100, 200, 300, 400]
+      pageSizes: [10, 20, 50, 100, 200, 300, 500],
+      flag: false,
+      btnText: "点击查看详细信息"
     };
   },
   created() {
@@ -132,27 +182,37 @@ export default {
     }
   },
   methods: {
-    getFiltersData() {
-      let hash = {};
-      this.timeData = this.data
-        .map(item => {
-          return {
-            text: item.reg_datetime,
-            value: item.reg_datetime
-          };
-        })
-        .reduce((arr, current) => {
-          hash[current.text]
-            ? ""
-            : (hash[current.text] = true && arr.push(current));
-          return arr;
-        }, []);
-    },
     async getData() {
       const res = await this.$http.get(`/agent/get`);
       this.data = res.data.data;
-      console.log(this.data);
-      this.getFiltersData();
+      this.foreverData = res.data.data;
+    },
+    async viewDetails(uid) {
+      this.flag = true;
+      this.btnText = "加载中...";
+      const res = await this.$http.post(`/agent/get`, {
+        uid
+      });
+      if (res.status) {
+        this.btnText = "详细信息如下";
+      }
+      this.onlyData = res.data;
+    },
+    filterDate(value) {
+      if (!value) {
+        this.data = this.foreverData;
+        return;
+      }
+      this.data = this.foreverData;
+      const start = value[0];
+      const end = value[1];
+      const dataTable = this.data.filter(dataTable => {
+        return (
+          new Date(dataTable.reg_datetime) >= new Date(start) &&
+          new Date(dataTable.reg_datetime) <= new Date(end)
+        );
+      });
+      this.data = dataTable;
     },
     sizeChange(val) {
       this.pageSize = val;
@@ -160,13 +220,6 @@ export default {
     },
     currentChange(val) {
       this.currentPage = val;
-    },
-    resetDateFilter() {
-      this.$refs.filterTable.clearFilter("reg_datetime");
-    },
-    filterHandler(value, row, column) {
-      const property = column["property"];
-      return row[property] === value;
     },
     openEditPwd(phone) {
       this.$prompt("请输入新密码", "提示", {
@@ -198,11 +251,19 @@ export default {
           const res = await this.$http.post(`/disableAccount`, {
             phone
           });
-          this.$message({
-            type: "success",
-            message: "禁止成功!" + res,
-            offset: 10
-          });
+          if (res.data.status === "true") {
+            this.$message({
+              type: "success",
+              message: `总代 ${phone} 已封禁成功！`,
+              offset: 10
+            });
+          } else {
+            this.$message({
+              type: "warning",
+              message: `服务器已超时，请稍后重试～`,
+              offset: 10
+            });
+          }
         })
         .catch(() => {});
     },

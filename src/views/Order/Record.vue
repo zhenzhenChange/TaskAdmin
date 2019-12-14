@@ -4,8 +4,19 @@
       <el-input size="medium" placeholder="输入关键字搜索" v-model="search">
         <i slot="prefix" class="el-input__icon el-icon-search"></i>
       </el-input>
-      <el-button @click="resetDateFilter">重置日期筛选</el-button>
-      <el-button @click="resetAllFilter">重置所有筛选</el-button>
+      <el-date-picker
+        size="medium"
+        type="datetimerange"
+        v-model="value"
+        align="center"
+        unlink-panels
+        range-separator="至"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期"
+        :picker-options="pickerOptions"
+        @change="filterDate"
+        class="mr-20"
+      ></el-date-picker>
     </el-card>
     <el-table
       v-if="searchData"
@@ -39,8 +50,6 @@
         sortable
         width="180"
         column-key="order_release_time"
-        :filters="timeData"
-        :filter-method="filterHandler"
       >
         <template v-slot="scope">
           <i class="el-icon-time"></i>
@@ -69,8 +78,6 @@
         label="订单状态"
         align="center"
         width="120"
-        :filters="stateData"
-        :filter-method="filterHandler"
         filter-placement="bottom-end"
       >
         <template v-slot="scope">
@@ -107,12 +114,43 @@ export default {
   data() {
     return {
       data: [],
-      timeData: [],
-      stateData: [],
+      foreverData: [],
       search: "",
       currentPage: 1,
       pageSize: 10,
-      pageSizes: [10, 20, 50, 100, 200, 300, 400]
+      pageSizes: [10, 20, 50, 100, 200, 300, 400],
+      pickerOptions: {
+        shortcuts: [
+          {
+            text: "最近一周",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit("pick", [start, end]);
+            }
+          },
+          {
+            text: "最近一个月",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit("pick", [start, end]);
+            }
+          },
+          {
+            text: "最近三个月",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit("pick", [start, end]);
+            }
+          }
+        ]
+      },
+      value: ""
     };
   },
   created() {
@@ -134,40 +172,26 @@ export default {
     stateType(type) {
       return type === "成功" ? "success" : "primary";
     },
-    getFiltersData() {
-      let timeHash = {};
-      let stateHash = {};
-      this.timeData = this.data
-        .map(item => {
-          return {
-            text: item.order_release_time,
-            value: item.order_release_time
-          };
-        })
-        .reduce((arr, current) => {
-          timeHash[current.text]
-            ? ""
-            : (timeHash[current.text] = true && arr.push(current));
-          return arr;
-        }, []);
-      this.stateData = this.data
-        .map(item => {
-          return {
-            text: item.order_state,
-            value: item.order_state
-          };
-        })
-        .reduce((arr, current) => {
-          stateHash[current.text]
-            ? ""
-            : (stateHash[current.text] = true && arr.push(current));
-          return arr;
-        }, []);
-    },
     async getData() {
       const res = await this.$http.get(`/man/get`);
       this.data = res.data.data;
-      this.getFiltersData();
+      this.foreverData = res.data.data;
+    },
+    filterDate(value) {
+      if (!value) {
+        this.data = this.foreverData;
+        return;
+      }
+      this.data = this.foreverData;
+      const start = value[0];
+      const end = value[1];
+      const dataTable = this.data.filter(dataTable => {
+        return (
+          new Date(dataTable.reg_datetime) >= new Date(start) &&
+          new Date(dataTable.reg_datetime) <= new Date(end)
+        );
+      });
+      this.data = dataTable;
     },
     sizeChange(val) {
       this.pageSize = val;
@@ -175,16 +199,6 @@ export default {
     },
     currentChange(val) {
       this.currentPage = val;
-    },
-    resetDateFilter() {
-      this.$refs.filterTable.clearFilter("order_release_time");
-    },
-    resetAllFilter() {
-      this.$refs.filterTable.clearFilter();
-    },
-    filterHandler(value, row, column) {
-      const property = column["property"];
-      return row[property] === value;
     },
     deleteRecord(id) {
       this.$confirm("确定要删除该条记录吗？", "警告", {

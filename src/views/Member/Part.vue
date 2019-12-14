@@ -6,7 +6,7 @@
       </el-input>
       <el-date-picker
         size="medium"
-        type="daterange"
+        type="datetimerange"
         v-model="value"
         align="center"
         unlink-panels
@@ -27,9 +27,15 @@
         <template v-slot="props">
           <el-form label-position="left" inline class="part-table-expand">
             <el-form-item label="账号">
-              <span>{{ props.row.phone }}</span>
+              <span class="mr-10">{{ props.row.phone }}</span>
+              <el-button
+                size="mini"
+                :loading="flag"
+                type="text"
+                @click="viewDetails(props.row.uid)"
+              >{{btnText}}</el-button>
             </el-form-item>
-            <el-form-item label="备注">
+            <!-- <el-form-item label="备注">
               <span>{{ props.row.user_remark }}</span>
             </el-form-item>
             <el-form-item label="当天充值">
@@ -40,7 +46,7 @@
             </el-form-item>
             <el-form-item label="当天成功订单">
               <span>{{ props.row.orderData }}</span>
-            </el-form-item>
+            </el-form-item> -->
           </el-form>
         </template>
       </el-table-column>
@@ -108,6 +114,7 @@ export default {
   data() {
     return {
       data: [],
+      foreverData: [],
       search: "",
       currentPage: 1,
       pageSize: 10,
@@ -143,7 +150,9 @@ export default {
           }
         ]
       },
-      value: ""
+      value: "",
+      flag: false,
+      btnText: "点击查看详细信息"
     };
   },
   created() {
@@ -165,12 +174,25 @@ export default {
     async getData() {
       const res = await this.$http.get(`/give/get`);
       this.data = res.data.data;
+      this.foreverData = res.data.data;
+    },
+    async viewDetails(uid) {
+      this.flag = true;
+      this.btnText = "加载中...";
+      const res = await this.$http.post(`/give/get`, {
+        uid
+      });
+      if (res.status) {
+        this.btnText = "详细信息如下";
+      }
+      this.onlyData = res.data;
     },
     filterDate(value) {
       if (!value) {
-        this.getData();
+        this.data = this.foreverData;
         return;
       }
+      this.data = this.foreverData;
       const start = value[0];
       const end = value[1];
       const dataTable = this.data.filter(dataTable => {
@@ -219,7 +241,6 @@ export default {
             phone,
             NewPwd: value
           });
-          console.log(res);
           this.$message({
             type: "success",
             message: res,
@@ -243,6 +264,12 @@ export default {
             this.$message({
               type: "success",
               message: `账号 ${phone} 已封禁!`,
+              offset: 10
+            });
+          } else {
+            this.$message({
+              type: "warning",
+              message: `服务器已超时，请稍后重试～`,
               offset: 10
             });
           }

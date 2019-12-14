@@ -6,7 +6,7 @@
       </el-input>
       <el-date-picker
         size="medium"
-        type="daterange"
+        type="datetimerange"
         v-model="value"
         align="center"
         unlink-panels
@@ -28,32 +28,38 @@
         <template v-slot="props">
           <el-form label-position="left" inline class="clerk-table-expand">
             <el-form-item label="账号">
-              <span>{{ props.row.phone }}</span>
+              <span class="mr-10">{{ props.row.phone }}</span>
+              <el-button
+                size="mini"
+                :loading="flag"
+                type="text"
+                @click="viewDetails(props.row.uid)"
+              >{{btnText}}</el-button>
             </el-form-item>
-            <el-form-item label="备注">
+            <!-- <el-form-item label="备注">
               <span>{{ props.row.user_remark }}</span>
             </el-form-item>
             <el-form-item label="当天提成">
               <span>{{ props.row.general_income }}</span>
             </el-form-item>
             <el-form-item label="当天接单">
-              <span>{{ props.row.orderData }}</span>
+              <span>{{ mineOrder.length }}</span>
             </el-form-item>
             <el-form-item label="当天成功订单">
-              <span>{{ props.row.orderData }}</span>
+              <span>{{ mineOrder.length }}</span>
             </el-form-item>
             <el-form-item label="下级总接订单">
-              <span>{{ props.row.sonData }}</span>
+              <span>{{ sonOrderData.length }}</span>
             </el-form-item>
             <el-form-item label="下级总成功订单">
-              <span>{{ props.row.sonData }}</span>
+              <span>{{ sonOrderData.length }}</span>
             </el-form-item>
             <el-form-item label="下级当天接订单">
-              <span>{{ props.row.sonData }}</span>
+              <span>{{ sonOrderData.length }}</span>
             </el-form-item>
             <el-form-item label="下级当天成功订单">
-              <span>{{ props.row.sonData }}</span>
-            </el-form-item>
+              <span>{{ sonOrderData.length }}</span>
+            </el-form-item>-->
           </el-form>
         </template>
       </el-table-column>
@@ -74,10 +80,10 @@
       <el-table-column align="center" prop="my_balance" label="余额"></el-table-column>
       <el-table-column align="center" prop="general_income" label="总提成"></el-table-column>
       <el-table-column align="center" label="总接单">
-        <template>{{ data.mineOrder.length }}</template>
+        <!-- <template>{{ mineOrder.length }}</template> -->
       </el-table-column>
       <el-table-column align="center" label="总成功">
-        <template>{{ data.mineOrder.map(item => item.order_state).toString() }}</template>
+        <!-- <template>{{ mineOrder.map(item => item.order_state).toString() }}</template> -->
       </el-table-column>
       <el-table-column align="center" prop="extension_code" label="推广码"></el-table-column>
       <el-table-column align="center" label="账号状态">
@@ -101,13 +107,13 @@
       </el-table-column>
     </el-table>
     <el-pagination
-      v-if="data.data"
+      v-if="data"
       @size-change="sizeChange"
       @current-change="currentChange"
       :page-size="pageSize"
       :page-sizes="pageSizes"
       :current-page="currentPage"
-      :total="length || data.data.length"
+      :total="length || data.length"
       layout="total, sizes, prev, pager, next, jumper"
       class="mt-20"
     ></el-pagination>
@@ -119,6 +125,8 @@ export default {
   data() {
     return {
       data: [],
+      foreverData: [],
+      onlyData: [],
       search: "",
       currentPage: 1,
       pageSize: 10,
@@ -155,7 +163,9 @@ export default {
         ]
       },
       value: "",
-      length: ""
+      length: "",
+      flag: false,
+      btnText: "点击查看详细信息"
     };
   },
   created() {
@@ -164,34 +174,47 @@ export default {
   computed: {
     searchData() {
       if (this.search) {
-        return this.data.data.filter(data => {
+        return this.data.filter(data => {
           return Object.keys(data).some(key => {
             return String(data[key]).includes(this.search);
           });
         });
       }
-      return this.data.data;
+      return this.data;
     }
   },
   methods: {
     async getData() {
       const res = await this.$http.get(`/recv/get`);
-      this.data = res.data;
+      this.data = res.data.data;
+      this.foreverData = res.data.data;
+    },
+    async viewDetails(uid) {
+      this.flag = true;
+      this.btnText = "加载中...";
+      const res = await this.$http.post(`/recv/get`, {
+        uid
+      });
+      if (res.status) {
+        this.btnText = "详细信息如下";
+      }
+      this.onlyData = res.data;
     },
     filterDate(value) {
       if (!value) {
-        this.getData();
+        this.data = this.foreverData;
         return;
       }
+      this.data = this.foreverData;
       const start = value[0];
       const end = value[1];
-      const dataTable = this.data.data.filter(dataTable => {
+      const dataTable = this.data.filter(dataTable => {
         return (
           new Date(dataTable.reg_datetime) >= new Date(start) &&
           new Date(dataTable.reg_datetime) <= new Date(end)
         );
       });
-      this.data.data = dataTable;
+      this.data = dataTable;
     },
     sizeChange(val) {
       this.pageSize = val;
@@ -235,6 +258,12 @@ export default {
             this.$message({
               type: "success",
               message: `账号 ${phone} 已封禁!`,
+              offset: 10
+            });
+          } else {
+            this.$message({
+              type: "warning",
+              message: `服务器已超时，请稍后重试～`,
               offset: 10
             });
           }
