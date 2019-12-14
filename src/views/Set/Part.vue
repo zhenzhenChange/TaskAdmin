@@ -47,6 +47,7 @@
         >批量修改已选取对象的微信下单价格</el-button>
       </el-card>
       <el-table
+        v-if="data"
         ref="multipleTable"
         :data="data.slice((currentPage-1)*pageSize,currentPage*pageSize)"
         tooltip-effect="dark"
@@ -73,6 +74,7 @@
         <el-table-column align="center" prop="user_remark" label="备注"></el-table-column>
       </el-table>
       <el-pagination
+        v-if="data"
         @size-change="sizeChange"
         @current-change="currentChange"
         :page-size="pageSize"
@@ -90,13 +92,7 @@
 export default {
   data() {
     return {
-      data: [
-        {
-          phone: "17777",
-          reg_datetime: "注册日期",
-          user_remark: "备注"
-        }
-      ],
+      data: [],
       multipleSelection: [],
       su_vipInitPrice: "",
       su_extensionAward: "",
@@ -108,7 +104,14 @@ export default {
       pageSizes: [10, 20, 50, 100, 200, 300, 400]
     };
   },
+  created() {
+    this.getData();
+  },
   methods: {
+    async getData() {
+      const res = await this.$http.get("/setup/get");
+      this.data = res.data;
+    },
     sizeChange(val) {
       this.pageSize = val;
       this.currentPage = 1;
@@ -155,7 +158,7 @@ export default {
     openBatchEditPrice() {
       if (!this.multipleSelection.length) {
         this.$message({
-          type: "error",
+          type: "warning",
           message: "请选取修改对象",
           offset: 10
         });
@@ -172,7 +175,7 @@ export default {
               phone: item.phone
             };
           });
-          const res = await this.$http.post(`/give/modPrice`, {
+          const res = await this.$http.post(`/setup/setOrderRatio`, {
             phoneArray: this.multipleSelection,
             su_generalUserTicketRatio: value
           });
