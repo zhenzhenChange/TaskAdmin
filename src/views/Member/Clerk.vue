@@ -258,7 +258,8 @@ export default {
             this.$message({
               type: "success",
               message: `账号 ${phone} 已封禁!`,
-              offset: 10
+              offset: 10,
+              center: true
             });
           } else {
             this.$message({

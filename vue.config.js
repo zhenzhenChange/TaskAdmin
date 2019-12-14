@@ -4,6 +4,10 @@ module.exports = {
       '/api/admin': {
         target: "http://47.99.213.197:8080/chStageWoA",
         changeOrigin: true
+      },
+      '/api/common': {
+        target: "http://47.99.213.197:8080/chStageWoA",
+        changeOrigin: true
       }
     }
   }

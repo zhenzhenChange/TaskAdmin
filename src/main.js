@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import ElementUI from 'element-ui'
-import router from './router'
 import dayjs from "dayjs"
+import router from './router'
 import http from './http'
+import commonHTTP from './commonHTTP'
 
 import App from './App.vue'
 
@@ -47,6 +48,7 @@ Vue.filter("onlyDate", value => {
 })
 
 Vue.prototype.$http = http
+Vue.prototype.$commonHTTP = commonHTTP
 
 new Vue({
   router,

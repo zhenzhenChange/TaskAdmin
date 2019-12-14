@@ -5,10 +5,10 @@
     </div>
     <el-form @submit.native.prevent="login">
       <el-form-item label="用户名">
-        <el-input v-model="userData.adminName"></el-input>
+        <el-input v-model="userData.phone"></el-input>
       </el-form-item>
       <el-form-item label="密码">
-        <el-input type="password" v-model="userData.passWord"></el-input>
+        <el-input type="password" v-model="userData.pwd"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" native-type="submit">登录</el-button>
@@ -22,15 +22,15 @@ export default {
   data() {
     return {
       userData: {
-        adminName: "admin",
-        passWord: "admin"
+        phone: "88888888",
+        pwd: "123456789"
       }
     };
   },
   methods: {
     async login() {
-      /* const res = await this.$http.post("login", this.userData);
-      localStorage.token = res.data.token; */
+      // const res = await this.$commonHTTP.post("/login", this.userData);
+      // console.log(res);
       this.$router.push("/home");
       this.$message({
         type: "success",
