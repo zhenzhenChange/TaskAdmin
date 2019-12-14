@@ -151,8 +151,8 @@ export default {
       const end = value[1];
       const dataTable = this.data.filter(dataTable => {
         return (
-          new Date(dataTable.reg_datetime) >= new Date(start) &&
-          new Date(dataTable.reg_datetime) <= new Date(end)
+          new Date(dataTable.wb_datetime) >= new Date(start) &&
+          new Date(dataTable.wb_datetime) <= new Date(end)
         );
       });
       this.data = dataTable;

@@ -56,14 +56,13 @@ export default {
   },
   methods: {
     async saveSet() {
-      const clerkData = {
+      const limitRes = await this.$http.post(`/setup/limitHold`, {
+        su_holdLimit: this.su_holdLimit
+      });
+      const codeRes = await this.$http.post(`/setup/isExtCodeReq`, {
         su_isExtensionCodeReq: this.su_isExtensionCodeReq,
         userType: "接单端"
-      };
-      const limitRes = await this.$http.post(
-        `/setup/limitHold/${this.su_holdLimit}`
-      );
-      const codeRes = await this.$http.post(`/setup/isExtCodeReq/${clerkData}`);
+      });
       if (limitRes.statusCode && codeRes.statusCode) {
         this.$message({
           type: "suceess",
@@ -72,11 +71,10 @@ export default {
         });
       }
     },
-    changeValue(value) {
-      this.su_isExtensionCodeReq = value;
-    },
     async sendNotice() {
-      const res = await this.$http.post(`/setup/setRelesAnno/${this.textarea}`);
+      const res = await this.$http.post(`/setup/setRelesAnno`, {
+        su_recvAnno: this.textarea
+      });
       if (res.statusCode) {
         this.$message({
           type: "suceess",
@@ -84,6 +82,9 @@ export default {
           offset: 10
         });
       }
+    },
+    changeValue(value) {
+      this.su_isExtensionCodeReq = value;
     }
   }
 };

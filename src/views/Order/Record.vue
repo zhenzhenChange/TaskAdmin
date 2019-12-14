@@ -32,7 +32,7 @@
               <span>{{ props.row.order_id }}</span>
             </el-form-item>
             <el-form-item label="有效时间">
-              <span>{{ props.row.order_effectPeriod }}</span>
+              <span>{{ props.row.order_effectPeriod }} 分钟</span>
             </el-form-item>
             <el-form-item label="订单类型">
               <span>{{ props.row.order_type }}</span>
@@ -187,8 +187,8 @@ export default {
       const end = value[1];
       const dataTable = this.data.filter(dataTable => {
         return (
-          new Date(dataTable.reg_datetime) >= new Date(start) &&
-          new Date(dataTable.reg_datetime) <= new Date(end)
+          new Date(dataTable.order_release_time) >= new Date(start) &&
+          new Date(dataTable.order_release_time) <= new Date(end)
         );
       });
       this.data = dataTable;

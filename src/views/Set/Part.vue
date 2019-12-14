@@ -39,8 +39,6 @@
     </el-tab-pane>
     <el-tab-pane label="批量调节价格百分比">
       <el-card class="card">
-        <el-button @click="resetDateFilter">重置日期筛选</el-button>
-        <el-button @click="toggleSelection()">取消选择</el-button>
         <el-button
           size="meduim"
           icon="el-icon-edit"
@@ -65,8 +63,6 @@
           sortable
           width="150"
           column-key="reg_datetime"
-          :filters="timeData"
-          :filter-method="filterHandler"
         >
           <template v-slot="scope">
             <i class="el-icon-time"></i>
@@ -101,7 +97,6 @@ export default {
           user_remark: "备注"
         }
       ],
-      timeData: [{ text: "", value: "" }],
       multipleSelection: [],
       su_vipInitPrice: "",
       su_extensionAward: "",
@@ -114,25 +109,6 @@ export default {
     };
   },
   methods: {
-    toggleSelection() {
-      this.$refs.multipleTable.clearSelection();
-    },
-    getFiltersData() {
-      let hash = {};
-      this.timeData = this.data
-        .map(item => {
-          return {
-            text: item.reg_datetime,
-            value: item.reg_datetime
-          };
-        })
-        .reduce((arr, current) => {
-          hash[current.text]
-            ? ""
-            : (hash[current.text] = true && arr.push(current));
-          return arr;
-        }, []);
-    },
     sizeChange(val) {
       this.pageSize = val;
       this.currentPage = 1;
@@ -146,25 +122,16 @@ export default {
     changeValue(value) {
       this.su_isExtensionCodeReq = value;
     },
-    resetDateFilter() {
-      this.$refs.multipleTable.clearFilter("reg_datetime");
-    },
-    filterHandler(value, row, column) {
-      const property = column["property"];
-      return row[property] === value;
-    },
     async saveSet() {
-      const partData = {
-        su_isExtensionCodeReq: this.su_isExtensionCodeReq,
-        userType: "下单端"
-      };
-      const priceRes = await this.$http.post(
-        `/setup/setFreshmanPrice/${this.su_vipInitPrice}`
-      );
-      const awardRes = await this.$http.post(
-        `/setup/extensionAward/${this.su_extensionAward}`
-      );
-      const codeRes = await this.$http.post(`/setup/isExtCodeReq/${partData}`);
+      const priceRes = await this.$http.post(`/setup/setFreshmanPrice`, {
+        su_vipInitPrice: this.su_vipInitPrice
+      });
+      const awardRes = await this.$http.post(`/setup/extensionAward`, {
+        su_extensionAward: this.su_extensionAward
+      });
+      const codeRes = await this.$http.post(`/setup/isExtCodeReq`, {
+        su_isExtensionCodeReq: this.su_isExtensionCodeReq
+      });
       if (priceRes.statusCode && awardRes.statusCode && codeRes.statusCode) {
         this.$message({
           type: "suceess",
@@ -174,7 +141,9 @@ export default {
       }
     },
     async sendNotice() {
-      const res = await this.$http.post(`/setup/setRecvAnno/${this.textarea}`);
+      const res = await this.$http.post(`/setup/setRecvAnno`, {
+        su_giveAnno: this.textarea
+      });
       if (res.statusCode) {
         this.$message({
           type: "suceess",
@@ -203,11 +172,10 @@ export default {
               phone: item.phone
             };
           });
-          const data = {
+          const res = await this.$http.post(`/give/modPrice`, {
             phoneArray: this.multipleSelection,
-            newPrice: value
-          };
-          const res = await this.$http.post(`/give/modPrice/${data}`);
+            su_generalUserTicketRatio: value
+          });
           this.$message({
             type: "success",
             message: `您修改的价格为: ${res}`,
