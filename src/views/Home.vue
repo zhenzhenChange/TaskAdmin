@@ -43,8 +43,10 @@
         <el-button @click="logout">退出登录</el-button>
       </el-header>
       <el-main>
-        <!-- :key="$route.path" 根据路由区分组件 -->
-        <router-view :key="$route.path" />
+        <keep-alive>
+          <!-- :key="$route.path" 根据路由区分组件 -->
+          <router-view :key="$route.path" />
+        </keep-alive>
       </el-main>
     </el-container>
   </el-container>

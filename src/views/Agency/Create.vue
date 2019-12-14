@@ -78,8 +78,8 @@ export default {
         this.agencyData.pwd = this.confirmPwd = "";
         return;
       }
-      const res = await this.$http.post(`/reg`, this.agencyData);
-      if (res.statusCode) {
+      const res = await this.$commonHTTP.post(`/reg`, this.agencyData);
+      if (JSON.parse(res.data.status)) {
         this.$message({
           type: "success",
           message: `${this.agencyData.phone}添加成功~`,
@@ -87,7 +87,7 @@ export default {
         });
       } else {
         this.$message({
-          type: "success",
+          type: "warning",
           message: `服务器超时，请稍后重试~~`,
           offset: 10
         });

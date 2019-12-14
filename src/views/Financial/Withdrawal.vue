@@ -130,7 +130,6 @@ export default {
           this.data.push(item);
         }
       });
-      console.log(this.data);
     },
     filterDate(value) {
       if (!value) {

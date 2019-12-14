@@ -46,7 +46,7 @@
             </el-form-item>
             <el-form-item label="当天成功订单">
               <span>{{ props.row.orderData }}</span>
-            </el-form-item> -->
+            </el-form-item>-->
           </el-form>
         </template>
       </el-table-column>
@@ -71,7 +71,13 @@
         <!-- <template v-slot="scope">{{scope.row.orderData.map(item=>item.order_state).toString()}}</template> -->
       </el-table-column>
       <el-table-column align="center" label="账号状态">
-        <template v-slot="scope">{{ scope.row.is_valide === 1 ? "可用" : "已限制" }}</template>
+        <template v-slot="scope">
+          <el-tag
+            :type="scope.row.is_valide === 1 ? 'success' : 'danger'"
+            disable-transitions
+            hit
+          >{{ scope.row.is_valide === 1 ? "正常" : "已封禁" }}</el-tag>
+        </template>
       </el-table-column>
       <el-table-column align="center" label="操作" width="450">
         <template v-slot="scope">

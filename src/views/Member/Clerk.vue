@@ -87,7 +87,13 @@
       </el-table-column>
       <el-table-column align="center" prop="extension_code" label="推广码"></el-table-column>
       <el-table-column align="center" label="账号状态">
-        <template v-slot="scope">{{ scope.row.is_valide === 1 ? "可用" : "已限制" }}</template>
+        <template v-slot="scope">
+          <el-tag
+            :type="scope.row.is_valide === 1 ? 'success' : 'danger'"
+            disable-transitions
+            hit
+          >{{ scope.row.is_valide === 1 ? "正常" : "已封禁" }}</el-tag>
+        </template>
       </el-table-column>
       <el-table-column align="center" label="操作" width="450">
         <template v-slot="scope">
@@ -253,7 +259,7 @@ export default {
           const res = await this.$http.post("/disableAccount", {
             phone
           });
-          if (res.data.status) {
+          if (JSON.parse(res.data.status)) {
             this.getData();
             this.$message({
               type: "success",

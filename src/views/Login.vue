@@ -23,15 +23,15 @@ export default {
     return {
       userData: {
         phone: "88888888",
-        pwd: "123456789"
+        pwd: "1213456789"
       }
     };
   },
   methods: {
     async login() {
-      // const res = await this.$commonHTTP.post("/login", this.userData);
-      // console.log(res);
-      this.$router.push("/home");
+      const res = await this.$commonHTTP.post("/login", this.userData);
+      console.log(res);
+      this.$router.push("/members");
       this.$message({
         type: "success",
         message: "登录成功",

@@ -82,7 +82,15 @@
       <el-table-column align="center" prop="general_income" label="总提成"></el-table-column>
       <el-table-column align="center" prop="orderData.length" label="总领取订单"></el-table-column>
       <el-table-column align="center" prop="orderData.length" label="总成功订单"></el-table-column>
-      <el-table-column align="center" prop="is_valide" label="账号状态"></el-table-column>
+      <el-table-column align="center" label="账号状态">
+        <template v-slot="scope">
+          <el-tag
+            :type="scope.row.is_valide === 1 ? 'success' : 'danger'"
+            disable-transitions
+            hit
+          >{{ scope.row.is_valide === 1 ? "正常" : "已封禁" }}</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column align="center" label="操作" width="450">
         <template v-slot="scope">
           <el-button
@@ -161,7 +169,7 @@ export default {
       search: "",
       currentPage: 1,
       pageSize: 10,
-      pageSizes: [10, 20, 50, 100, 200, 300, 500],
+      pageSizes: [10, 20, 50, 100, 200, 300, 500], // 每页表格显示条数
       flag: false,
       btnText: "点击查看详细信息"
     };
@@ -231,13 +239,21 @@ export default {
         .then(async ({ value }) => {
           const res = await this.$http.post(`/changePwd`, {
             phone,
-            NewPwd: value
+            newPwd: value
           });
-          this.$message({
-            type: "success",
-            message: res,
-            offset: 10
-          });
+          if (JSON.parse(res.data.status)) {
+            this.$message({
+              type: "success",
+              message: `修改成功！`,
+              offset: 10
+            });
+          } else {
+            this.$message({
+              type: "warning",
+              message: `服务器已超时，请稍后重试～`,
+              offset: 10
+            });
+          }
         })
         .catch(() => {});
     },
@@ -251,7 +267,7 @@ export default {
           const res = await this.$http.post(`/disableAccount`, {
             phone
           });
-          if (res.data.status === "true") {
+          if (JSON.parse(res.data.status)) {
             this.$message({
               type: "success",
               message: `总代 ${phone} 已封禁成功！`,
@@ -278,10 +294,16 @@ export default {
             uid,
             my_returnRatio: value
           });
-          if (res.data.status) {
+          if (JSON.parse(res.data.status)) {
             this.$message({
               type: "success",
               message: `修改成功！`,
+              offset: 10
+            });
+          } else {
+            this.$message({
+              type: "warning",
+              message: `服务器已超时，请稍后重试～`,
               offset: 10
             });
           }
@@ -298,12 +320,20 @@ export default {
           const res = await this.$http.post(`/agent/setRetRatio`, {
             retRatio: value
           });
-          this.son_pumpRation = value;
-          this.$message({
-            type: "success",
-            message: res,
-            offset: 10
-          });
+          if (JSON.parse(res.data.status)) {
+            this.$message({
+              type: "success",
+              message: "设置成功！",
+              offset: 10
+            });
+            this.son_pumpRation = value;
+          } else {
+            this.$message({
+              type: "warning",
+              message: `服务器已超时，请稍后重试～`,
+              offset: 10
+            });
+          }
         })
         .catch(() => {});
     }
