@@ -30,15 +30,16 @@ export default {
   methods: {
     async login() {
       const res = await this.$commonHTTP.post("/login", this.userData);
-      console.log(res);
-      this.$router.push("/members");
-      this.$message({
-        type: "success",
-        message: "登录成功",
-        duration: 1500,
-        center: true,
-        offset: 10
-      });
+      if (res.status === 200) {
+        this.$router.push("/members");
+        this.$message({
+          type: "success",
+          message: "登录成功",
+          duration: 1500,
+          center: true,
+          offset: 10
+        });
+      }
     }
   }
 };
