@@ -239,7 +239,7 @@ export default {
         .then(async ({ value }) => {
           const res = await this.$http.post(`/changePwd`, {
             phone,
-            newPwd: value
+            NewPwd: value
           });
           if (JSON.parse(res.data.status)) {
             this.$message({
