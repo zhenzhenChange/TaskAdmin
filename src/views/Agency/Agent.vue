@@ -18,7 +18,7 @@
         class="mr-20"
       ></el-date-picker>
       <el-button @click="openEditDefaultIncome" icon="el-icon-edit" type="primary">总代提成默认设置</el-button>
-      <span class="ml-10">总代默认提成：{{son_pumpRation}}</span>
+      <span class="ml-10">总代默认提成：{{my_returnRatio}}</span>
     </el-card>
     <el-table
       ref="filterTable"
@@ -110,6 +110,7 @@
             icon="el-icon-warning"
             type="warning"
             @click="openBan(scope.row.uid)"
+            :disabled="scope.row.is_valide === 0 ? true : false"
           >禁止该账号登录</el-button>
         </template>
       </el-table-column>
@@ -133,7 +134,7 @@ export default {
     return {
       data: [],
       foreverData: [],
-      son_pumpRation: "下级抽层率",
+      my_returnRatio: "当前账号收益率",
       pickerOptions: {
         shortcuts: [
           {
@@ -193,6 +194,7 @@ export default {
     async getData() {
       const res = await this.$http.get(`/agent/get`);
       this.data = res.data.data;
+      console.log(this.data);
       this.foreverData = res.data.data;
     },
     async viewDetails(uid) {

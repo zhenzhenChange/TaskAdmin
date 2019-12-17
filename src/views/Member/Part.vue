@@ -85,7 +85,7 @@
             size="mini"
             icon="el-icon-edit"
             type="primary"
-            @click="openEditPrice(scope.row.phone)"
+            @click="openEditPrice(scope.row.uid)"
           >修改微信下单价格</el-button>
           <el-button
             size="mini"
@@ -98,6 +98,7 @@
             icon="el-icon-warning"
             type="warning"
             @click="openBan(scope.row.phone)"
+            :disabled="scope.row.is_valide === 0 ? true : false"
           >禁止账号登录</el-button>
         </template>
       </el-table-column>
@@ -225,7 +226,7 @@ export default {
         .then(async ({ value }) => {
           const res = await this.$http.post(`/give/modPrice`, {
             phone,
-            newPrice: value
+            user_minPrice: value
           });
           this.$message({
             type: "success",

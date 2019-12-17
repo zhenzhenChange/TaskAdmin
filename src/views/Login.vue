@@ -22,15 +22,37 @@ export default {
   data() {
     return {
       userData: {
-        phone: "88888888",
-        pwd: "1213456789"
+        phone: "14588889654",
+        pwd: "123456789"
       }
     };
   },
   methods: {
     async login() {
       const res = await this.$commonHTTP.post("/login", this.userData);
-      if (res.status === 200) {
+      console.log(res);
+      if (res.data.my_stratum !== 0) {
+        this.$message({
+          type: "warning",
+          message: "请使用管理员账号登录～",
+          duration: 1500,
+          center: true,
+          offset: 10
+        });
+        return;
+      }
+      if (res.data.is_valide === 0) {
+        this.$message({
+          type: "warning",
+          message: "该账号已被封禁～",
+          duration: 1500,
+          center: true,
+          offset: 10
+        });
+        return;
+      }
+      if (res.status === 200 && res.data.my_stratum === 0) {
+        this.$store.commit("SaveUserID", res.data.uid);
         this.$router.push("/members");
         this.$message({
           type: "success",

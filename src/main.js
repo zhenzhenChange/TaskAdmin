@@ -2,6 +2,9 @@ import Vue from 'vue'
 import ElementUI from 'element-ui'
 import dayjs from "dayjs"
 import router from './router'
+import {
+  store
+} from './store'
 import http from './http'
 import commonHTTP from './commonHTTP'
 
@@ -51,6 +54,7 @@ Vue.prototype.$http = http
 Vue.prototype.$commonHTTP = commonHTTP
 
 new Vue({
+  store,
   router,
   render: h => h(App)
 }).$mount('#app')

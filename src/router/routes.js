@@ -23,7 +23,10 @@ import SetClerk from '../views/Set/Clerk.vue'
 const routes = [{
     path: '/',
     name: 'login',
-    component: Login
+    component: Login,
+    meta: {
+      isPublic: true
+    }
   },
   {
     path: '/home',

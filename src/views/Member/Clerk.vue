@@ -108,6 +108,7 @@
             icon="el-icon-warning"
             type="warning"
             @click="openBan(scope.row.phone)"
+            :disabled="scope.row.is_valide === 0 ? true : false"
           >禁止账号登录</el-button>
         </template>
       </el-table-column>

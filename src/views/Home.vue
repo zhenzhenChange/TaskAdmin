@@ -40,6 +40,7 @@
     </el-aside>
     <el-container>
       <el-header class="home-header">
+        <span class="userID">管理员ID：{{userID ? userID : "未登录"}}</span>
         <el-button @click="logout">退出登录</el-button>
       </el-header>
       <el-main>
@@ -53,11 +54,18 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   methods: {
     logout() {
       this.$router.push("/");
+      localStorage.removeItem("userID");
     }
+  },
+  computed: {
+    ...mapState({
+      userID: state => state.userID
+    })
   }
 };
 </script>
@@ -80,5 +88,11 @@ export default {
 .el-menu-item {
   color: gray;
   font-size: 12px;
+}
+
+.userID {
+  float: left;
+  font-size: 20px;
+  margin-left: 20px;
 }
 </style>
