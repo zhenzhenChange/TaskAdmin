@@ -210,10 +210,13 @@ export default {
           const res = await this.$http.post(`/man/delOrderRec`, {
             order_id: id
           });
-          this.$message({
-            type: "success",
-            message: "操作成功!" + res
-          });
+          if (res.status === 200 && JSON.parse(res.data.statusCode)) {
+            this.$message({
+              type: "success",
+              message: "删除成功!"
+            });
+            this.getData();
+          }
         })
         .catch(() => {});
     }

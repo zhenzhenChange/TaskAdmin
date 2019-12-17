@@ -18,7 +18,7 @@
         class="mr-20"
       ></el-date-picker>
       <el-button @click="openEditDefaultIncome" icon="el-icon-edit" type="primary">总代提成默认设置</el-button>
-      <span class="ml-10">总代默认提成：{{my_returnRatio}}</span>
+      <span class="ml-10">总代默认提成：{{son_pumpRation}}</span>
     </el-card>
     <el-table
       ref="filterTable"
@@ -97,13 +97,13 @@
             size="mini"
             icon="el-icon-edit"
             type="primary"
-            @click="openEditPwd(scope.row.phone)"
+            @click="openEditPwd(scope.row.uid)"
           >修改密码</el-button>
           <el-button
             size="mini"
             icon="el-icon-edit"
             type="primary"
-            @click="openEditIncome(scope.row.phone)"
+            @click="openEditIncome(scope.row.uid)"
           >修改该总代提成</el-button>
           <el-button
             size="mini"
@@ -129,12 +129,13 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   data() {
     return {
       data: [],
       foreverData: [],
-      my_returnRatio: "当前账号收益率",
+      son_pumpRation: "",
       pickerOptions: {
         shortcuts: [
           {
@@ -170,7 +171,7 @@ export default {
       search: "",
       currentPage: 1,
       pageSize: 10,
-      pageSizes: [10, 20, 50, 100, 200, 300, 500], // 每页表格显示条数
+      pageSizes: [10, 20, 50, 100, 200, 300, 500],
       flag: false,
       btnText: "点击查看详细信息"
     };
@@ -188,13 +189,15 @@ export default {
         });
       }
       return this.data;
-    }
+    },
+    ...mapState({
+      userID: state => state.userID
+    })
   },
   methods: {
     async getData() {
       const res = await this.$http.get(`/agent/get`);
       this.data = res.data.data;
-      console.log(this.data);
       this.foreverData = res.data.data;
     },
     async viewDetails(uid) {
@@ -320,9 +323,10 @@ export default {
       })
         .then(async ({ value }) => {
           const res = await this.$http.post(`/agent/setRetRatio`, {
-            retRatio: value
+            uid: this.userID,
+            son_pumpRation: value
           });
-          if (JSON.parse(res.data.status)) {
+          if (res.status === 200 && JSON.parse(res.data.status)) {
             this.$message({
               type: "success",
               message: "设置成功！",

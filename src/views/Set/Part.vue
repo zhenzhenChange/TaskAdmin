@@ -7,21 +7,21 @@
           <el-button class="btn" type="text" @click="saveSet">保存</el-button>
         </div>
         <div>
-          <el-input v-model="su_vipInitPrice">
+          <el-input v-model="defaultSet.su_vipInitPrice">
             <template slot="prepend">会员注册初始价格</template>
           </el-input>
-          <el-input v-model="su_extensionAward" class="mt-20">
+          <el-input v-model="defaultSet.su_extensionAward" class="mt-20">
             <template slot="prepend">邀请价格初始设置</template>
           </el-input>
           <div>
             <span class="exCode">邀请码是否为必填项：</span>
             <el-switch
               class="switch"
-              v-model="su_isExtensionCodeReq"
+              v-model="defaultSet.su_isExtensionCodeReq"
               active-text="是"
               inactive-text="否"
-              active-value="1"
-              inactive-value="0"
+              :active-value="true"
+              :inactive-value="false"
               @change="changeValue"
             ></el-switch>
           </div>
@@ -30,10 +30,16 @@
       <el-card class="box-card">
         <div slot="header" class="clearfix">
           <span>下单端公告发布</span>
-          <el-button class="btn" type="text" @click="saveSet">发布</el-button>
+          <el-button class="btn" type="text" @click="sendNotice">发布</el-button>
         </div>
         <div>
-          <el-input resize type="textarea" rows="6" placeholder="请输入内容" v-model="textarea"></el-input>
+          <el-input
+            resize
+            type="textarea"
+            rows="6"
+            placeholder="请输入内容"
+            v-model="defaultSet.su_giveAnno"
+          ></el-input>
         </div>
       </el-card>
     </el-tab-pane>
@@ -47,7 +53,7 @@
         >批量修改已选取对象的微信下单价格</el-button>
       </el-card>
       <el-table
-        v-if="data"
+        v-if="data.length"
         ref="multipleTable"
         :data="data.slice((currentPage-1)*pageSize,currentPage*pageSize)"
         tooltip-effect="dark"
@@ -89,15 +95,18 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   data() {
     return {
       data: [],
       multipleSelection: [],
-      su_vipInitPrice: "",
-      su_extensionAward: "",
-      su_isExtensionCodeReq: 1,
-      textarea: "",
+      defaultSet: {
+        su_vipInitPrice: "",
+        su_extensionAward: "",
+        su_isExtensionCodeReq: "",
+        su_giveAnno: ""
+      },
       position: "top",
       currentPage: 1,
       pageSize: 10,
@@ -107,10 +116,15 @@ export default {
   created() {
     this.getData();
   },
+  computed: {
+    ...mapState({
+      userID: state => state.userID
+    })
+  },
   methods: {
     async getData() {
-      const res = await this.$http.get("/setup/get");
-      this.data = res.data;
+      const res = await this.$http.post("/setup/get");
+      this.defaultSet = res.data;
     },
     sizeChange(val) {
       this.pageSize = val;
@@ -126,33 +140,34 @@ export default {
       this.su_isExtensionCodeReq = value;
     },
     async saveSet() {
-      const priceRes = await this.$http.post(`/setup/setFreshmanPrice`, {
-        su_vipInitPrice: this.su_vipInitPrice
+      const res = await this.$http.post(`/setup/defaultPartSet`, {
+        uid: this.userID,
+        su_vipInitPrice: this.defaultSet.su_vipInitPrice,
+        su_extensionAward: this.defaultSet.su_extensionAward,
+        su_isExtensionCodeReq: this.defaultSet.su_isExtensionCodeReq ? 1 : 0
       });
-      const awardRes = await this.$http.post(`/setup/extensionAward`, {
-        su_extensionAward: this.su_extensionAward
-      });
-      const codeRes = await this.$http.post(`/setup/isExtCodeReq`, {
-        su_isExtensionCodeReq: this.su_isExtensionCodeReq
-      });
-      if (priceRes.statusCode && awardRes.statusCode && codeRes.statusCode) {
+      if (res.status === 200 && JSON.parse(res.data.status)) {
         this.$message({
-          type: "suceess",
+          type: "success",
           message: "保存成功",
           offset: 10
         });
+        this.getData();
       }
     },
     async sendNotice() {
-      const res = await this.$http.post(`/setup/setRecvAnno`, {
-        su_giveAnno: this.textarea
+      const res = await this.$http.post(`/setup/setRelesAnno`, {
+        uid: this.userID,
+        su_giveAnno: this.defaultSet.su_giveAnno
       });
-      if (res.statusCode) {
+      console.log(res);
+      if (res.status === 200 && JSON.parse(res.data.status)) {
         this.$message({
-          type: "suceess",
+          type: "success",
           message: "发布成功",
           offset: 10
         });
+        this.getData();
       }
     },
     openBatchEditPrice() {
@@ -176,6 +191,7 @@ export default {
             };
           });
           const res = await this.$http.post(`/setup/setOrderRatio`, {
+            uid: this.userID,
             phoneArray: this.multipleSelection,
             su_generalUserTicketRatio: value
           });

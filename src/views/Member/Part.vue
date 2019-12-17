@@ -217,7 +217,7 @@ export default {
     currentChange(val) {
       this.currentPage = val;
     },
-    openEditPrice(phone) {
+    openEditPrice(uid) {
       this.$prompt("请重新输入价格", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -225,7 +225,7 @@ export default {
       })
         .then(async ({ value }) => {
           const res = await this.$http.post(`/give/modPrice`, {
-            phone,
+            uid,
             user_minPrice: value
           });
           this.$message({

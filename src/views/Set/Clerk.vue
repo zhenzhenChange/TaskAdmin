@@ -7,18 +7,18 @@
           <el-button class="btn" type="text" @click="saveSet">保存</el-button>
         </div>
         <div>
-          <el-input v-model="su_holdLimit">
+          <el-input v-model="defaultSet.su_holdLimit">
             <template slot="prepend">最多同时几单未完成</template>
           </el-input>
           <div>
             <span class="exCode">邀请码是否为必填项：</span>
             <el-switch
               class="switch"
-              v-model="su_isExtensionCodeReq"
+              v-model="defaultSet.su_isExtensionCodeReq"
               active-text="是"
               inactive-text="否"
-              active-value="1"
-              inactive-value="0"
+              :active-value="true"
+              :inactive-value="false"
               @change="changeValue"
             ></el-switch>
           </div>
@@ -35,7 +35,7 @@
             type="textarea"
             rows="6"
             placeholder="请输入内容"
-            v-model="textarea"
+            v-model="defaultSet.su_recvAnno"
             clearable
           ></el-input>
         </div>
@@ -45,42 +45,59 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   data() {
     return {
-      su_holdLimit: "",
-      su_isExtensionCodeReq: 1,
+      defaultSet: {
+        su_holdLimit: "",
+        su_isExtensionCodeReq: "",
+        su_recvAnno: ""
+      },
       textarea: "",
       positon: "top"
     };
   },
+  created() {
+    this.getData();
+  },
+  computed: {
+    ...mapState({
+      userID: state => state.userID
+    })
+  },
   methods: {
+    async getData() {
+      const res = await this.$http.post("/setup/get");
+      this.defaultSet = res.data;
+    },
     async saveSet() {
-      const limitRes = await this.$http.post(`/setup/limitHold`, {
-        su_holdLimit: this.su_holdLimit
+      console.log(this.su_isExtensionCodeReq);
+      const res = await this.$http.post(`/setup/defaultClerkSet`, {
+        uid: this.userID,
+        su_holdLimit: this.defaultSet.su_holdLimit,
+        su_isExtensionCodeReq: this.defaultSet.su_isExtensionCodeReq ? 1 : 0
       });
-      const codeRes = await this.$http.post(`/setup/isExtCodeReq`, {
-        su_isExtensionCodeReq: this.su_isExtensionCodeReq,
-        userType: "接单端"
-      });
-      if (limitRes.statusCode && codeRes.statusCode) {
+      if (res.status === 200 && JSON.parse(res.status)) {
         this.$message({
-          type: "suceess",
+          type: "success",
           message: "保存成功",
           offset: 10
         });
       }
     },
     async sendNotice() {
-      const res = await this.$http.post(`/setup/setRelesAnno`, {
-        su_recvAnno: this.textarea
+      const res = await this.$http.post(`/setup/setRecvAnno`, {
+        uid: this.userID,
+        su_recvAnno: this.defaultSet.su_recvAnno
       });
-      if (res.statusCode) {
+      if (res.status === 200 && JSON.parse(res.data.status)) {
         this.$message({
-          type: "suceess",
+          type: "success",
           message: "发布成功！",
           offset: 10
         });
+        this.getData();
       }
     },
     changeValue(value) {

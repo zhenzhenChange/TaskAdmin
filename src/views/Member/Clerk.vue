@@ -36,30 +36,41 @@
                 @click="viewDetails(props.row.uid)"
               >{{btnText}}</el-button>
             </el-form-item>
-            <!-- <el-form-item label="备注">
+            <el-form-item label="备注">
               <span>{{ props.row.user_remark }}</span>
+            </el-form-item>
+            <el-form-item label="总提成">
+              <span>{{ props.row.general_income }}</span>
             </el-form-item>
             <el-form-item label="当天提成">
               <span>{{ props.row.general_income }}</span>
             </el-form-item>
-            <el-form-item label="当天接单">
-              <span>{{ mineOrder.length }}</span>
-            </el-form-item>
-            <el-form-item label="当天成功订单">
-              <span>{{ mineOrder.length }}</span>
-            </el-form-item>
-            <el-form-item label="下级总接订单">
-              <span>{{ sonOrderData.length }}</span>
-            </el-form-item>
-            <el-form-item label="下级总成功订单">
-              <span>{{ sonOrderData.length }}</span>
-            </el-form-item>
-            <el-form-item label="下级当天接订单">
-              <span>{{ sonOrderData.length }}</span>
-            </el-form-item>
-            <el-form-item label="下级当天成功订单">
-              <span>{{ sonOrderData.length }}</span>
-            </el-form-item>-->
+            <div v-if="divFlag">
+              <el-form-item label="总接单">
+                <span>{{ mineOrder.length }}</span>
+              </el-form-item>
+              <el-form-item label="当天接单">
+                <span>{{ mineOrder.length }}</span>
+              </el-form-item>
+              <el-form-item label="总成功订单">
+                <span>{{ mineOrder.length }}</span>
+              </el-form-item>
+              <el-form-item label="当天成功订单">
+                <span>{{ mineOrder.length }}</span>
+              </el-form-item>
+              <el-form-item label="下级总接订单">
+                <span>{{ sonOrderData.length }}</span>
+              </el-form-item>
+              <el-form-item label="下级总成功订单">
+                <span>{{ sonOrderData.length }}</span>
+              </el-form-item>
+              <el-form-item label="下级当天接订单">
+                <span>{{ sonOrderData.length }}</span>
+              </el-form-item>
+              <el-form-item label="下级当天成功订单">
+                <span>{{ sonOrderData.length }}</span>
+              </el-form-item>
+            </div>
           </el-form>
         </template>
       </el-table-column>
@@ -78,13 +89,6 @@
       </el-table-column>
       <el-table-column align="center" prop="phone" label="账号"></el-table-column>
       <el-table-column align="center" prop="my_balance" label="余额"></el-table-column>
-      <el-table-column align="center" prop="general_income" label="总提成"></el-table-column>
-      <el-table-column align="center" label="总接单">
-        <!-- <template>{{ mineOrder.length }}</template> -->
-      </el-table-column>
-      <el-table-column align="center" label="总成功">
-        <!-- <template>{{ mineOrder.map(item => item.order_state).toString() }}</template> -->
-      </el-table-column>
       <el-table-column align="center" prop="extension_code" label="推广码"></el-table-column>
       <el-table-column align="center" label="账号状态">
         <template v-slot="scope">
@@ -133,7 +137,9 @@ export default {
     return {
       data: [],
       foreverData: [],
-      onlyData: [],
+      mineOrder: [],
+      sonOrderData: [],
+      wb_book: [],
       search: "",
       currentPage: 1,
       pageSize: 10,
@@ -172,7 +178,8 @@ export default {
       value: "",
       length: "",
       flag: false,
-      btnText: "点击查看详细信息"
+      btnText: "点击查看详细信息",
+      divFlag: false
     };
   },
   created() {
@@ -195,6 +202,7 @@ export default {
       const res = await this.$http.get(`/recv/get`);
       this.data = res.data.data;
       this.foreverData = res.data.data;
+      console.log(this.data);
     },
     async viewDetails(uid) {
       this.flag = true;
@@ -202,10 +210,15 @@ export default {
       const res = await this.$http.post(`/recv/get`, {
         uid
       });
-      if (res.status) {
+      console.log(res);
+      if (res.status === 200) {
+        this.mineOrder = res.data.mineOrder;
+        this.sonOrderData = res.data.sonOrderData;
+        this.wb_book = res.data.wb_book;
         this.btnText = "详细信息如下";
+        this.flag = false;
+        this.divFlag = true;
       }
-      this.onlyData = res.data;
     },
     filterDate(value) {
       if (!value) {
