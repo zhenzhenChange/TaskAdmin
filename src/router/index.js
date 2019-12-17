@@ -16,11 +16,11 @@ const router = new VueRouter({
   routes
 })
 
-router.beforeEach((to, from, next) => {
-  if (!to.meta.isPublic && !localStorage.getItem("userID")) {
-    return next('/')
-  }
-  next()
-})
+// router.beforeEach((to, from, next) => {
+//   if (!to.meta.isPublic && !localStorage.getItem("userID")) {
+//     return next('/')
+//   }
+//   next()
+// })
 
 export default router

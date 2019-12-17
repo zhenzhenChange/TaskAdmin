@@ -1,5 +1,5 @@
 <template>
-  <el-tabs :tab-position="'top'" class="vh-80">
+  <el-tabs :tab-position="position" class="vh-80">
     <el-tab-pane label="流水中心">
       <financial-capital></financial-capital>
     </el-tab-pane>
@@ -11,3 +11,13 @@
     </el-tab-pane>
   </el-tabs>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      position: "top"
+    };
+  }
+};
+</script>

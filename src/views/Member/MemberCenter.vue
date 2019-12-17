@@ -1,5 +1,5 @@
 <template>
-  <el-tabs :tab-position="'top'" class="vh-80">
+  <el-tabs :tab-position="position" class="vh-80">
     <el-tab-pane label="接单会员中心">
       <member-clerk></member-clerk>
     </el-tab-pane>
@@ -8,3 +8,13 @@
     </el-tab-pane>
   </el-tabs>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      position: "top"
+    };
+  }
+};
+</script>

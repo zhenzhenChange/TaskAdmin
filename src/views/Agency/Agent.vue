@@ -38,27 +38,29 @@
                 @click="viewDetails(props.row.uid)"
               >{{btnText}}</el-button>
             </el-form-item>
-            <!-- <el-form-item label="当天提成">
-              <span>{{ props.row.general_income }}</span>
-            </el-form-item>
-            <el-form-item label="当天接单">
-              <span>{{ props.row.orderData }}</span>
-            </el-form-item>
-            <el-form-item label="当天成功订单">
-              <span>{{ props.row.orderData }}</span>
-            </el-form-item>
-            <el-form-item label="下级总接订单">
-              <span>{{ props.row.sonData }}</span>
-            </el-form-item>
-            <el-form-item label="下级总成功订单">
-              <span>{{ props.row.sonData }}</span>
-            </el-form-item>
-            <el-form-item label="下级当天接订单">
-              <span>{{ props.row.sonData }}</span>
-            </el-form-item>
-            <el-form-item label="下级当天成功订单">
-              <span>{{ props.row.sonData }}</span>
-            </el-form-item>-->
+            <div v-if="divFlag">
+              <el-form-item label="当天提成">
+                <span>{{ props.row.general_income }}</span>
+              </el-form-item>
+              <el-form-item label="当天接单">
+                <span>{{ props.row.orderData }}</span>
+              </el-form-item>
+              <el-form-item label="当天成功订单">
+                <span>{{ props.row.orderData }}</span>
+              </el-form-item>
+              <el-form-item label="下级总接订单">
+                <span>{{ props.row.sonData }}</span>
+              </el-form-item>
+              <el-form-item label="下级总成功订单">
+                <span>{{ props.row.sonData }}</span>
+              </el-form-item>
+              <el-form-item label="下级当天接订单">
+                <span>{{ props.row.sonData }}</span>
+              </el-form-item>
+              <el-form-item label="下级当天成功订单">
+                <span>{{ props.row.sonData }}</span>
+              </el-form-item>
+            </div>
           </el-form>
         </template>
       </el-table-column>
@@ -97,7 +99,7 @@
             size="mini"
             icon="el-icon-edit"
             type="primary"
-            @click="openEditPwd(scope.row.uid)"
+            @click="openEditPwd(scope.row.phone)"
           >修改密码</el-button>
           <el-button
             size="mini"
@@ -134,6 +136,7 @@ export default {
   data() {
     return {
       data: [],
+      mineOrder: [],
       foreverData: [],
       son_pumpRation: "",
       pickerOptions: {
@@ -173,7 +176,8 @@ export default {
       pageSize: 10,
       pageSizes: [10, 20, 50, 100, 200, 300, 500],
       flag: false,
-      btnText: "点击查看详细信息"
+      btnText: "点击查看详细信息",
+      divFlag: false
     };
   },
   created() {
@@ -206,10 +210,12 @@ export default {
       const res = await this.$http.post(`/agent/get`, {
         uid
       });
-      if (res.status) {
+      if (res.status === 200) {
+        this.mineOrder = res.data.mineOrder;
         this.btnText = "详细信息如下";
+        this.flag = false;
+        this.divFlag = true;
       }
-      this.onlyData = res.data;
     },
     filterDate(value) {
       if (!value) {
@@ -246,7 +252,7 @@ export default {
             phone,
             NewPwd: value
           });
-          if (JSON.parse(res.data.status)) {
+          if (res.status === 200 && JSON.parse(res.data.status)) {
             this.$message({
               type: "success",
               message: `修改成功！`,
@@ -272,7 +278,7 @@ export default {
           const res = await this.$http.post(`/disableAccount`, {
             phone
           });
-          if (JSON.parse(res.data.status)) {
+          if (res.sattus === 200 && JSON.parse(res.data.status)) {
             this.$message({
               type: "success",
               message: `总代 ${phone} 已封禁成功！`,
@@ -299,7 +305,7 @@ export default {
             uid,
             my_returnRatio: value
           });
-          if (JSON.parse(res.data.status)) {
+          if (res.status === 200 && JSON.parse(res.data.status)) {
             this.$message({
               type: "success",
               message: `修改成功！`,

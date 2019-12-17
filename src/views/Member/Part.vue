@@ -35,18 +35,29 @@
                 @click="viewDetails(props.row.uid)"
               >{{btnText}}</el-button>
             </el-form-item>
-            <!-- <el-form-item label="备注">
-              <span>{{ props.row.user_remark }}</span>
-            </el-form-item>
-            <el-form-item label="当天充值">
-              <span>{{ props.row.totalRecharge }}</span>
-            </el-form-item>
-            <el-form-item label="当天下订单">
-              <span>{{ props.row.orderData }}</span>
-            </el-form-item>
-            <el-form-item label="当天成功订单">
-              <span>{{ props.row.orderData }}</span>
-            </el-form-item>-->
+            <div v-if="divFlag">
+              <el-form-item label="备注">
+                <span>{{ props.row.user_remark }}</span>
+              </el-form-item>
+              <el-form-item label="总充值">
+                <span>{{ props.row.totalRecharge }}</span>
+              </el-form-item>
+              <el-form-item label="当天充值">
+                <span>{{ props.row.totalRecharge }}</span>
+              </el-form-item>
+              <el-form-item label="总订单">
+                <span>{{ props.row.totalRecharge }}</span>
+              </el-form-item>
+              <el-form-item label="总成功订单">
+                <span>{{ props.row.totalRecharge }}</span>
+              </el-form-item>
+              <el-form-item label="当天下订单">
+                <span>{{ props.row.orderData }}</span>
+              </el-form-item>
+              <el-form-item label="当天成功订单">
+                <span>{{ props.row.orderData }}</span>
+              </el-form-item>
+            </div>
           </el-form>
         </template>
       </el-table-column>
@@ -66,10 +77,6 @@
       <el-table-column align="center" prop="phone" label="账号"></el-table-column>
       <el-table-column align="center" prop="my_balance" label="余额"></el-table-column>
       <el-table-column align="center" prop="wb_fee" label="总充值"></el-table-column>
-      <el-table-column align="center" prop="orderData.length" label="总下订单"></el-table-column>
-      <el-table-column align="center" label="总成功订单">
-        <!-- <template v-slot="scope">{{scope.row.orderData.map(item=>item.order_state).toString()}}</template> -->
-      </el-table-column>
       <el-table-column align="center" label="账号状态">
         <template v-slot="scope">
           <el-tag
@@ -159,7 +166,8 @@ export default {
       },
       value: "",
       flag: false,
-      btnText: "点击查看详细信息"
+      btnText: "点击查看详细信息",
+      divFlag: false
     };
   },
   created() {
@@ -189,10 +197,14 @@ export default {
       const res = await this.$http.post(`/give/get`, {
         uid
       });
-      if (res.status) {
+      if (res.status === 200) {
+        this.mineOrder = res.data.mineOrder;
+        this.sonOrderData = res.data.sonOrderData;
+        this.wb_book = res.data.wb_book;
         this.btnText = "详细信息如下";
+        this.flag = false;
+        this.divFlag = true;
       }
-      this.onlyData = res.data;
     },
     filterDate(value) {
       if (!value) {
@@ -228,11 +240,19 @@ export default {
             uid,
             user_minPrice: value
           });
-          this.$message({
-            type: "success",
-            message: `您修改的价格为: ${res}`,
-            offset: 10
-          });
+          if (res.status === 200 && JSON.parse(res.data.status)) {
+            this.$message({
+              type: "success",
+              message: `修改成功！`,
+              offset: 10
+            });
+          } else {
+            this.$message({
+              type: "warning",
+              message: `服务器已超时`,
+              offset: 10
+            });
+          }
         })
         .catch(() => {});
     },
@@ -248,11 +268,19 @@ export default {
             phone,
             NewPwd: value
           });
-          this.$message({
-            type: "success",
-            message: res,
-            offset: 10
-          });
+          if (res.status === 200 && JSON.parse(res.data.status)) {
+            this.$message({
+              type: "success",
+              message: "修改成功",
+              offset: 10
+            });
+          } else {
+            this.$message({
+              type: "warning",
+              message: "服务器已超时~",
+              offset: 10
+            });
+          }
         })
         .catch(() => {});
     },
@@ -266,6 +294,7 @@ export default {
           const res = await this.$http.post(`/disableAccount`, {
             phone
           });
+          console.log(res);
           if (res.data.status) {
             this.getData();
             this.$message({

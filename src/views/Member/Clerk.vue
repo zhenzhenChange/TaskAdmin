@@ -39,13 +39,13 @@
             <el-form-item label="备注">
               <span>{{ props.row.user_remark }}</span>
             </el-form-item>
-            <el-form-item label="总提成">
-              <span>{{ props.row.general_income }}</span>
-            </el-form-item>
-            <el-form-item label="当天提成">
-              <span>{{ props.row.general_income }}</span>
-            </el-form-item>
             <div v-if="divFlag">
+              <el-form-item label="总提成">
+                <span>{{ props.row.general_income }}</span>
+              </el-form-item>
+              <el-form-item label="当天提成">
+                <span>{{ props.row.general_income }}</span>
+              </el-form-item>
               <el-form-item label="总接单">
                 <span>{{ mineOrder.length }}</span>
               </el-form-item>
@@ -202,7 +202,6 @@ export default {
       const res = await this.$http.get(`/recv/get`);
       this.data = res.data.data;
       this.foreverData = res.data.data;
-      console.log(this.data);
     },
     async viewDetails(uid) {
       this.flag = true;
@@ -210,7 +209,6 @@ export default {
       const res = await this.$http.post(`/recv/get`, {
         uid
       });
-      console.log(res);
       if (res.status === 200) {
         this.mineOrder = res.data.mineOrder;
         this.sonOrderData = res.data.sonOrderData;
@@ -255,11 +253,19 @@ export default {
             phone,
             NewPwd: value
           });
-          this.$message({
-            type: "success",
-            message: `${res}  密码修改成功！`,
-            offset: 10
-          });
+          if (res.status === 200 && JSON.parse(res.data.status)) {
+            this.$message({
+              type: "success",
+              message: `修改成功！`,
+              offset: 10
+            });
+          } else {
+            this.$message({
+              type: "warning",
+              message: `服务器已超时~`,
+              offset: 10
+            });
+          }
         })
         .catch(() => {});
     },
