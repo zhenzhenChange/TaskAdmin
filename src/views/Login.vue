@@ -30,7 +30,6 @@ export default {
   methods: {
     async login() {
       const res = await this.$commonHTTP.post("/login", this.userData);
-      console.log(res)
       if (res.data.my_stratum !== 0) {
         this.$message({
           type: "warning",
