@@ -72,7 +72,6 @@ export default {
       this.defaultSet = res.data;
     },
     async saveSet() {
-      console.log(this.su_isExtensionCodeReq);
       const res = await this.$http.post(`/setup/defaultClerkSet`, {
         uid: this.userID,
         su_holdLimit: this.defaultSet.su_holdLimit,

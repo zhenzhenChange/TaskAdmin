@@ -294,7 +294,6 @@ export default {
           const res = await this.$http.post(`/disableAccount`, {
             phone
           });
-          console.log(res);
           if (res.data.status) {
             this.getData();
             this.$message({

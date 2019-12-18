@@ -164,7 +164,6 @@ export default {
         uid: this.userID,
         su_giveAnno: this.defaultSet.su_giveAnno
       });
-      console.log(res);
       if (res.status === 200 && JSON.parse(res.data.status)) {
         this.$message({
           type: "success",
