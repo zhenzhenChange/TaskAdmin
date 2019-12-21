@@ -21,14 +21,26 @@ export default {
         orient: "vertical",
         x: "left",
         data: [
-          "当天订单量",
-          "当天成功订单量",
-          "当天会员注册量",
-          "当天交易量",
-          "总订单量",
-          "总成功订单量",
-          "当天流水量",
-          "总流水量"
+          "当天接单总量",
+          "当天成功订单总量",
+          "当天发布订单总量",
+          "当天充值总额",
+          "当天提现总额",
+          "当天发布佣金总额",
+          "当天下单注册量",
+          "当天接单注册量",
+          "当天接单总人数",
+          "当天下单总人数",
+          "接单总量",
+          "成功订单总量",
+          "发单总量",
+          "充值总额",
+          "提现总额",
+          "下单注册总量",
+          "接单注册总量",
+          "接单总人数",
+          "下单总人数",
+          "利润"
         ]
       },
       series: [
@@ -48,9 +60,12 @@ export default {
             }
           },
           data: [
-            { value: 435, name: "会员量" },
+            { value: 1248, name: "订单总量", selected: true },
+            { value: 435, name: "会员总人数" },
             { value: 679, name: "订单总成功量" },
-            { value: 1248, name: "订单总量", selected: true }
+            { value: 679, name: "充值总额" },
+            { value: 679, name: "提现总额" },
+            { value: 679, name: "利润" }
           ]
         },
         {
@@ -95,14 +110,22 @@ export default {
             }
           },
           data: [
-            { value: 335, name: "当天订单量" },
-            { value: 310, name: "当天成功订单量" },
-            { value: 234, name: "当天会员注册量" },
-            { value: 135, name: "当天交易量" },
-            { value: 1048, name: "总订单量" },
-            { value: 251, name: "总成功订单量" },
-            { value: 147, name: "当天流水量" },
-            { value: 102, name: "总流水量" }
+            { value: 335, name: "当天接单总量" },
+            { value: 310, name: "当天成功订单总量" },
+            { value: 234, name: "当天发布订单总量" },
+            { value: 135, name: "当天充值总额" },
+            { value: 1048, name: "当天提现总额" },
+            { value: 251, name: "当天发布佣金总额" },
+            { value: 147, name: "当天下单注册量" },
+            { value: 102, name: "当天接单注册量" },
+            { value: 102, name: "当天接单总人数" },
+            { value: 102, name: "当天下单总人数" },
+            { value: 102, name: "下单注册总量" },
+            { value: 102, name: "接单注册总量" },
+            { value: 102, name: "接单总量" },
+            { value: 102, name: "发单总量" },
+            { value: 102, name: "接单总人数" },
+            { value: 102, name: "下单总人数" }
           ]
         }
       ]
@@ -122,7 +145,7 @@ export default {
 
 <style lang="scss" scoped>
 .pie {
-  width: 1200px;
+  width: 1600px;
   height: 800px;
   margin: 0 auto;
 }
