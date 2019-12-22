@@ -23,7 +23,7 @@ export default {
     return {
       userData: {
         phone: "14588889654",
-        pwd: "123456789"
+        pwd: "88888888"
       }
     };
   },
