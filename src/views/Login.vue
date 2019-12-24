@@ -22,8 +22,8 @@ export default {
   data() {
     return {
       userData: {
-        phone: "14588889654",
-        pwd: "88888888"
+        phone: "",
+        pwd: ""
       }
     };
   },
