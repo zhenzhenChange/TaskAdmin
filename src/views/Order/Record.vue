@@ -21,7 +21,7 @@
     <el-table
       v-if="searchData"
       ref="filterTable"
-      :data="searchData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+      :data="searchData.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
       stripe
       border
     >
@@ -81,7 +81,17 @@
         filter-placement="bottom-end"
       >
         <template v-slot="scope">
-          <el-tag hit :type="stateType(scope.row.order_state)">{{scope.row.order_state}}</el-tag>
+          <el-tag hit :type="stateType(scope.row.order_state)">
+            {{ scope.row.order_state === 1 ? '未领取' :
+               scope.row.order_state === 2 ? '进行中' :
+               scope.row.order_state === 3 ? "已过期" :
+               scope.row.order_state === 4 ? "已放弃" :
+               scope.row.order_state === 5 ? "未完成" :
+               scope.row.order_state === 6 ? "用户确认完成" :
+               scope.row.order_state === 7 ? "用户确认未完成" :
+               scope.row.order_state === 8 ? "放单端确认完成" : "放单端确认未完成"
+            }}
+          </el-tag>
         </template>
       </el-table-column>
       <el-table-column align="center" label="平台利润" prop="son_pumpRation"></el-table-column>
@@ -92,7 +102,8 @@
             icon="el-icon-error"
             type="danger"
             @click="deleteRecord(scope.row.order_id)"
-          >删除该记录</el-button>
+            >删除该记录</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -166,6 +177,10 @@ export default {
         });
       }
       return this.data;
+    },
+    orderState(state) {
+      console.log(state);
+      return state;
     }
   },
   methods: {
