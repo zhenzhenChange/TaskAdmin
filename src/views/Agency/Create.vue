@@ -56,7 +56,6 @@ export default {
         return;
       }
       const res = await this.$http.post(`/addRelesUser`, this.agencyData);
-      console.log(res);
       if (res.data.status) {
         this.$message({
           type: "success",
