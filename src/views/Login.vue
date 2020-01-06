@@ -22,8 +22,8 @@ export default {
   data() {
     return {
       userData: {
-        phone: "16324762654",
-        pwd: "123456789"
+        phone: "937219",
+        pwd: "937219"
       }
     };
   },
@@ -63,6 +63,7 @@ export default {
       }
       if (res.status === 200 && user.my_stratum === 0) {
         this.$store.commit("SaveUserID", user.uid);
+        this.$store.commit("SaveUserSonPumpRation", user.son_pumpRation);
         this.$router.push("/members");
         this.$message({
           type: "success",

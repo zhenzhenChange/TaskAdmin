@@ -55,21 +55,25 @@
         prop="Alipay_name"
         label="支付宝姓名"
       ></el-table-column>
-      <el-table-column
-        align="center"
-        prop="wb_type"
-        label="交易类型"
-      ></el-table-column>
+      <el-table-column align="center" prop="wb_type" label="交易类型">
+        <template v-slot="scope">
+          <el-tag hit :type="scope.row.wb_type === 0 ? 'success' : 'warning'">{{
+            scope.row.wb_type === 0 ? "充值" : "提现"
+          }}</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column
         align="center"
         prop="wb_fee"
         label="交易费用"
       ></el-table-column>
-      <el-table-column
-        align="center"
-        prop="wb_state"
-        label="交易状态"
-      ></el-table-column>
+      <el-table-column align="center" prop="wb_state" label="交易状态">
+        <template v-slot="scope">
+          <el-tag hit :type="scope.row.wb_state === 0 ? 'danger' : 'success'">{{
+            scope.row.wb_state === 0 ? "失败" : "成功"
+          }}</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column align="center" label="操作" width="450">
         <template v-slot="scope">
           <el-button

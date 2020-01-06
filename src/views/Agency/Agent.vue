@@ -23,7 +23,7 @@
         type="primary"
         >总代提成默认设置</el-button
       >
-      <span class="ml-10">总代默认提成：{{ son_pumpRation }}</span>
+      <span class="ml-10">总代默认提成：{{ sonPumpRation }}</span>
     </el-card>
     <el-table
       ref="filterTable"
@@ -126,7 +126,7 @@
           >
         </template>
       </el-table-column>
-      <el-table-column align="center" label="操作" width="450">
+      <el-table-column align="center" label="操作" width="350">
         <template v-slot="scope">
           <el-button
             size="mini"
@@ -134,13 +134,6 @@
             type="primary"
             @click="openEditPwd(scope.row.phone)"
             >修改密码</el-button
-          >
-          <el-button
-            size="mini"
-            icon="el-icon-edit"
-            type="primary"
-            @click="openEditIncome(scope.row.uid)"
-            >修改该总代提成</el-button
           >
           <el-button
             size="mini"
@@ -231,7 +224,8 @@ export default {
       return this.data;
     },
     ...mapState({
-      userID: state => state.userID
+      userID: state => state.userID,
+      sonPumpRation: state => state.sonPumpRation
     })
   },
   methods: {
@@ -318,33 +312,6 @@ export default {
             this.$message({
               type: "success",
               message: `总代 ${phone} 已封禁成功！`,
-              offset: 10
-            });
-          } else {
-            this.$message({
-              type: "warning",
-              message: `服务器已超时，请稍后重试～`,
-              offset: 10
-            });
-          }
-        })
-        .catch(() => {});
-    },
-    openEditIncome(uid) {
-      this.$prompt("请重新设置提成", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "info"
-      })
-        .then(async ({ value }) => {
-          const res = await this.$http.post(`/agent/modAgRetRatio`, {
-            uid,
-            my_returnRatio: value
-          });
-          if (res.status === 200 && JSON.parse(res.data.status)) {
-            this.$message({
-              type: "success",
-              message: `修改成功！`,
               offset: 10
             });
           } else {

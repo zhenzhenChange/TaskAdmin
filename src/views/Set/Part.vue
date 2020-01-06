@@ -45,73 +45,6 @@
         </div>
       </el-card>
     </el-tab-pane>
-    <el-tab-pane label="批量调节价格百分比">
-      <el-card class="card">
-        <el-button
-          size="meduim"
-          icon="el-icon-edit"
-          type="primary"
-          @click="openBatchEditPrice"
-          >批量修改已选取对象的微信下单价格</el-button
-        >
-      </el-card>
-      <el-table
-        v-if="data"
-        ref="multipleTable"
-        :data="data.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
-        tooltip-effect="dark"
-        class="w-100"
-        @selection-change="selectionChange"
-        stripe
-        border
-      >
-        <el-table-column type="selection" width="55"></el-table-column>
-        <el-table-column
-          align="center"
-          prop="reg_datetime"
-          label="注册日期"
-          sortable
-          width="180"
-          column-key="reg_datetime"
-        >
-          <template v-slot="scope">
-            <i class="el-icon-time"></i>
-            <span class="ml-10">{{ scope.row.reg_datetime | date }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          align="center"
-          prop="phone"
-          label="账号"
-        ></el-table-column>
-        <el-table-column
-          align="center"
-          prop="user_remark"
-          label="备注"
-        ></el-table-column>
-        <el-table-column
-          align="center"
-          prop="my_balance"
-          label="余额"
-        ></el-table-column>
-        <el-table-column
-          align="center"
-          prop="is_valide"
-          label="账号状态"
-        ></el-table-column>
-      </el-table>
-      <el-pagination
-        v-if="data"
-        @size-change="sizeChange"
-        @current-change="currentChange"
-        :page-size="pageSize"
-        :page-sizes="pageSizes"
-        :current-page="currentPage"
-        :total="data.length"
-        layout="total, sizes, prev, pager, next, jumper"
-        class="mt-20"
-      ></el-pagination>
-    </el-tab-pane>
   </el-tabs>
 </template>
 
@@ -120,7 +53,6 @@ import { mapState } from "vuex";
 export default {
   data() {
     return {
-      data: [],
       multipleSelection: [],
       defaultSet: {
         su_vipInitPrice: "",
@@ -145,8 +77,6 @@ export default {
   methods: {
     async getData() {
       const res = await this.$http.get("/setup/get");
-      const giveRes = await this.$http.get("/give/get");
-      this.data = giveRes.data.data;
       this.defaultSet = res.data;
     },
     sizeChange(val) {
@@ -191,47 +121,6 @@ export default {
         });
         this.getData();
       }
-    },
-    openBatchEditPrice() {
-      if (!this.multipleSelection.length) {
-        this.$message({
-          type: "warning",
-          message: "请选取修改对象",
-          offset: 10
-        });
-        return;
-      }
-      this.$prompt("请重新输入价格", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "info"
-      })
-        .then(async ({ value }) => {
-          // phone数组
-          this.multipleSelection = this.multipleSelection.map(item => {
-            return item.phone;
-          });
-          console.log(this.multipleSelection);
-          const res = await this.$http.post(`/setup/setOrderRatio`, {
-            uid: this.userID,
-            phoneArray: this.multipleSelection,
-            user_minPrice: value
-          });
-          if (res.status === 200 && JSON.parse(res.data.status)) {
-            this.$message({
-              type: "success",
-              message: `修改成功！`,
-              offset: 10
-            });
-          } else {
-            this.$message({
-              type: "warning",
-              message: `服务器已超时~`,
-              offset: 10
-            });
-          }
-        })
-        .catch(() => {});
     }
   }
 };

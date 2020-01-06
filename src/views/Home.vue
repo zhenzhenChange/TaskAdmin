@@ -40,8 +40,8 @@
     </el-aside>
     <el-container>
       <el-header class="home-header">
-        <span class="userID">管理员ID：{{ userID ? userID : "未登录" }}</span>
-        <el-button @click="logout">退出登录</el-button>
+        <span class="userID" v-show="userID">管理员：{{ userID }}</span>
+        <el-button @click="logout" type="primary" round>注销</el-button>
       </el-header>
       <el-main>
         <keep-alive>
@@ -60,6 +60,7 @@ export default {
     logout() {
       this.$router.push("/");
       localStorage.removeItem("userID");
+      localStorage.removeItem("sonPumpRation");
     }
   },
   computed: {
@@ -92,7 +93,7 @@ export default {
 
 .userID {
   float: left;
-  font-size: 20px;
-  margin-left: 20px;
+  font-size: 18px;
+  margin-left: 10px;
 }
 </style>

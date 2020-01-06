@@ -7,16 +7,24 @@ const mutations = {
   SaveUserID: (state, userID) => {
     state.userID = userID;
     localStorage.setItem("userID", userID);
+  },
+  SaveUserSonPumpRation: (state, sonPumpRation) => {
+    state.sonPumpRation = sonPumpRation;
+    localStorage.setItem("sonPumpRation", sonPumpRation);
   }
 };
 
 const state = {
-  userID: "" || localStorage.getItem("userID")
+  userID: "" || localStorage.getItem("userID"),
+  sonPumpRation: "" || localStorage.getItem("sonPumpRation")
 };
 
 const getters = {
   userID: state => {
     state.userID;
+  },
+  sonPumpRation: state => {
+    state.sonPumpRation;
   }
 };
 

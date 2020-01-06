@@ -215,13 +215,28 @@ export default {
       return this.data;
     },
     orderState(state) {
-      console.log(state);
       return state;
     }
   },
   methods: {
     stateType(type) {
-      return type === "成功" ? "success" : "primary";
+      return type === 1
+        ? "info"
+        : type === 2
+        ? ""
+        : type === 3
+        ? "warning"
+        : type === 4
+        ? "warning"
+        : type === 5
+        ? "danger"
+        : type === 6
+        ? "success"
+        : type === 7
+        ? "danger"
+        : type === 8
+        ? "success"
+        : "danger";
     },
     async getData() {
       const res = await this.$http.get(`/man/get`);

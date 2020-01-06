@@ -109,7 +109,7 @@
             icon="el-icon-edit"
             type="primary"
             @click="openEditPrice(scope.row.uid)"
-            >修改微信下单价格</el-button
+            >修改微信最低下单价格</el-button
           >
           <el-button
             size="mini"

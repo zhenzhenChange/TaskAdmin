@@ -1,49 +1,37 @@
 <template>
-  <el-form
-    label-width="120px"
-    :model="agencyData"
-    @submit.native.prevent="createAgency"
-  >
-    <el-row>
-      <el-col :span="6">
-        <el-form-item label="手机号码" required>
-          <el-input
-            v-model="agencyData.phone"
-            placeholder="请输入手机号码"
-          ></el-input>
-        </el-form-item>
-      </el-col>
-    </el-row>
-    <el-row>
-      <el-col :span="6">
-        <el-form-item label="密码" required>
-          <el-input
-            type="password"
-            v-model="agencyData.pwd"
-            placeholder="请输入密码"
-          ></el-input>
-        </el-form-item>
-      </el-col>
-    </el-row>
-    <el-row>
-      <el-col :span="6">
-        <el-form-item label="确认密码" required>
-          <el-input
-            type="password"
-            v-model="confirmPwd"
-            placeholder="请再次输入密码"
-          ></el-input>
-        </el-form-item>
-      </el-col>
-    </el-row>
-    <el-row>
-      <el-col :span="12">
-        <el-form-item>
-          <el-button native-type="submit">添加</el-button>
-        </el-form-item>
-      </el-col>
-    </el-row>
-  </el-form>
+  <el-card class="box-card">
+    <div slot="header" class="clearfix">
+      <span>添加总代</span>
+    </div>
+    <el-form :model="agencyData" @submit.native.prevent="createAgency">
+      <el-form-item>
+        <el-input v-model="agencyData.phone" placeholder="请输入手机号码">
+          <template slot="prepend">手机号码</template>
+        </el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-input
+          type="password"
+          v-model="agencyData.pwd"
+          placeholder="请输入密码"
+          ><template slot="prepend">登录密码</template></el-input
+        >
+      </el-form-item>
+      <el-form-item>
+        <el-input
+          type="password"
+          v-model="confirmPwd"
+          placeholder="请再次输入密码"
+          ><template slot="prepend">确认密码</template></el-input
+        >
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" native-type="submit" icon="el-icon-plus"
+          >添加</el-button
+        >
+      </el-form-item>
+    </el-form>
+  </el-card>
 </template>
 <script>
 export default {
@@ -81,3 +69,10 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.box-card {
+  width: 30%;
+  margin: 0 auto;
+}
+</style>

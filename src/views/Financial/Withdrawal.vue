@@ -59,11 +59,13 @@
         prop="wb_fee"
         label="提现金额"
       ></el-table-column>
-      <el-table-column
-        align="center"
-        prop="wb_state"
-        label="提现状态"
-      ></el-table-column>
+      <el-table-column align="center" prop="wb_state" label="提现状态"
+        ><template v-slot="scope">
+          <el-tag hit :type="scope.row.wb_state === 0 ? 'danger' : 'success'">{{
+            scope.row.wb_state === 0 ? "失败" : "成功"
+          }}</el-tag>
+        </template></el-table-column
+      >
       <el-table-column align="center" label="操作" width="450">
         <template v-slot="scope">
           <el-button
