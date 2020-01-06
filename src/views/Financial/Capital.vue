@@ -21,7 +21,9 @@
     <el-table
       v-if="searchData"
       ref="filterTable"
-      :data="searchData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+      :data="
+        searchData.slice((currentPage - 1) * pageSize, currentPage * pageSize)
+      "
       stripe
       border
     >
@@ -35,15 +37,39 @@
       >
         <template v-slot="scope">
           <i class="el-icon-time"></i>
-          <span class="ml-10">{{ scope.row.wb_datetime | date}}</span>
+          <span class="ml-10">{{ scope.row.wb_datetime | date }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="wb_uid" label="交易账号"></el-table-column>
-      <el-table-column align="center" prop="Alipay_account" label="支付宝账号"></el-table-column>
-      <el-table-column align="center" prop="Alipay_name" label="支付宝姓名"></el-table-column>
-      <el-table-column align="center" prop="wb_type" label="交易类型"></el-table-column>
-      <el-table-column align="center" prop="wb_fee" label="交易费用"></el-table-column>
-      <el-table-column align="center" prop="wb_state" label="交易状态"></el-table-column>
+      <el-table-column
+        align="center"
+        prop="wb_uid"
+        label="交易账号"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="Alipay_account"
+        label="支付宝账号"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="Alipay_name"
+        label="支付宝姓名"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="wb_type"
+        label="交易类型"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="wb_fee"
+        label="交易费用"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="wb_state"
+        label="交易状态"
+      ></el-table-column>
       <el-table-column align="center" label="操作" width="450">
         <template v-slot="scope">
           <el-button
@@ -51,13 +77,15 @@
             icon="el-icon-edit"
             type="primary"
             @click="openEditAlipayAccount(scope.row.wb_uid)"
-          >修改支付宝账号</el-button>
+            >修改支付宝账号</el-button
+          >
           <el-button
             size="mini"
             icon="el-icon-error"
             type="danger"
             @click="openDeleteRecord(scope.row.wb_id)"
-          >删除该记录</el-button>
+            >删除该记录</el-button
+          >
         </template>
       </el-table-column>
     </el-table>

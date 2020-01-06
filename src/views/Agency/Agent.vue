@@ -17,12 +17,19 @@
         @change="filterDate"
         class="mr-20"
       ></el-date-picker>
-      <el-button @click="openEditDefaultIncome" icon="el-icon-edit" type="primary">总代提成默认设置</el-button>
-      <span class="ml-10">总代默认提成：{{son_pumpRation}}</span>
+      <el-button
+        @click="openEditDefaultIncome"
+        icon="el-icon-edit"
+        type="primary"
+        >总代提成默认设置</el-button
+      >
+      <span class="ml-10">总代默认提成：{{ son_pumpRation }}</span>
     </el-card>
     <el-table
       ref="filterTable"
-      :data="searchData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+      :data="
+        searchData.slice((currentPage - 1) * pageSize, currentPage * pageSize)
+      "
       stripe
       border
     >
@@ -36,9 +43,16 @@
                 :loading="flag"
                 type="text"
                 @click="viewDetails(props.row.uid)"
-              >{{btnText}}</el-button>
+                >{{ btnText }}</el-button
+              >
             </el-form-item>
             <div v-if="divFlag">
+              <el-form-item label="总领取订单">
+                <span>{{ props.row.general_income }}</span>
+              </el-form-item>
+              <el-form-item label="总成功订单">
+                <span>{{ props.row.general_income }}</span>
+              </el-form-item>
               <el-form-item label="当天提成">
                 <span>{{ props.row.general_income }}</span>
               </el-form-item>
@@ -77,20 +91,39 @@
           <span class="ml-10">{{ scope.row.reg_datetime | date }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="phone" label="账号"></el-table-column>
-      <el-table-column align="center" prop="extension_code" label="推广码"></el-table-column>
-      <el-table-column align="center" prop="my_balance" label="余额"></el-table-column>
-      <el-table-column align="center" prop="user_remark" label="备注"></el-table-column>
-      <el-table-column align="center" prop="general_income" label="总提成"></el-table-column>
-      <el-table-column align="center" prop="orderData.length" label="总领取订单"></el-table-column>
-      <el-table-column align="center" prop="orderData.length" label="总成功订单"></el-table-column>
+      <el-table-column
+        align="center"
+        prop="phone"
+        label="账号"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="extension_code"
+        label="推广码"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="my_balance"
+        label="余额"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="user_remark"
+        label="备注"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="general_income"
+        label="总提成"
+      ></el-table-column>
       <el-table-column align="center" label="账号状态">
         <template v-slot="scope">
           <el-tag
             :type="scope.row.is_valide === 1 ? 'success' : 'danger'"
             disable-transitions
             hit
-          >{{ scope.row.is_valide === 1 ? "正常" : "已封禁" }}</el-tag>
+            >{{ scope.row.is_valide === 1 ? "正常" : "已封禁" }}</el-tag
+          >
         </template>
       </el-table-column>
       <el-table-column align="center" label="操作" width="450">
@@ -100,20 +133,23 @@
             icon="el-icon-edit"
             type="primary"
             @click="openEditPwd(scope.row.phone)"
-          >修改密码</el-button>
+            >修改密码</el-button
+          >
           <el-button
             size="mini"
             icon="el-icon-edit"
             type="primary"
             @click="openEditIncome(scope.row.uid)"
-          >修改该总代提成</el-button>
+            >修改该总代提成</el-button
+          >
           <el-button
             size="mini"
             icon="el-icon-warning"
             type="warning"
             @click="openBan(scope.row.uid)"
             :disabled="scope.row.is_valide === 0 ? true : false"
-          >禁止该账号登录</el-button>
+            >禁止该账号登录</el-button
+          >
         </template>
       </el-table-column>
     </el-table>

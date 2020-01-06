@@ -17,7 +17,7 @@
     </el-card>
     <el-table
       ref="filterTable"
-      :data="data.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+      :data="data.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
       stripe
       border
     >
@@ -34,12 +34,36 @@
           <span class="ml-10">{{ scope.row.wb_datetime | date }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="wb_id" label="流水编号"></el-table-column>
-      <el-table-column align="center" prop="wb_uid" label="提现账号"></el-table-column>
-      <el-table-column align="center" prop="Alipay_account" label="支付宝账号"></el-table-column>
-      <el-table-column align="center" prop="Alipay_name" label="支付宝姓名"></el-table-column>
-      <el-table-column align="center" prop="wb_fee" label="提现金额"></el-table-column>
-      <el-table-column align="center" prop="wb_state" label="提现状态"></el-table-column>
+      <el-table-column
+        align="center"
+        prop="wb_id"
+        label="流水编号"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="wb_uid"
+        label="提现账号"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="Alipay_account"
+        label="支付宝账号"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="Alipay_name"
+        label="支付宝姓名"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="wb_fee"
+        label="提现金额"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="wb_state"
+        label="提现状态"
+      ></el-table-column>
       <el-table-column align="center" label="操作" width="450">
         <template v-slot="scope">
           <el-button
@@ -47,19 +71,22 @@
             icon="el-icon-success"
             type="primary"
             @click="openAgreed(scope.row.wb_id)"
-          >同意申请</el-button>
+            >同意申请</el-button
+          >
           <el-button
             size="mini"
             icon="el-icon-warning"
             type="warning"
             @click="openRejected(scope.row.wb_id)"
-          >驳回申请</el-button>
+            >驳回申请</el-button
+          >
           <el-button
             size="mini"
             icon="el-icon-error"
             type="danger"
             @click="openDeleteRecord(scope.row.wb_id)"
-          >删除该条记录</el-button>
+            >删除该条记录</el-button
+          >
         </template>
       </el-table-column>
     </el-table>

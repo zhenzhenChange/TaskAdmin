@@ -30,7 +30,9 @@
       <el-card class="box-card">
         <div slot="header" class="clearfix">
           <span>下单端公告发布</span>
-          <el-button class="btn" type="text" @click="sendNotice">发布</el-button>
+          <el-button class="btn" type="text" @click="sendNotice"
+            >发布</el-button
+          >
         </div>
         <div>
           <el-input
@@ -50,12 +52,13 @@
           icon="el-icon-edit"
           type="primary"
           @click="openBatchEditPrice"
-        >批量修改已选取对象的微信下单价格</el-button>
+          >批量修改已选取对象的微信下单价格</el-button
+        >
       </el-card>
       <el-table
         v-if="data"
         ref="multipleTable"
-        :data="data.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+        :data="data.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
         tooltip-effect="dark"
         class="w-100"
         @selection-change="selectionChange"
@@ -76,10 +79,26 @@
             <span class="ml-10">{{ scope.row.reg_datetime | date }}</span>
           </template>
         </el-table-column>
-        <el-table-column align="center" prop="phone" label="账号"></el-table-column>
-        <el-table-column align="center" prop="user_remark" label="备注"></el-table-column>
-        <el-table-column align="center" prop="my_balance" label="余额"></el-table-column>
-        <el-table-column align="center" prop="is_valide" label="账号状态"></el-table-column>
+        <el-table-column
+          align="center"
+          prop="phone"
+          label="账号"
+        ></el-table-column>
+        <el-table-column
+          align="center"
+          prop="user_remark"
+          label="备注"
+        ></el-table-column>
+        <el-table-column
+          align="center"
+          prop="my_balance"
+          label="余额"
+        ></el-table-column>
+        <el-table-column
+          align="center"
+          prop="is_valide"
+          label="账号状态"
+        ></el-table-column>
       </el-table>
       <el-pagination
         v-if="data"
@@ -125,7 +144,7 @@ export default {
   },
   methods: {
     async getData() {
-      const res = await this.$http.post("/setup/get");
+      const res = await this.$http.get("/setup/get");
       const giveRes = await this.$http.get("/give/get");
       this.data = giveRes.data.data;
       this.defaultSet = res.data;
@@ -190,10 +209,9 @@ export default {
         .then(async ({ value }) => {
           // phone数组
           this.multipleSelection = this.multipleSelection.map(item => {
-            return {
-              phone: item.phone
-            };
+            return item.phone;
           });
+          console.log(this.multipleSelection);
           const res = await this.$http.post(`/setup/setOrderRatio`, {
             uid: this.userID,
             phoneArray: this.multipleSelection,

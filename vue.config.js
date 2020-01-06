@@ -2,11 +2,11 @@ module.exports = {
   devServer: {
     proxy: {
       '/api/admin': {
-        target: "http://192.168.1.108:8080/chStage",
+        target: "http://47.99.213.197:8080/chStageV6",
         changeOrigin: true
       },
       '/api/common': {
-        target: "http://192.168.1.108:8080/chStage",
+        target: "http://47.99.213.197:8080/chStageV6",
         changeOrigin: true
       }
     }

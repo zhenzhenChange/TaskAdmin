@@ -27,7 +27,9 @@
       <el-card class="box-card">
         <div slot="header" class="clearfix">
           <span>接单端公告发布</span>
-          <el-button class="btn" type="text" @click="sendNotice">发布</el-button>
+          <el-button class="btn" type="text" @click="sendNotice"
+            >发布</el-button
+          >
         </div>
         <div>
           <el-input
@@ -68,7 +70,7 @@ export default {
   },
   methods: {
     async getData() {
-      const res = await this.$http.post("/setup/get");
+      const res = await this.$http.get("/setup/get");
       this.defaultSet = res.data;
     },
     async saveSet() {

@@ -40,7 +40,7 @@
     </el-aside>
     <el-container>
       <el-header class="home-header">
-        <span class="userID">管理员ID：{{userID ? userID : "未登录"}}</span>
+        <span class="userID">管理员ID：{{ userID ? userID : "未登录" }}</span>
         <el-button @click="logout">退出登录</el-button>
       </el-header>
       <el-main>

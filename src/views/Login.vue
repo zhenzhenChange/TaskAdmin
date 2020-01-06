@@ -22,8 +22,8 @@ export default {
   data() {
     return {
       userData: {
-        phone: "937219",
-        pwd: "937219"
+        phone: "16324762654",
+        pwd: "123456789"
       }
     };
   },
@@ -31,6 +31,16 @@ export default {
     async login() {
       const res = await this.$commonHTTP.post("/login", this.userData);
       const user = res.data.user;
+      if (res.data.msg) {
+        this.$message({
+          type: "warning",
+          message: `${res.data.msg}`,
+          duration: 1500,
+          center: true,
+          offset: 10
+        });
+        return;
+      }
       if (user.my_stratum !== 0) {
         this.$message({
           type: "warning",

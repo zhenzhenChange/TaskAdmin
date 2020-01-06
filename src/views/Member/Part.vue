@@ -19,7 +19,9 @@
     </el-card>
     <el-table
       ref="filterTable"
-      :data="searchData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+      :data="
+        searchData.slice((currentPage - 1) * pageSize, currentPage * pageSize)
+      "
       stripe
       border
     >
@@ -33,7 +35,8 @@
                 :loading="flag"
                 type="text"
                 @click="viewDetails(props.row.uid)"
-              >{{btnText}}</el-button>
+                >{{ btnText }}</el-button
+              >
             </el-form-item>
             <div v-if="divFlag">
               <el-form-item label="备注">
@@ -71,19 +74,32 @@
       >
         <template v-slot="scope">
           <i class="el-icon-time"></i>
-          <span class="ml-10">{{ scope.row.reg_datetime | date}}</span>
+          <span class="ml-10">{{ scope.row.reg_datetime | date }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="phone" label="账号"></el-table-column>
-      <el-table-column align="center" prop="my_balance" label="余额"></el-table-column>
-      <el-table-column align="center" prop="wb_fee" label="总充值"></el-table-column>
+      <el-table-column
+        align="center"
+        prop="phone"
+        label="账号"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="my_balance"
+        label="余额"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="wb_fee"
+        label="总充值"
+      ></el-table-column>
       <el-table-column align="center" label="账号状态">
         <template v-slot="scope">
           <el-tag
             :type="scope.row.is_valide === 1 ? 'success' : 'danger'"
             disable-transitions
             hit
-          >{{ scope.row.is_valide === 1 ? "正常" : "已封禁" }}</el-tag>
+            >{{ scope.row.is_valide === 1 ? "正常" : "已封禁" }}</el-tag
+          >
         </template>
       </el-table-column>
       <el-table-column align="center" label="操作" width="450">
@@ -93,20 +109,23 @@
             icon="el-icon-edit"
             type="primary"
             @click="openEditPrice(scope.row.uid)"
-          >修改微信下单价格</el-button>
+            >修改微信下单价格</el-button
+          >
           <el-button
             size="mini"
             icon="el-icon-edit"
             type="primary"
             @click="openEditPwd(scope.row.phone)"
-          >修改密码</el-button>
+            >修改密码</el-button
+          >
           <el-button
             size="mini"
             icon="el-icon-warning"
             type="warning"
             @click="openBan(scope.row.phone)"
             :disabled="scope.row.is_valide === 0 ? true : false"
-          >禁止账号登录</el-button>
+            >禁止账号登录</el-button
+          >
         </template>
       </el-table-column>
     </el-table>

@@ -18,7 +18,7 @@
     <el-table
       v-if="data"
       ref="filterTable"
-      :data="data.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+      :data="data.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
       stripe
       border
     >
@@ -47,14 +47,30 @@
           <span class="ml-10">{{ scope.row.action_datetime | date }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="发布账号" prop="uid_give"></el-table-column>
-      <el-table-column align="center" label="订单编号" prop="order_id"></el-table-column>
-      <el-table-column align="center" label="订单价格" prop="order_price"></el-table-column>
-      <el-table-column align="center" label="接单账号" prop="uid_recive"></el-table-column>
+      <el-table-column
+        align="center"
+        label="发布账号"
+        prop="uid_give"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        label="订单编号"
+        prop="order_id"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        label="订单价格"
+        prop="order_price"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        label="接单账号"
+        prop="uid_recive"
+      ></el-table-column>
       <el-table-column align="center" label="申诉证据" prop="order_apply_proof">
-        <template
-          v-slot="scope"
-        >{{ scope.row.order_apply_proof ? scope.row.order_apply_proof : "无上传" }}</template>
+        <template v-slot="scope">{{
+          scope.row.order_apply_proof ? scope.row.order_apply_proof : "无上传"
+        }}</template>
       </el-table-column>
       <el-table-column
         prop="action_resState"
@@ -64,7 +80,9 @@
         filter-placement="bottom-end"
       >
         <template v-slot="scope">
-          <el-tag hit :type="stateType(scope.row.action_resState)">{{scope.row.action_resState}}</el-tag>
+          <el-tag hit :type="stateType(scope.row.action_resState)">{{
+            scope.row.action_resState
+          }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column align="center" label="操作" width="250">
@@ -74,7 +92,8 @@
             icon="el-icon-error"
             type="danger"
             @click="openDeleteRecord(scope.row.order_id)"
-          >删除该记录</el-button>
+            >删除该记录</el-button
+          >
         </template>
       </el-table-column>
     </el-table>

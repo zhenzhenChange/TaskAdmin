@@ -1,11 +1,11 @@
-import axios from 'axios'
+import axios from "axios";
 
 const commonHTTP = axios.create({
   withCredentials: true,
-  baseURL: '/api/common',
+  baseURL: "/api/common",
   headers: {
-    'Content-Type': 'application/json'
+    "Content-Type": "application/json"
   }
-})
+});
 
-export default commonHTTP
+export default commonHTTP;
