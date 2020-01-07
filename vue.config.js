@@ -10,5 +10,6 @@ module.exports = {
         changeOrigin: true
       }
     }
-  }
+  },
+  publicPath: "/task-admin/"
 };
