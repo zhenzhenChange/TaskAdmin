@@ -245,7 +245,6 @@ export default {
             uid,
             user_minPrice: value
           });
-          console.log(res.data.statusCode);
           if (res.status === 200 && JSON.parse(res.data.statusCode)) {
             this.$message({
               type: "success",
