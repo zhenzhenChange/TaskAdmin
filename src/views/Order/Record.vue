@@ -21,9 +21,7 @@
     <el-table
       v-if="searchData"
       ref="filterTable"
-      :data="
-        searchData.slice((currentPage - 1) * pageSize, currentPage * pageSize)
-      "
+      :data="searchData.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
       stripe
       border
     >
@@ -58,31 +56,11 @@
           <span class="ml-10">{{ scope.row.order_release_time | date }}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        align="center"
-        label="发布账号"
-        prop="uid_give"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        label="订单编号"
-        prop="order_id"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        label="订单标题"
-        prop="order_title"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        label="订单价格"
-        prop="order_price"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        label="接单账号"
-        prop="uid_recive"
-      ></el-table-column>
+      <el-table-column align="center" label="发布账号" prop="uid_give"></el-table-column>
+      <el-table-column align="center" label="订单编号" prop="order_id"></el-table-column>
+      <el-table-column align="center" label="订单标题" prop="order_title"></el-table-column>
+      <el-table-column align="center" label="订单价格" prop="order_price"></el-table-column>
+      <el-table-column align="center" label="接单账号" prop="uid_recive"></el-table-column>
       <el-table-column align="center" label="接单时间" width="180">
         <template v-slot="scope">
           <i class="el-icon-time"></i>
@@ -126,11 +104,7 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column
-        align="center"
-        label="平台利润"
-        prop="son_pumpRation"
-      ></el-table-column>
+      <el-table-column align="center" label="平台利润" prop="son_pumpRation"></el-table-column>
       <el-table-column align="center" label="操作" width="250">
         <template v-slot="scope">
           <el-button

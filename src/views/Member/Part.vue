@@ -19,9 +19,7 @@
     </el-card>
     <el-table
       ref="filterTable"
-      :data="
-        searchData.slice((currentPage - 1) * pageSize, currentPage * pageSize)
-      "
+      :data="searchData.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
       stripe
       border
     >
@@ -77,21 +75,9 @@
           <span class="ml-10">{{ scope.row.reg_datetime | date }}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        align="center"
-        prop="phone"
-        label="账号"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        prop="my_balance"
-        label="余额"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        prop="wb_fee"
-        label="总充值"
-      ></el-table-column>
+      <el-table-column align="center" prop="phone" label="账号"></el-table-column>
+      <el-table-column align="center" prop="my_balance" label="余额"></el-table-column>
+      <el-table-column align="center" prop="wb_fee" label="总充值"></el-table-column>
       <el-table-column align="center" label="账号状态">
         <template v-slot="scope">
           <el-tag
@@ -259,7 +245,8 @@ export default {
             uid,
             user_minPrice: value
           });
-          if (res.status === 200 && JSON.parse(res.data.status)) {
+          console.log(res.data.statusCode);
+          if (res.status === 200 && JSON.parse(res.data.statusCode)) {
             this.$message({
               type: "success",
               message: `修改成功！`,
@@ -268,7 +255,7 @@ export default {
           } else {
             this.$message({
               type: "warning",
-              message: `服务器已超时`,
+              message: `服务器已超时，请稍后重试～`,
               offset: 10
             });
           }

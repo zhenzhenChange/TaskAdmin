@@ -47,26 +47,10 @@
           <span class="ml-10">{{ scope.row.action_datetime | date }}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        align="center"
-        label="发布账号"
-        prop="uid_give"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        label="订单编号"
-        prop="order_id"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        label="订单价格"
-        prop="order_price"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        label="接单账号"
-        prop="uid_recive"
-      ></el-table-column>
+      <el-table-column align="center" label="发布账号" prop="uid_give"></el-table-column>
+      <el-table-column align="center" label="订单编号" prop="order_id"></el-table-column>
+      <el-table-column align="center" label="订单价格" prop="order_price"></el-table-column>
+      <el-table-column align="center" label="接单账号" prop="uid_recive"></el-table-column>
       <el-table-column align="center" label="申诉证据" prop="order_apply_proof">
         <template v-slot="scope">{{
           scope.row.order_apply_proof ? scope.row.order_apply_proof : "无上传"

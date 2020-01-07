@@ -34,31 +34,11 @@
           <span class="ml-10">{{ scope.row.wb_datetime | date }}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        align="center"
-        prop="wb_id"
-        label="流水编号"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        prop="wb_uid"
-        label="提现账号"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        prop="Alipay_account"
-        label="支付宝账号"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        prop="Alipay_name"
-        label="支付宝姓名"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        prop="wb_fee"
-        label="提现金额"
-      ></el-table-column>
+      <el-table-column align="center" prop="wb_id" label="流水编号"></el-table-column>
+      <el-table-column align="center" prop="wb_uid" label="提现账号"></el-table-column>
+      <el-table-column align="center" prop="Alipay_account" label="支付宝账号"></el-table-column>
+      <el-table-column align="center" prop="Alipay_name" label="支付宝姓名"></el-table-column>
+      <el-table-column align="center" prop="wb_fee" label="提现金额"></el-table-column>
       <el-table-column align="center" prop="wb_state" label="提现状态"
         ><template v-slot="scope">
           <el-tag hit :type="scope.row.wb_state === 0 ? 'danger' : 'success'">{{

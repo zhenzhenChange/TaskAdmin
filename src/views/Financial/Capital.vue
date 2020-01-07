@@ -21,9 +21,7 @@
     <el-table
       v-if="searchData"
       ref="filterTable"
-      :data="
-        searchData.slice((currentPage - 1) * pageSize, currentPage * pageSize)
-      "
+      :data="searchData.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
       stripe
       border
     >
@@ -40,21 +38,9 @@
           <span class="ml-10">{{ scope.row.wb_datetime | date }}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        align="center"
-        prop="wb_uid"
-        label="交易账号"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        prop="Alipay_account"
-        label="支付宝账号"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        prop="Alipay_name"
-        label="支付宝姓名"
-      ></el-table-column>
+      <el-table-column align="center" prop="wb_uid" label="交易账号"></el-table-column>
+      <el-table-column align="center" prop="Alipay_account" label="支付宝账号"></el-table-column>
+      <el-table-column align="center" prop="Alipay_name" label="支付宝姓名"></el-table-column>
       <el-table-column align="center" prop="wb_type" label="交易类型">
         <template v-slot="scope">
           <el-tag hit :type="scope.row.wb_type === 0 ? 'success' : 'warning'">{{
@@ -62,11 +48,7 @@
           }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column
-        align="center"
-        prop="wb_fee"
-        label="交易费用"
-      ></el-table-column>
+      <el-table-column align="center" prop="wb_fee" label="交易费用"></el-table-column>
       <el-table-column align="center" prop="wb_state" label="交易状态">
         <template v-slot="scope">
           <el-tag hit :type="scope.row.wb_state === 0 ? 'danger' : 'success'">{{
@@ -204,14 +186,15 @@ export default {
       })
         .then(async ({ value }) => {
           const res = await this.$http.post(`/changeAlipayAccount`, {
-            wb_id: uid,
-            newAlipay_account: value
+            uid,
+            Alipay_account: value
           });
           this.$message({
             type: "success",
-            message: res,
+            message: `${res.data.status}`,
             offset: 10
           });
+          this.getData();
         })
         .catch(() => {});
     },

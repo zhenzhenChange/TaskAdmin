@@ -17,19 +17,14 @@
         @change="filterDate"
         class="mr-20"
       ></el-date-picker>
-      <el-button
-        @click="openEditDefaultIncome"
-        icon="el-icon-edit"
-        type="primary"
+      <el-button @click="openEditDefaultIncome" icon="el-icon-edit" type="primary"
         >总代提成默认设置</el-button
       >
       <span class="ml-10">总代默认提成：{{ sonPumpRation }}</span>
     </el-card>
     <el-table
       ref="filterTable"
-      :data="
-        searchData.slice((currentPage - 1) * pageSize, currentPage * pageSize)
-      "
+      :data="searchData.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
       stripe
       border
     >
@@ -91,31 +86,11 @@
           <span class="ml-10">{{ scope.row.reg_datetime | date }}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        align="center"
-        prop="phone"
-        label="账号"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        prop="extension_code"
-        label="推广码"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        prop="my_balance"
-        label="余额"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        prop="user_remark"
-        label="备注"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        prop="general_income"
-        label="总提成"
-      ></el-table-column>
+      <el-table-column align="center" prop="phone" label="账号"></el-table-column>
+      <el-table-column align="center" prop="extension_code" label="推广码"></el-table-column>
+      <el-table-column align="center" prop="my_balance" label="余额"></el-table-column>
+      <el-table-column align="center" prop="user_remark" label="备注"></el-table-column>
+      <el-table-column align="center" prop="general_income" label="总提成"></el-table-column>
       <el-table-column align="center" label="账号状态">
         <template v-slot="scope">
           <el-tag
@@ -335,13 +310,13 @@ export default {
             uid: this.userID,
             son_pumpRation: value
           });
-          if (res.status === 200 && JSON.parse(res.data.status)) {
+          if (res.status === 200) {
             this.$message({
               type: "success",
               message: "设置成功！",
               offset: 10
             });
-            this.son_pumpRation = value;
+            this.$store.commit("SaveUserSonPumpRation", res.data.son_pumpRation);
           } else {
             this.$message({
               type: "warning",

@@ -30,9 +30,7 @@
       <el-card class="box-card">
         <div slot="header" class="clearfix">
           <span>下单端公告发布</span>
-          <el-button class="btn" type="text" @click="sendNotice"
-            >发布</el-button
-          >
+          <el-button class="btn" type="text" @click="sendNotice">发布</el-button>
         </div>
         <div>
           <el-input
