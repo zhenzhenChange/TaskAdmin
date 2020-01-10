@@ -213,7 +213,6 @@ export default {
       const res = await this.$http.post(`/recv/get`, {
         uid
       });
-      console.log(res.data)
       if (res.status === 200) {
         this.mineOrder = res.data.mineOrder;
         this.sonOrderData = res.data.sonOrderData;

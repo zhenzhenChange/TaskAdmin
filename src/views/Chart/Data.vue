@@ -113,7 +113,6 @@ export default {
         .post("/init", { date: "2019-12" })
         .then(result => {
           const data = result.data;
-          console.log(data)
           myChart.hideLoading();
           myChart.setOption({
             series: [
