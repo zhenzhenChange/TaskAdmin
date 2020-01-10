@@ -110,25 +110,27 @@ export default {
         ]
       });
       this.$http
-        .post("/init", { date: this.date })
+        .post("/init", { date: "2019-12" })
         .then(result => {
           const data = result.data;
+          console.log(data)
           myChart.hideLoading();
           myChart.setOption({
             series: [
               {
                 data: [
-                  { value: data.all_get_order, name: "订单总量", selected: true },
+                  { value: data.all_get_order + data.all_put_order, name: "订单总量", selected: true },
                   { value: data.put_register + data.get_register, name: "会员总人数" },
                   { value: data.all_success_order + data.all_put_success_order, name: "订单总成功量" },
                   { value: data.all_recharge, name: "充值总额" },
                   { value: data.all_withdraw, name: "提现总额" },
+                  { value: data.all_put_price, name: "发布佣金总额" },
                   { value: data.profit, name: "利润" }
                 ]
               },
               {
                 data: [
-                  { value: data.xxxxxxxxxxx, name: "当天接单总量" },
+                  { value: data.today_all_get_order, name: "当天接单总量" },
                   { value: data.today_all_put_success_order + data.today_all_success_order, name: "当天成功订单总量" },
                   { value: data.today_all_put_order, name: "当天发布订单总量" },
                   { value: data.today_all_recharge, name: "当天充值总额" },
@@ -140,7 +142,7 @@ export default {
                   { value: data.today_put_order_number, name: "当天下单总人数" },
                   { value: data.put_register, name: "下单注册总量" },
                   { value: data.get_register, name: "接单注册总量" },
-                  { value: data.xxxxxxxxxxxx, name: "接单总量" },
+                  { value: data.all_get_order, name: "接单总量" },
                   { value: data.all_put_order, name: "发单总量" },
                   { value: data.get_order_number, name: "接单总人数" },
                   { value: data.put_order_number, name: "下单总人数" }

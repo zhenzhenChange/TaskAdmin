@@ -1,44 +1,45 @@
 <template>
-  <el-form label-width="120px" :model="customerData" @submit.native.prevent="postCustomerData">
-    <el-row>
-      <el-col :span="6">
-        <el-form-item label="充值账号" required>
-          <el-input v-model="customerData.phone" placeholder="请输入手机号"></el-input>
-        </el-form-item>
-      </el-col>
-      <el-col :span="6">
-        <el-form-item label="支付宝账号" required>
-          <el-input v-model="customerData.Alipay_account" placeholder="请输入支付宝账号"></el-input>
-        </el-form-item>
-      </el-col>
-    </el-row>
-    <el-row>
-      <el-col :span="6">
-        <el-form-item label="支付宝姓名" required>
-          <el-input v-model="customerData.Alipay_name" placeholder="请输入支付宝姓名"></el-input>
-        </el-form-item>
-      </el-col>
-      <el-col :span="6">
-        <el-form-item label="充值金额" required>
-          <el-input v-model="customerData.wb_fee" placeholder="请输入充值金额"></el-input>
-        </el-form-item>
-      </el-col>
-    </el-row>
-    <el-row>
-      <el-col :span="12">
-        <el-form-item label="备注">
-          <el-input v-model="customerData.wb_remark" placeholder="请输入备注（可选）"></el-input>
-        </el-form-item>
-      </el-col>
-    </el-row>
-    <el-row>
-      <el-col :span="12">
-        <el-form-item>
-          <el-button native-type="submit">充值</el-button>
-        </el-form-item>
-      </el-col>
-    </el-row>
-  </el-form>
+  <el-card class="box-card">
+    <div slot="header" class="clearfix">
+      <span>人工充值</span>
+    </div>
+    <el-form :model="customerData" @submit.native.prevent="postCustomerData">
+      <el-form-item>
+        <el-input v-model="customerData.phone" placeholder="请输入手机号"
+          ><template slot="prepend">充值账号</template>
+        </el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-input
+          v-model="customerData.Alipay_account"
+          placeholder="请输入支付宝账号"
+          ><template slot="prepend">支付宝账号</template></el-input
+        >
+      </el-form-item>
+      <el-form-item>
+        <el-input
+          v-model="customerData.Alipay_name"
+          placeholder="请输入支付宝姓名"
+          ><template slot="prepend">支付宝姓名</template></el-input
+        >
+      </el-form-item>
+      <el-form-item>
+        <el-input v-model="customerData.wb_fee" placeholder="请输入充值金额"
+          ><template slot="prepend">充值金额</template></el-input
+        >
+      </el-form-item>
+      <el-form-item>
+        <el-input
+          v-model="customerData.wb_remark"
+          placeholder="请输入备注（可选）"
+          ><template slot="prepend">备注</template></el-input
+        >
+      </el-form-item>
+      <el-form-item>
+        <el-button native-type="submit" type="primary" icon="el-icon-finished">充值</el-button>
+      </el-form-item>
+    </el-form>
+  </el-card>
 </template>
 
 <script>
@@ -68,3 +69,10 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.box-card {
+  width: 30%;
+  margin: 0 auto;
+}
+</style>

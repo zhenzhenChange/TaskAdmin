@@ -327,12 +327,19 @@ export default {
             extension_code: value
           });
           if (res.status === 200) {
+            if (res.data.status === "邀请码已存在！") {
+              this.$message({
+                type: "warning",
+                message: `邀请码已存在，请您重新设置~`,
+                offset: 10
+              });
+              return;
+            }
             this.$message({
               type: "success",
               message: `${res.data.status}`,
               offset: 10
             });
-            this.getData();
           } else {
             this.$message({
               type: "warning",
@@ -340,6 +347,7 @@ export default {
               offset: 10
             });
           }
+          this.getData();
         })
         .catch(() => {});
     },
