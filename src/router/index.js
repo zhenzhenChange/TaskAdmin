@@ -12,7 +12,7 @@ VueRouter.prototype.push = function push(location) {
 
 const router = new VueRouter({
   mode: "history",
-  // base: "/task-admin/",
+  base: "/task-admin/",
   routes
 });
 
