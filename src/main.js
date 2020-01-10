@@ -41,7 +41,7 @@ Vue.use(ElementUI);
 Vue.config.productionTip = false;
 
 Vue.filter("date", value => {
-  return dayjs(value).format("YYYY-MM-DD HH:MM:ss");
+  return dayjs(value).format("YYYY-MM-DD HH:mm:ss");
 });
 
 Vue.filter("onlyDate", value => {

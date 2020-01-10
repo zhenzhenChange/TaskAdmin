@@ -11,5 +11,5 @@ module.exports = {
       }
     }
   },
-  publicPath: "/task-admin/"
+  // publicPath: "/task-admin/"
 };

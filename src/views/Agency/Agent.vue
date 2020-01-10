@@ -17,14 +17,19 @@
         @change="filterDate"
         class="mr-20"
       ></el-date-picker>
-      <el-button @click="openEditDefaultIncome" icon="el-icon-edit" type="primary"
+      <el-button
+        @click="openEditDefaultIncome"
+        icon="el-icon-edit"
+        type="primary"
         >总代提成默认设置</el-button
       >
       <span class="ml-10">总代默认提成：{{ sonPumpRation }}</span>
     </el-card>
     <el-table
       ref="filterTable"
-      :data="searchData.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
+      :data="
+        searchData.slice((currentPage - 1) * pageSize, currentPage * pageSize)
+      "
       stripe
       border
     >
@@ -86,11 +91,31 @@
           <span class="ml-10">{{ scope.row.reg_datetime | date }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="phone" label="账号"></el-table-column>
-      <el-table-column align="center" prop="extension_code" label="推广码"></el-table-column>
-      <el-table-column align="center" prop="my_balance" label="余额"></el-table-column>
-      <el-table-column align="center" prop="user_remark" label="备注"></el-table-column>
-      <el-table-column align="center" prop="general_income" label="总提成"></el-table-column>
+      <el-table-column
+        align="center"
+        prop="phone"
+        label="账号"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="extension_code"
+        label="推广码"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="my_balance"
+        label="余额"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="user_remark"
+        label="备注"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="general_income"
+        label="总提成"
+      ></el-table-column>
       <el-table-column align="center" label="账号状态">
         <template v-slot="scope">
           <el-tag
@@ -101,8 +126,15 @@
           >
         </template>
       </el-table-column>
-      <el-table-column align="center" label="操作" width="350">
+      <el-table-column align="center" label="操作" width="450">
         <template v-slot="scope">
+          <el-button
+            size="mini"
+            icon="el-icon-edit"
+            type="primary"
+            @click="openEditCode(scope.row.uid)"
+            >修改邀请码</el-button
+          >
           <el-button
             size="mini"
             icon="el-icon-edit"
@@ -114,7 +146,7 @@
             size="mini"
             icon="el-icon-warning"
             type="warning"
-            @click="openBan(scope.row.uid)"
+            @click="openBan(scope.row.phone)"
             :disabled="scope.row.is_valide === 0 ? true : false"
             >禁止该账号登录</el-button
           >
@@ -273,6 +305,44 @@ export default {
         })
         .catch(() => {});
     },
+    openEditCode(uid) {
+      this.$prompt("请设置新邀请码", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "info"
+      })
+        .then(async ({ value }) => {
+          value = value.replace(/\s*/g, "");
+          const reg = new RegExp("[\\u4E00-\\u9FFF]+", "g");
+          if (reg.test(value) || value.length > 10) {
+            this.$message({
+              type: "warning",
+              message: `邀请码限制为10位以下的英文字符和数字组合~`,
+              offset: 10
+            });
+            return;
+          }
+          const res = await this.$http.post(`/adminUpdateCode`, {
+            uid,
+            extension_code: value
+          });
+          if (res.status === 200) {
+            this.$message({
+              type: "success",
+              message: `${res.data.status}`,
+              offset: 10
+            });
+            this.getData();
+          } else {
+            this.$message({
+              type: "warning",
+              message: `服务器已超时，请稍后重试～`,
+              offset: 10
+            });
+          }
+        })
+        .catch(() => {});
+    },
     openBan(phone) {
       this.$confirm("确定要禁止该账号登录吗？", "警告", {
         confirmButtonText: "确定",
@@ -283,7 +353,7 @@ export default {
           const res = await this.$http.post(`/disableAccount`, {
             phone
           });
-          if (res.sattus === 200 && JSON.parse(res.data.status)) {
+          if (res.status === 200 && JSON.parse(res.data.status)) {
             this.$message({
               type: "success",
               message: `总代 ${phone} 已封禁成功！`,
@@ -296,6 +366,7 @@ export default {
               offset: 10
             });
           }
+          this.getData();
         })
         .catch(() => {});
     },
@@ -316,7 +387,10 @@ export default {
               message: "设置成功！",
               offset: 10
             });
-            this.$store.commit("SaveUserSonPumpRation", res.data.son_pumpRation);
+            this.$store.commit(
+              "SaveUserSonPumpRation",
+              res.data.son_pumpRation
+            );
           } else {
             this.$message({
               type: "warning",
