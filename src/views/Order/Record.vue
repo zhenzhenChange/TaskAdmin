@@ -77,7 +77,7 @@
         prop="order_state"
         label="订单状态"
         align="center"
-        width="120"
+        width="140"
         filter-placement="bottom-end"
       >
         <template v-slot="scope">
