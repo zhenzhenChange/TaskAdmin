@@ -20,18 +20,10 @@ const state = {
 };
 
 const getters = {
-  userID: state => {
-    state.userID;
-  },
-  sonPumpRation: state => {
-    state.sonPumpRation;
-  }
+  userID: state => state.userID,
+  sonPumpRation: state => state.sonPumpRation
 };
 
-const store = new Vuex.Store({
-  mutations,
-  state,
-  getters
-});
+const store = new Vuex.Store({ mutations, state, getters });
 
 export { store };

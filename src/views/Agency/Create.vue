@@ -10,17 +10,25 @@
         </el-input>
       </el-form-item>
       <el-form-item>
-        <el-input type="password" v-model="agencyData.pwd" placeholder="请输入密码"
+        <el-input
+          type="password"
+          v-model="agencyData.pwd"
+          placeholder="请输入密码"
           ><template slot="prepend">登录密码</template></el-input
         >
       </el-form-item>
       <el-form-item>
-        <el-input type="password" v-model="confirmPwd" placeholder="请再次输入密码"
+        <el-input
+          type="password"
+          v-model="confirmPwd"
+          placeholder="请再次输入密码"
           ><template slot="prepend">确认密码</template></el-input
         >
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" native-type="submit" icon="el-icon-plus">添加</el-button>
+        <el-button type="primary" native-type="submit" icon="el-icon-plus"
+          >添加</el-button
+        >
       </el-form-item>
     </el-form>
   </el-card>
@@ -29,10 +37,7 @@
 export default {
   data() {
     return {
-      agencyData: {
-        phone: "",
-        pwd: ""
-      },
+      agencyData: { phone: "", pwd: "" },
       confirmPwd: ""
     };
   },

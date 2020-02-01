@@ -40,19 +40,11 @@ Vue.component("agent-create", Create);
 Vue.use(ElementUI);
 Vue.config.productionTip = false;
 
-Vue.filter("date", value => {
-  return dayjs(value).format("YYYY-MM-DD HH:mm:ss");
-});
+Vue.filter("date", value => dayjs(value).format("YYYY-MM-DD HH:mm:ss"));
 
-Vue.filter("onlyDate", value => {
-  return dayjs(value).format("YYYY-MM-DD");
-});
+Vue.filter("onlyDate", value => dayjs(value).format("YYYY-MM-DD"));
 
 Vue.prototype.$http = http;
 Vue.prototype.$commonHTTP = commonHTTP;
 
-new Vue({
-  store,
-  router,
-  render: h => h(App)
-}).$mount("#app");
+new Vue({ store, router, render: h => h(App) }).$mount("#app");

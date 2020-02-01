@@ -5,33 +5,34 @@
         <i slot="prefix" class="el-input__icon el-icon-search"></i>
       </el-input>
       <el-date-picker
-        size="medium"
-        type="datetimerange"
-        v-model="value"
-        align="center"
-        unlink-panels
-        range-separator="至"
-        start-placeholder="开始日期"
-        end-placeholder="结束日期"
-        :picker-options="pickerOptions"
-        @change="filterDate"
         class="mr-20"
+        size="medium"
+        unlink-panels
+        align="center"
+        v-model="value"
+        type="datetimerange"
+        @change="filterDate"
+        range-separator="至"
+        end-placeholder="结束日期"
+        start-placeholder="开始日期"
+        :picker-options="pickerOptions"
       ></el-date-picker>
       <el-button
-        @click="openEditDefaultIncome"
-        icon="el-icon-edit"
         type="primary"
-        >总代提成默认设置</el-button
+        icon="el-icon-edit"
+        @click="openEditDefaultIncome"
       >
+        总代提成默认设置
+      </el-button>
       <span class="ml-10">总代默认提成：{{ sonPumpRation }}</span>
     </el-card>
     <el-table
-      ref="filterTable"
+      stripe
+      border
       :data="
         searchData.slice((currentPage - 1) * pageSize, currentPage * pageSize)
       "
-      stripe
-      border
+      ref="filterTable"
     >
       <el-table-column type="expand">
         <template v-slot="props">
@@ -40,11 +41,12 @@
               <span class="mr-10">{{ props.row.phone }}</span>
               <el-button
                 size="mini"
-                :loading="flag"
                 type="text"
+                :loading="flag"
                 @click="viewDetails(props.row.uid)"
-                >{{ btnText }}</el-button
               >
+                {{ btnText }}
+              </el-button>
             </el-form-item>
             <div v-if="divFlag">
               <el-form-item label="总领取订单">
@@ -79,11 +81,11 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="reg_datetime"
-        label="注册日期"
         sortable
         width="180"
         align="center"
+        label="注册日期"
+        prop="reg_datetime"
         column-key="reg_datetime"
       >
         <template v-slot="scope">
@@ -92,60 +94,61 @@
         </template>
       </el-table-column>
       <el-table-column
-        align="center"
         prop="phone"
         label="账号"
+        align="center"
       ></el-table-column>
       <el-table-column
         align="center"
-        prop="extension_code"
         label="推广码"
+        prop="extension_code"
       ></el-table-column>
       <el-table-column
+        label="余额"
         align="center"
         prop="my_balance"
-        label="余额"
       ></el-table-column>
       <el-table-column
+        label="备注"
         align="center"
         prop="user_remark"
-        label="备注"
       ></el-table-column>
       <el-table-column
         align="center"
-        prop="general_income"
         label="总提成"
+        prop="general_income"
       ></el-table-column>
       <el-table-column align="center" label="账号状态">
         <template v-slot="scope">
           <el-tag
-            :type="scope.row.is_valide === 1 ? 'success' : 'danger'"
-            disable-transitions
             hit
-            >{{ scope.row.is_valide === 1 ? "正常" : "已封禁" }}</el-tag
+            disable-transitions
+            :type="scope.row.is_valide === 1 ? 'success' : 'danger'"
           >
+            {{ scope.row.is_valide === 1 ? "正常" : "已封禁" }}
+          </el-tag>
         </template>
       </el-table-column>
       <el-table-column align="center" label="操作" width="450">
         <template v-slot="scope">
           <el-button
             size="mini"
-            icon="el-icon-edit"
             type="primary"
+            icon="el-icon-edit"
             @click="openEditCode(scope.row.uid)"
             >修改邀请码</el-button
           >
           <el-button
             size="mini"
-            icon="el-icon-edit"
             type="primary"
+            icon="el-icon-edit"
             @click="openEditPwd(scope.row.phone)"
             >修改密码</el-button
           >
           <el-button
             size="mini"
-            icon="el-icon-warning"
             type="warning"
+            icon="el-icon-warning"
             @click="openBan(scope.row.phone)"
             :disabled="scope.row.is_valide === 0 ? true : false"
             >禁止该账号登录</el-button
@@ -154,14 +157,14 @@
       </el-table-column>
     </el-table>
     <el-pagination
-      @size-change="sizeChange"
-      @current-change="currentChange"
+      class="mt-20"
+      :total="data.length"
       :page-size="pageSize"
       :page-sizes="pageSizes"
+      @size-change="sizeChange"
       :current-page="currentPage"
-      :total="data.length"
+      @current-change="currentChange"
       layout="total, sizes, prev, pager, next, jumper"
-      class="mt-20"
     ></el-pagination>
   </div>
 </template>
@@ -244,9 +247,7 @@ export default {
     async viewDetails(uid) {
       this.flag = true;
       this.btnText = "加载中...";
-      const res = await this.$http.post(`/agent/get`, {
-        uid
-      });
+      const res = await this.$http.post(`/agent/get`, { uid });
       if (res.status === 200) {
         this.mineOrder = res.data.mineOrder;
         this.btnText = "详细信息如下";

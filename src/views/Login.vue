@@ -21,10 +21,7 @@
 export default {
   data() {
     return {
-      userData: {
-        phone: "",
-        pwd: ""
-      }
+      userData: { phone: "", pwd: "" }
     };
   },
   methods: {

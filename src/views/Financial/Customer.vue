@@ -36,7 +36,9 @@
         >
       </el-form-item>
       <el-form-item>
-        <el-button native-type="submit" type="primary" icon="el-icon-finished">充值</el-button>
+        <el-button native-type="submit" type="primary" icon="el-icon-finished"
+          >充值</el-button
+        >
       </el-form-item>
     </el-form>
   </el-card>
@@ -59,11 +61,7 @@ export default {
     async postCustomerData() {
       const res = this.$http.post(`/recharge`, this.customerData);
       if (res.statusCode) {
-        this.$message({
-          type: "success",
-          message: "充值成功！",
-          offset: 10
-        });
+        this.$message({ type: "success", message: "充值成功！", offset: 10 });
       }
     }
   }

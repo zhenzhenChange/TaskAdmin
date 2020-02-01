@@ -19,7 +19,9 @@
     </el-card>
     <el-table
       ref="filterTable"
-      :data="searchData.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
+      :data="
+        searchData.slice((currentPage - 1) * pageSize, currentPage * pageSize)
+      "
       stripe
       border
     >
@@ -75,9 +77,21 @@
           <span class="ml-10">{{ scope.row.reg_datetime | date }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="phone" label="账号"></el-table-column>
-      <el-table-column align="center" prop="my_balance" label="余额"></el-table-column>
-      <el-table-column align="center" prop="wb_fee" label="总充值"></el-table-column>
+      <el-table-column
+        align="center"
+        prop="phone"
+        label="账号"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="my_balance"
+        label="余额"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        prop="wb_fee"
+        label="总充值"
+      ></el-table-column>
       <el-table-column align="center" label="账号状态">
         <template v-slot="scope">
           <el-tag
@@ -199,9 +213,7 @@ export default {
     async viewDetails(uid) {
       this.flag = true;
       this.btnText = "加载中...";
-      const res = await this.$http.post(`/give/get`, {
-        uid
-      });
+      const res = await this.$http.post(`/give/get`, { uid });
       if (res.status === 200) {
         this.mineOrder = res.data.mineOrder;
         this.sonOrderData = res.data.sonOrderData;

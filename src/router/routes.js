@@ -25,9 +25,7 @@ const routes = [
     path: "/",
     name: "login",
     component: Login,
-    meta: {
-      isPublic: true
-    }
+    meta: { isPublic: true }
   },
   {
     path: "/home",

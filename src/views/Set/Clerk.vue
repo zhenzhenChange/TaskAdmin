@@ -27,7 +27,9 @@
       <el-card class="box-card">
         <div slot="header" class="clearfix">
           <span>接单端公告发布</span>
-          <el-button class="btn" type="text" @click="sendNotice">发布</el-button>
+          <el-button class="btn" type="text" @click="sendNotice"
+            >发布</el-button
+          >
         </div>
         <div>
           <el-input
@@ -62,9 +64,7 @@ export default {
     this.getData();
   },
   computed: {
-    ...mapState({
-      userID: state => state.userID
-    })
+    ...mapState({ userID: state => state.userID })
   },
   methods: {
     async getData() {
@@ -78,11 +78,7 @@ export default {
         su_isExtensionCodeReq: this.defaultSet.su_isExtensionCodeReq ? 1 : 0
       });
       if (res.status === 200 && JSON.parse(res.status)) {
-        this.$message({
-          type: "success",
-          message: "保存成功",
-          offset: 10
-        });
+        this.$message({ type: "success", message: "保存成功", offset: 10 });
       }
     },
     async sendNotice() {

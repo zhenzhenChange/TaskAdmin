@@ -10,11 +10,7 @@ VueRouter.prototype.push = function push(location) {
   return originalPush.call(this, location).catch(err => err);
 };
 
-const router = new VueRouter({
-  mode: "history",
-  base: "/task-admin/",
-  routes
-});
+const router = new VueRouter({ mode: "history", base: "/task-admin/", routes });
 
 router.beforeEach((to, from, next) => {
   if (!to.meta.isPublic && !localStorage.getItem("userID")) {
