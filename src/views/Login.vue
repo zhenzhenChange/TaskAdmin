@@ -1,17 +1,32 @@
 <template>
   <el-card class="box-card">
     <div slot="header">
-      <span>管理员登录</span>
+      <span>欢迎登录</span>
     </div>
     <el-form @submit.native.prevent="login">
-      <el-form-item label="用户名">
-        <el-input v-model="userData.phone"></el-input>
-      </el-form-item>
-      <el-form-item label="密码">
-        <el-input type="password" v-model="userData.pwd"></el-input>
+      <el-form-item>
+        <el-input v-model="userData.phone" placeholder="请输入账号">
+          <template slot="prepend">账号</template>
+        </el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" native-type="submit">登录</el-button>
+        <el-input
+          type="password"
+          v-model="userData.pwd"
+          placeholder="请输入密码"
+        >
+          <template slot="prepend">密码</template>
+        </el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button
+          icon="el-icon-user-solid"
+          type="primary"
+          size="medium"
+          native-type="submit"
+        >
+          登录
+        </el-button>
       </el-form-item>
     </el-form>
   </el-card>
@@ -77,7 +92,10 @@ export default {
 
 <style lang="scss" scoped>
 .box-card {
-  width: 30rem;
-  margin: 10rem auto;
+  width: 25rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 </style>

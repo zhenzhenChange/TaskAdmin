@@ -74,7 +74,7 @@
           }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="操作" width="450">
+      <el-table-column align="center" label="操作" width="300">
         <template v-slot="scope">
           <el-button
             size="mini"
@@ -101,7 +101,7 @@
       :current-page="currentPage"
       :total="data.length"
       layout="total, sizes, prev, pager, next, jumper"
-      class="mt-20"
+      class="mt-20 mb-20"
     ></el-pagination>
   </div>
 </template>

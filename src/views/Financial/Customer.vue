@@ -6,7 +6,7 @@
     <el-form :model="customerData" @submit.native.prevent="postCustomerData">
       <el-form-item>
         <el-input v-model="customerData.phone" placeholder="请输入手机号"
-          ><template slot="prepend">充值账号</template>
+          ><template slot="prepend">充值手机号</template>
         </el-input>
       </el-form-item>
       <el-form-item>
@@ -25,14 +25,14 @@
       </el-form-item>
       <el-form-item>
         <el-input v-model="customerData.wb_fee" placeholder="请输入充值金额"
-          ><template slot="prepend">充值金额</template></el-input
+          ><template slot="prepend">充值的金额</template></el-input
         >
       </el-form-item>
       <el-form-item>
         <el-input
           v-model="customerData.wb_remark"
-          placeholder="请输入备注（可选）"
-          ><template slot="prepend">备注</template></el-input
+          placeholder="请输入备注"
+          ><template slot="prepend">备注---可选</template></el-input
         >
       </el-form-item>
       <el-form-item>

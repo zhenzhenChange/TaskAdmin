@@ -25,55 +25,47 @@
       "
       stripe
       border
+      @expand-change="expandChange"
     >
       <el-table-column type="expand">
         <template v-slot="props">
           <el-form label-position="left" inline class="clerk-table-expand">
             <el-form-item label="账号">
-              <span class="mr-10">{{ props.row.phone }}</span>
-              <el-button
-                size="mini"
-                :loading="flag"
-                type="text"
-                @click="viewDetails(props.row.uid)"
-                >{{ btnText }}</el-button
-              >
+              <span>{{ props.row.phone }}</span>
             </el-form-item>
             <el-form-item label="备注">
-              <span>{{ props.row.user_remark }}</span>
+              <span> {{ props.row.user_remark }} </span>
             </el-form-item>
-            <div v-if="divFlag">
-              <el-form-item label="总提成">
-                <span>{{ props.row.general_income }}</span>
-              </el-form-item>
-              <el-form-item label="当天提成">
-                <span>{{ props.row.general_income }}</span>
-              </el-form-item>
-              <el-form-item label="总接单">
-                <span>{{ mineOrder.length }}</span>
-              </el-form-item>
-              <el-form-item label="当天接单">
-                <span>{{ mineOrder.length }}</span>
-              </el-form-item>
-              <el-form-item label="总成功订单">
-                <span>{{ mineOrder.length }}</span>
-              </el-form-item>
-              <el-form-item label="当天成功订单">
-                <span>{{ mineOrder.length }}</span>
-              </el-form-item>
-              <el-form-item label="下级总接订单">
-                <span>{{ sonOrderData.length }}</span>
-              </el-form-item>
-              <el-form-item label="下级总成功订单">
-                <span>{{ sonOrderData.length }}</span>
-              </el-form-item>
-              <el-form-item label="下级当天接订单">
-                <span>{{ sonOrderData.length }}</span>
-              </el-form-item>
-              <el-form-item label="下级当天成功订单">
-                <span>{{ sonOrderData.length }}</span>
-              </el-form-item>
-            </div>
+            <el-form-item label="总提成">
+              <span>{{ props.row.general_income }}</span>
+            </el-form-item>
+            <el-form-item label="当天提成">
+              <span>{{ props.row.general_income }}</span>
+            </el-form-item>
+            <el-form-item label="总接单">
+              <span>{{ showInfo.sumOrder }}</span>
+            </el-form-item>
+            <el-form-item label="当天接单">
+              <span>{{ showInfo.todayOrder }}</span>
+            </el-form-item>
+            <el-form-item label="总成功订单">
+              <span>{{ showInfo.sussOrder }}</span>
+            </el-form-item>
+            <el-form-item label="当天成功订单">
+              <span>{{ showInfo.todaySussOrder }}</span>
+            </el-form-item>
+            <el-form-item label="下级总接订单">
+              <span>{{ showInfo.sonSumOrder }}</span>
+            </el-form-item>
+            <el-form-item label="下级总成功订单">
+              <span>{{ showInfo.sonSussOrder }}</span>
+            </el-form-item>
+            <el-form-item label="下级当天接订单">
+              <span>{{ showInfo.sonTodayOrder }}</span>
+            </el-form-item>
+            <el-form-item label="下级当天成功订单">
+              <span>{{ showInfo.sonTodaySussOrder }}</span>
+            </el-form-item>
           </el-form>
         </template>
       </el-table-column>
@@ -144,7 +136,7 @@
       :current-page="currentPage"
       :total="length || data.length"
       layout="total, sizes, prev, pager, next, jumper"
-      class="mt-20"
+      class="mt-20 mb-20"
     ></el-pagination>
   </div>
 </template>
@@ -196,8 +188,7 @@ export default {
       value: "",
       length: "",
       flag: false,
-      btnText: "点击查看详细信息",
-      divFlag: false
+      showInfo: {}
     };
   },
   created() {
@@ -221,18 +212,9 @@ export default {
       this.data = res.data.data;
       this.foreverData = res.data.data;
     },
-    async viewDetails(uid) {
-      this.flag = true;
-      this.btnText = "加载中...";
-      const res = await this.$http.post(`/recv/get`, { uid });
-      if (res.status === 200) {
-        this.mineOrder = res.data.mineOrder;
-        this.sonOrderData = res.data.sonOrderData;
-        this.wb_book = res.data.wb_book;
-        this.btnText = "详细信息如下";
-        this.flag = false;
-        this.divFlag = true;
-      }
+    async expandChange({ uid }) {
+      const { data } = await this.$http.post(`/recv/get`, { uid });
+      this.showInfo = data;
     },
     filterDate(value) {
       if (!value) {

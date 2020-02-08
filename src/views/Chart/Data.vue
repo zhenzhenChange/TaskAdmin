@@ -267,7 +267,7 @@ export default {
 <style lang="scss" scoped>
 .pie-order {
   width: 1300px;
-  height: 500px;
+  height: 800px;
   margin: 0 auto;
 }
 

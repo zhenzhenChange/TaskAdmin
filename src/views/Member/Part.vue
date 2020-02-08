@@ -24,43 +24,32 @@
       "
       stripe
       border
+      @expand-change="expandChange"
     >
       <el-table-column type="expand">
         <template v-slot="props">
           <el-form label-position="left" inline class="part-table-expand">
             <el-form-item label="账号">
-              <span class="mr-10">{{ props.row.phone }}</span>
-              <el-button
-                size="mini"
-                :loading="flag"
-                type="text"
-                @click="viewDetails(props.row.uid)"
-                >{{ btnText }}</el-button
-              >
+              <span>{{ props.row.phone }}</span>
             </el-form-item>
-            <div v-if="divFlag">
-              <el-form-item label="备注">
-                <span>{{ props.row.user_remark }}</span>
-              </el-form-item>
-              <el-form-item label="总充值">
-                <span>{{ props.row.totalRecharge }}</span>
-              </el-form-item>
-              <el-form-item label="当天充值">
-                <span>{{ props.row.totalRecharge }}</span>
-              </el-form-item>
-              <el-form-item label="总订单">
-                <span>{{ props.row.totalRecharge }}</span>
-              </el-form-item>
-              <el-form-item label="总成功订单">
-                <span>{{ props.row.totalRecharge }}</span>
-              </el-form-item>
-              <el-form-item label="当天下订单">
-                <span>{{ props.row.orderData }}</span>
-              </el-form-item>
-              <el-form-item label="当天成功订单">
-                <span>{{ props.row.orderData }}</span>
-              </el-form-item>
-            </div>
+            <el-form-item label="备注">
+              <span>{{ props.row.user_remark }}</span>
+            </el-form-item>
+            <el-form-item label="当天充值">
+              <span>{{ showInfo.totalCharge }}</span>
+            </el-form-item>
+            <el-form-item label="总订单">
+              <span>{{ showInfo.relesSumOrder }}</span>
+            </el-form-item>
+            <el-form-item label="总成功订单">
+              <span>{{ showInfo.relesSussSumOrder }}</span>
+            </el-form-item>
+            <el-form-item label="当天下订单">
+              <span>{{ showInfo.relesTodayOrder }}</span>
+            </el-form-item>
+            <el-form-item label="当天成功订单">
+              <span>{{ showInfo.relesTodaySuccOrder }}</span>
+            </el-form-item>
           </el-form>
         </template>
       </el-table-column>
@@ -137,7 +126,7 @@
       :current-page="currentPage"
       :total="data.length"
       layout="total, sizes, prev, pager, next, jumper"
-      class="mt-20"
+      class="mt-20 mb-20"
     ></el-pagination>
   </div>
 </template>
@@ -185,8 +174,7 @@ export default {
       },
       value: "",
       flag: false,
-      btnText: "点击查看详细信息",
-      divFlag: false
+      showInfo: {}
     };
   },
   created() {
@@ -210,18 +198,10 @@ export default {
       this.data = res.data.data;
       this.foreverData = res.data.data;
     },
-    async viewDetails(uid) {
-      this.flag = true;
-      this.btnText = "加载中...";
-      const res = await this.$http.post(`/give/get`, { uid });
-      if (res.status === 200) {
-        this.mineOrder = res.data.mineOrder;
-        this.sonOrderData = res.data.sonOrderData;
-        this.wb_book = res.data.wb_book;
-        this.btnText = "详细信息如下";
-        this.flag = false;
-        this.divFlag = true;
-      }
+    async expandChange({ uid }) {
+      const data = await this.$http.post(`/give/get`, { uid });
+      console.log(data);
+      this.showInfo = data;
     },
     filterDate(value) {
       if (!value) {

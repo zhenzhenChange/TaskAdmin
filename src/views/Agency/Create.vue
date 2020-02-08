@@ -14,8 +14,9 @@
           type="password"
           v-model="agencyData.pwd"
           placeholder="请输入密码"
-          ><template slot="prepend">登录密码</template></el-input
         >
+          <template slot="prepend">登录密码</template>
+        </el-input>
       </el-form-item>
       <el-form-item>
         <el-input

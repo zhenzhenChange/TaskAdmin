@@ -105,7 +105,7 @@
       :current-page="currentPage"
       :total="data.length"
       layout="total, sizes, prev, pager, next, jumper"
-      class="mt-20"
+      class="mt-20 mb-20"
     ></el-pagination>
   </div>
 </template>
