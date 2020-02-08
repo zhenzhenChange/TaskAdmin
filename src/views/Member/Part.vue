@@ -200,7 +200,6 @@ export default {
     },
     async expandChange({ uid }) {
       const data = await this.$http.post(`/give/get`, { uid });
-      console.log(data);
       this.showInfo = data;
     },
     filterDate(value) {
