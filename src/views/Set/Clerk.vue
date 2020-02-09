@@ -10,7 +10,7 @@
           <el-input v-model="defaultSet.su_holdLimit">
             <template slot="prepend">最多同时几单未完成</template>
           </el-input>
-          <el-input class="mt-20" v-model="limit">
+          <el-input class="mt-20" v-model="defaultSet.orderLimit">
             <template slot="prepend">成功率超出自动封号</template>
           </el-input>
           <div>
@@ -55,11 +55,11 @@ export default {
   data() {
     return {
       defaultSet: {
+        orderLimit: "",
+        su_recvAnno: "",
         su_holdLimit: "",
-        su_isExtensionCodeReq: "",
-        su_recvAnno: ""
+        su_isExtensionCodeReq: ""
       },
-      limit: "",
       textarea: "",
       positon: "top"
     };
@@ -78,7 +78,7 @@ export default {
     async saveSet() {
       await this.$http.post(`/admin/setLimit`, {
         uid: this.userID,
-        limit: this.limit
+        limit: this.defaultSet.orderLimit
       });
       const res = await this.$http.post(`/admin/setup/defaultClerkSet`, {
         uid: this.userID,
