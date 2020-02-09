@@ -2,7 +2,7 @@ import axios from "axios";
 
 const http = axios.create({
   withCredentials: true,
-  baseURL: "/task-api",
+  baseURL: "/api",
   headers: { "Content-Type": "application/json" }
 });
 
