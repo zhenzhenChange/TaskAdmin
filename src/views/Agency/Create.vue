@@ -53,7 +53,7 @@ export default {
         this.agencyData.pwd = this.confirmPwd = "";
         return;
       }
-      const res = await this.$http.post(`/addRelesUser`, this.agencyData);
+      const res = await this.$http.post(`/admin/addRelesUser`, this.agencyData);
       if (res.data.status) {
         this.$message({
           type: "success",

@@ -161,7 +161,7 @@ export default {
       return type === "成功" ? "success" : "primary";
     },
     async getData() {
-      const res = await this.$http.get(`/man/get`);
+      const res = await this.$http.get(`/admin/man/get`);
       res.data.data.map(item => {
         if (item.action_resState === 11) {
           this.data.push(item);
@@ -199,7 +199,7 @@ export default {
         type: "warning"
       })
         .then(async () => {
-          const res = await this.$http.post(`/man/delOrderRec`, {
+          const res = await this.$http.post(`/admin/man/delOrderRec`, {
             order_id: id
           });
           this.$message({

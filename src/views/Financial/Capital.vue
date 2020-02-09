@@ -169,7 +169,7 @@ export default {
   },
   methods: {
     async getData() {
-      const res = await this.$http.get(`/finac/get`);
+      const res = await this.$http.get(`/admin/finac/get`);
       this.data = res.data.data;
       this.foreverData = res.data.data;
     },
@@ -203,7 +203,7 @@ export default {
         type: "info"
       })
         .then(async ({ value }) => {
-          const res = await this.$http.post(`/changeAlipayAccount`, {
+          const res = await this.$http.post(`/admin/changeAlipayAccount`, {
             uid,
             Alipay_account: value
           });
@@ -223,7 +223,7 @@ export default {
         type: "warning"
       })
         .then(async () => {
-          const res = await this.$http.post(`/finac/delWbRec`, {
+          const res = await this.$http.post(`/admin/finac/delWbRec`, {
             wb_id: id
           });
           this.$message({

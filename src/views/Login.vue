@@ -41,7 +41,27 @@ export default {
   },
   methods: {
     async login() {
-      const res = await this.$commonHTTP.post("/login", this.userData);
+      if (!this.userData.phone) {
+        this.$message({
+          type: "warning",
+          message: `请输入账号`,
+          duration: 1500,
+          center: true,
+          offset: 10
+        });
+        return;
+      }
+      if (!this.userData.pwd) {
+        this.$message({
+          type: "warning",
+          message: `请输入密码`,
+          duration: 1500,
+          center: true,
+          offset: 10
+        });
+        return;
+      }
+      const res = await this.$http.post("/common/login", this.userData);
       const user = res.data.user;
       if (res.data.msg) {
         this.$message({

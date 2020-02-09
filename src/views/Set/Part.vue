@@ -74,7 +74,7 @@ export default {
   },
   methods: {
     async getData() {
-      const res = await this.$http.get("/setup/get");
+      const res = await this.$http.get("/admin/setup/get");
       this.defaultSet = res.data;
     },
     sizeChange(val) {
@@ -91,7 +91,7 @@ export default {
       this.su_isExtensionCodeReq = value;
     },
     async saveSet() {
-      const res = await this.$http.post(`/setup/defaultPartSet`, {
+      const res = await this.$http.post(`/admin/setup/defaultPartSet`, {
         uid: this.userID,
         su_vipInitPrice: this.defaultSet.su_vipInitPrice,
         su_extensionAward: this.defaultSet.su_extensionAward,
@@ -107,7 +107,7 @@ export default {
       }
     },
     async sendNotice() {
-      const res = await this.$http.post(`/setup/setRelesAnno`, {
+      const res = await this.$http.post(`/admin/setup/setRelesAnno`, {
         uid: this.userID,
         su_giveAnno: this.defaultSet.su_giveAnno
       });

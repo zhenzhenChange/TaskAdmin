@@ -33,6 +33,8 @@
         searchData.slice((currentPage - 1) * pageSize, currentPage * pageSize)
       "
       ref="filterTable"
+      :row-key="getRowKeys"
+      :expand-row-keys="expands"
       @expand-change="expandChange"
     >
       <el-table-column type="expand">
@@ -82,11 +84,13 @@
         </template>
       </el-table-column>
       <el-table-column
+        width="180"
         prop="phone"
         label="账号"
         align="center"
       ></el-table-column>
       <el-table-column
+        width="180"
         align="center"
         label="推广码"
         prop="extension_code"
@@ -97,6 +101,7 @@
         prop="my_balance"
       ></el-table-column>
       <el-table-column
+        width="180"
         label="备注"
         align="center"
         prop="user_remark"
@@ -118,7 +123,7 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="操作" width="380">
+      <el-table-column fixed="right" align="center" label="操作" width="600">
         <template v-slot="scope">
           <el-button
             size="mini"
@@ -131,8 +136,22 @@
             size="mini"
             type="primary"
             icon="el-icon-edit"
+            @click="openRemark(scope.row.uid)"
+            >修改备注</el-button
+          >
+          <el-button
+            size="mini"
+            type="primary"
+            icon="el-icon-edit"
             @click="openEditPwd(scope.row.phone)"
             >修改密码</el-button
+          >
+          <el-button
+            size="mini"
+            type="primary"
+            icon="el-icon-edit"
+            @click="openRatio(scope.row.uid)"
+            >修改提成</el-button
           >
           <el-button
             size="mini"
@@ -140,7 +159,7 @@
             icon="el-icon-warning"
             @click="openBan(scope.row.phone)"
             :disabled="scope.row.is_valide === 0 ? true : false"
-            >禁止该账号登录</el-button
+            >禁止账号登录</el-button
           >
         </template>
       </el-table-column>
@@ -164,6 +183,7 @@ export default {
   data() {
     return {
       data: [],
+      expands: [],
       mineOrder: [],
       foreverData: [],
       son_pumpRation: "",
@@ -228,13 +248,25 @@ export default {
   },
   methods: {
     async getData() {
-      const res = await this.$http.get(`/agent/get`);
+      const res = await this.$http.get(`/admin/agent/get`);
       this.data = res.data.data;
       this.foreverData = res.data.data;
     },
-    async expandChange({ uid }) {
-      const { data } = await this.$http.post(`/recv/get`, { uid });
+    getRowKeys(row) {
+      return row.uid;
+    },
+    async expandChange({ uid }, expandedRows) {
+      const { data } = await this.$http.post(`/admin/recv/get`, { uid });
       this.showInfo = data;
+      const _this = this;
+      if (expandedRows.length) {
+        _this.expands = [];
+        if (uid) {
+          _this.expands.push(uid);
+        }
+      } else {
+        _this.expands = [];
+      }
     },
     filterDate(value) {
       if (!value) {
@@ -267,7 +299,7 @@ export default {
         inputType: "password"
       })
         .then(async ({ value }) => {
-          const res = await this.$http.post(`/changePwd`, {
+          const res = await this.$http.post(`/admin/changePwd`, {
             phone,
             NewPwd: value
           });
@@ -284,6 +316,50 @@ export default {
               offset: 10
             });
           }
+        })
+        .catch(() => {});
+    },
+    openRemark(uid) {
+      this.$prompt("请输入新备注", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "info"
+      })
+        .then(async ({ value }) => {
+          const { data } = await this.$http.post(`/recv/setNickname`, {
+            uid,
+            user_remark: value
+          });
+          if (JSON.parse(data.ret)) {
+            this.$message({
+              type: "success",
+              message: `修改成功！`,
+              offset: 10
+            });
+          } else {
+            this.$message({
+              type: "warning",
+              message: `服务器已超时，请稍后重试～`,
+              offset: 10
+            });
+          }
+          this.getData();
+        })
+        .catch(() => {});
+    },
+    openRatio(uid) {
+      this.$prompt("请输入新提成", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "info"
+      })
+        .then(async ({ value }) => {
+          const { data } = await this.$http.post(`/admin/updateSunRatio`, {
+            uid,
+            my_returnRatio: value
+          });
+          this.$message({ type: "success", message: data.status, offset: 10 });
+          this.getData();
         })
         .catch(() => {});
     },
@@ -304,7 +380,7 @@ export default {
             });
             return;
           }
-          const res = await this.$http.post(`/adminUpdateCode`, {
+          const res = await this.$http.post(`/admin/adminUpdateCode`, {
             uid,
             extension_code: value
           });
@@ -340,7 +416,7 @@ export default {
         type: "warning"
       })
         .then(async () => {
-          const res = await this.$http.post(`/disableAccount`, {
+          const res = await this.$http.post(`/admin/disableAccount`, {
             phone
           });
           if (res.status === 200 && JSON.parse(res.data.status)) {
@@ -367,7 +443,7 @@ export default {
         type: "info"
       })
         .then(async ({ value }) => {
-          const res = await this.$http.post(`/agent/setRetRatio`, {
+          const res = await this.$http.post(`/admin/agent/setRetRatio`, {
             uid: this.userID,
             son_pumpRation: value
           });

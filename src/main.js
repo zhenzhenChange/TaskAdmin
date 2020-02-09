@@ -4,7 +4,6 @@ import dayjs from "dayjs";
 import router from "./router";
 import { store } from "./store";
 import http from "./http";
-import commonHTTP from "./commonHTTP";
 
 import App from "./App.vue";
 
@@ -45,6 +44,5 @@ Vue.filter("date", value => dayjs(value).format("YYYY-MM-DD HH:mm:ss"));
 Vue.filter("onlyDate", value => dayjs(value).format("YYYY-MM-DD"));
 
 Vue.prototype.$http = http;
-Vue.prototype.$commonHTTP = commonHTTP;
 
 new Vue({ store, router, render: h => h(App) }).$mount("#app");

@@ -24,6 +24,8 @@
       "
       stripe
       border
+      :row-key="getRowKeys"
+      :expand-row-keys="expands"
       @expand-change="expandChange"
     >
       <el-table-column type="expand">
@@ -36,7 +38,7 @@
               <span>{{ props.row.user_remark }}</span>
             </el-form-item>
             <el-form-item label="当天充值">
-              <span>{{ showInfo.totalCharge }}</span>
+              <span>{{ showInfo.todayCharge }}</span>
             </el-form-item>
             <el-form-item label="总订单">
               <span>{{ showInfo.relesSumOrder }}</span>
@@ -48,7 +50,7 @@
               <span>{{ showInfo.relesTodayOrder }}</span>
             </el-form-item>
             <el-form-item label="当天成功订单">
-              <span>{{ showInfo.relesTodaySuccOrder }}</span>
+              <span>{{ showInfo.relesTodaySussOrder }}</span>
             </el-form-item>
           </el-form>
         </template>
@@ -136,6 +138,7 @@ export default {
   data() {
     return {
       data: [],
+      expands: [],
       foreverData: [],
       search: "",
       currentPage: 1,
@@ -194,13 +197,25 @@ export default {
   },
   methods: {
     async getData() {
-      const res = await this.$http.get(`/give/get`);
+      const res = await this.$http.get(`/admin/give/get`);
       this.data = res.data.data;
       this.foreverData = res.data.data;
     },
-    async expandChange({ uid }) {
-      const data = await this.$http.post(`/give/get`, { uid });
-      this.showInfo = data;
+    getRowKeys(row) {
+      return row.uid;
+    },
+    async expandChange({ uid }, expandedRows) {
+      const data = await this.$http.post(`/admin/give/get`, { uid });
+      this.showInfo = data.data;
+      const _this = this;
+      if (expandedRows.length) {
+        _this.expands = [];
+        if (uid) {
+          _this.expands.push(uid);
+        }
+      } else {
+        _this.expands = [];
+      }
     },
     filterDate(value) {
       if (!value) {
@@ -232,7 +247,7 @@ export default {
         type: "info"
       })
         .then(async ({ value }) => {
-          const res = await this.$http.post(`/give/modPrice`, {
+          const res = await this.$http.post(`/admin/give/modPrice`, {
             uid,
             user_minPrice: value
           });
@@ -260,7 +275,7 @@ export default {
         inputType: "password"
       })
         .then(async ({ value }) => {
-          const res = await this.$http.post(`/changePwd`, {
+          const res = await this.$http.post(`/admin/changePwd`, {
             phone,
             NewPwd: value
           });
@@ -287,7 +302,7 @@ export default {
         type: "warning"
       })
         .then(async () => {
-          const res = await this.$http.post(`/disableAccount`, {
+          const res = await this.$http.post(`/admin/disableAccount`, {
             phone
           });
           if (res.data.status) {

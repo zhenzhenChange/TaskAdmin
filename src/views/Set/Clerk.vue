@@ -10,6 +10,9 @@
           <el-input v-model="defaultSet.su_holdLimit">
             <template slot="prepend">最多同时几单未完成</template>
           </el-input>
+          <el-input class="mt-20" v-model="limit">
+            <template slot="prepend">成功率超出自动封号</template>
+          </el-input>
           <div>
             <span class="exCode">邀请码是否为必填项：</span>
             <el-switch
@@ -56,6 +59,7 @@ export default {
         su_isExtensionCodeReq: "",
         su_recvAnno: ""
       },
+      limit: "",
       textarea: "",
       positon: "top"
     };
@@ -68,11 +72,15 @@ export default {
   },
   methods: {
     async getData() {
-      const res = await this.$http.get("/setup/get");
+      const res = await this.$http.get("/admin/setup/get");
       this.defaultSet = res.data;
     },
     async saveSet() {
-      const res = await this.$http.post(`/setup/defaultClerkSet`, {
+      await this.$http.post(`/admin/setLimit`, {
+        uid: this.userID,
+        limit: this.limit
+      });
+      const res = await this.$http.post(`/admin/setup/defaultClerkSet`, {
         uid: this.userID,
         su_holdLimit: this.defaultSet.su_holdLimit,
         su_isExtensionCodeReq: this.defaultSet.su_isExtensionCodeReq ? 1 : 0
@@ -82,16 +90,12 @@ export default {
       }
     },
     async sendNotice() {
-      const res = await this.$http.post(`/setup/setRecvAnno`, {
+      const res = await this.$http.post(`/admin/setup/setRecvAnno`, {
         uid: this.userID,
         su_recvAnno: this.defaultSet.su_recvAnno
       });
       if (res.status === 200 && JSON.parse(res.data.status)) {
-        this.$message({
-          type: "success",
-          message: "发布成功！",
-          offset: 10
-        });
+        this.$message({ type: "success", message: "发布成功！", offset: 10 });
         this.getData();
       }
     },

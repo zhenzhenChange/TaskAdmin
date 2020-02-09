@@ -20,6 +20,8 @@
     <el-table
       v-if="searchData"
       ref="filterTable"
+      :row-key="getRowKeys"
+      :expand-row-keys="expands"
       :data="
         searchData.slice((currentPage - 1) * pageSize, currentPage * pageSize)
       "
@@ -107,7 +109,7 @@
           >
         </template>
       </el-table-column>
-      <el-table-column align="center" label="操作" width="450">
+      <el-table-column align="center" label="操作" width="300">
         <template v-slot="scope">
           <el-button
             size="mini"
@@ -146,6 +148,7 @@ export default {
   data() {
     return {
       data: [],
+      expands: [],
       foreverData: [],
       mineOrder: [],
       sonOrderData: [],
@@ -208,13 +211,25 @@ export default {
   },
   methods: {
     async getData() {
-      const res = await this.$http.get(`/recv/get`);
+      const res = await this.$http.get(`/admin/recv/get`);
       this.data = res.data.data;
       this.foreverData = res.data.data;
     },
-    async expandChange({ uid }) {
-      const { data } = await this.$http.post(`/recv/get`, { uid });
+    getRowKeys(row) {
+      return row.uid;
+    },
+    async expandChange({ uid }, expandedRows) {
+      const { data } = await this.$http.post(`/admin/recv/get`, { uid });
       this.showInfo = data;
+      const _this = this;
+      if (expandedRows.length) {
+        _this.expands = [];
+        if (uid) {
+          _this.expands.push(uid);
+        }
+      } else {
+        _this.expands = [];
+      }
     },
     filterDate(value) {
       if (!value) {
@@ -247,7 +262,7 @@ export default {
         inputType: "password"
       })
         .then(async ({ value }) => {
-          const res = await this.$http.post("/changePwd", {
+          const res = await this.$http.post("/admin/changePwd", {
             phone,
             NewPwd: value
           });
@@ -274,7 +289,7 @@ export default {
         type: "warning"
       })
         .then(async () => {
-          const res = await this.$http.post("/disableAccount", {
+          const res = await this.$http.post("/admin/disableAccount", {
             phone
           });
           if (JSON.parse(res.data.status)) {

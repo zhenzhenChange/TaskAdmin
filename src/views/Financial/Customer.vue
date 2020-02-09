@@ -59,7 +59,7 @@ export default {
   },
   methods: {
     async postCustomerData() {
-      const res = this.$http.post(`/recharge`, this.customerData);
+      const res = this.$http.post(`/admin/recharge`, this.customerData);
       if (res.statusCode) {
         this.$message({ type: "success", message: "充值成功！", offset: 10 });
       }

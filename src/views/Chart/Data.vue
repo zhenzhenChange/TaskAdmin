@@ -104,7 +104,7 @@ export default {
         ]
       });
       this.$http
-        .post("/init", { date: date ? date : this.date })
+        .post("/admin/init", { date: date ? date : this.date })
         .then(result => {
           const data = result.data;
           myChart.hideLoading();
@@ -224,7 +224,7 @@ export default {
         ]
       });
       this.$http
-        .post("/init", { date: date ? date : this.date })
+        .post("/admin/init", { date: date ? date : this.date })
         .then(result => {
           const data = result.data;
           myChart.hideLoading();

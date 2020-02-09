@@ -64,6 +64,7 @@
         prop="uid_give"
       ></el-table-column>
       <el-table-column
+        width="180"
         align="center"
         label="订单编号"
         prop="order_id"
@@ -131,7 +132,7 @@
         label="平台利润"
         prop="son_pumpRation"
       ></el-table-column>
-      <el-table-column align="center" label="操作" width="250">
+      <el-table-column fixed="right" align="center" label="操作" width="150">
         <template v-slot="scope">
           <el-button
             size="mini"
@@ -239,7 +240,7 @@ export default {
         : "danger";
     },
     async getData() {
-      const res = await this.$http.get(`/man/get`);
+      const res = await this.$http.get(`/admin/man/get`);
       this.data = res.data.data;
       this.foreverData = res.data.data;
     },
@@ -273,7 +274,7 @@ export default {
         type: "warning"
       })
         .then(async () => {
-          const res = await this.$http.post(`/man/delOrderRec`, {
+          const res = await this.$http.post(`/admin/man/delOrderRec`, {
             order_id: id
           });
           if (res.status === 200 && JSON.parse(res.data.statusCode)) {

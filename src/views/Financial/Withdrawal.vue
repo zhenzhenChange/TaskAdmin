@@ -153,7 +153,7 @@ export default {
   },
   methods: {
     async getData() {
-      const res = await this.$http.get(`/finac/get`);
+      const res = await this.$http.get(`/admin/finac/get`);
       res.data.data.map(item => {
         if (item.wb_type === 1) {
           this.data.push(item);
@@ -190,7 +190,7 @@ export default {
         type: "info"
       })
         .then(async () => {
-          const res = await this.$http.post(`/finac/doWithdraw`, {
+          const res = await this.$http.post(`/admin/finac/doWithdraw`, {
             wb_id: id,
             wb_state: 1
           });
@@ -209,7 +209,7 @@ export default {
         type: "info"
       })
         .then(async () => {
-          const res = await this.$http.post(`/finac/doWithdraw`, {
+          const res = await this.$http.post(`/admin/finac/doWithdraw`, {
             wb_id: id,
             wb_state: 0
           });
@@ -228,7 +228,7 @@ export default {
         type: "warning"
       })
         .then(async () => {
-          const res = await this.$http.post(`/finac/delWbRec`, {
+          const res = await this.$http.post(`/admin/finac/delWbRec`, {
             wb_id: id
           });
           this.$message({
