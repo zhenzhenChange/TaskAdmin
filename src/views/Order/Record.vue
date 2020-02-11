@@ -21,9 +21,7 @@
     <el-table
       v-if="searchData"
       ref="filterTable"
-      :data="
-        searchData.slice((currentPage - 1) * pageSize, currentPage * pageSize)
-      "
+      :data="searchData.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
       stripe
       border
     >
@@ -58,32 +56,20 @@
           <span class="ml-10">{{ scope.row.order_release_time | date }}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        align="center"
-        label="发布账号"
-        prop="uid_give"
-      ></el-table-column>
+      <el-table-column align="center" label="发布账号" prop="uid_give"></el-table-column>
       <el-table-column
         width="180"
         align="center"
         label="订单编号"
         prop="order_id"
       ></el-table-column>
-      <el-table-column
-        align="center"
-        label="订单标题"
-        prop="order_title"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        label="订单价格"
-        prop="order_price"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        label="接单账号"
-        prop="uid_recive"
-      ></el-table-column>
+      <el-table-column align="center" label="订单标题" prop="order_title"></el-table-column>
+      <el-table-column align="center" label="订单价格">
+        <template v-slot="scope">
+          <span class="ml-10">{{ scope.row.order_price / 100 }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="接单账号" prop="uid_recive"></el-table-column>
       <el-table-column align="center" label="接单时间" width="180">
         <template v-slot="scope">
           <i class="el-icon-time"></i>
@@ -127,11 +113,11 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column
-        align="center"
-        label="平台利润"
-        prop="son_pumpRation"
-      ></el-table-column>
+      <el-table-column align="center" label="平台利润">
+        <template v-slot="scope">
+          <span class="ml-10">{{ scope.row.son_pumpRation * 100 }}%</span>
+        </template>
+      </el-table-column>
       <el-table-column fixed="right" align="center" label="操作" width="150">
         <template v-slot="scope">
           <el-button
@@ -176,7 +162,7 @@ export default {
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
               picker.$emit("pick", [start, end]);
-            }
+            },
           },
           {
             text: "最近一个月",
@@ -185,7 +171,7 @@ export default {
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
               picker.$emit("pick", [start, end]);
-            }
+            },
           },
           {
             text: "最近三个月",
@@ -194,11 +180,11 @@ export default {
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
               picker.$emit("pick", [start, end]);
-            }
-          }
-        ]
+            },
+          },
+        ],
       },
-      value: ""
+      value: "",
     };
   },
   created() {
@@ -217,7 +203,7 @@ export default {
     },
     orderState(state) {
       return state;
-    }
+    },
   },
   methods: {
     stateType(type) {
@@ -271,23 +257,23 @@ export default {
       this.$confirm("确定要删除该条记录吗？", "警告", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
         .then(async () => {
           const res = await this.$http.post(`/admin/man/delOrderRec`, {
-            order_id: id
+            order_id: id,
           });
           if (res.status === 200 && JSON.parse(res.data.statusCode)) {
             this.$message({
               type: "success",
-              message: "删除成功!"
+              message: "删除成功!",
             });
             this.getData();
           }
         })
         .catch(() => {});
-    }
-  }
+    },
+  },
 };
 </script>
 

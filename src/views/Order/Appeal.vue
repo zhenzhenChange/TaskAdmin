@@ -47,30 +47,14 @@
           <span class="ml-10">{{ scope.row.action_datetime | date }}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        align="center"
-        label="发布账号"
-        prop="uid_give"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        label="订单编号"
-        prop="order_id"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        label="订单价格"
-        prop="order_price"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        label="接单账号"
-        prop="uid_recive"
-      ></el-table-column>
+      <el-table-column align="center" label="发布账号" prop="uid_give"></el-table-column>
+      <el-table-column align="center" label="订单编号" prop="order_id"></el-table-column>
+      <el-table-column align="center" label="订单价格" prop="order_price"></el-table-column>
+      <el-table-column align="center" label="接单账号" prop="uid_recive"></el-table-column>
       <el-table-column align="center" label="申诉证据" prop="order_apply_proof">
-        <template v-slot="scope">{{
-          scope.row.order_apply_proof ? scope.row.order_apply_proof : "无上传"
-        }}</template>
+        <template v-slot="scope">
+          {{ scope.row.order_apply_proof ? scope.row.order_apply_proof : "无上传" }}
+        </template>
       </el-table-column>
       <el-table-column
         prop="action_resState"
@@ -80,9 +64,9 @@
         filter-placement="bottom-end"
       >
         <template v-slot="scope">
-          <el-tag hit :type="stateType(scope.row.action_resState)">{{
-            scope.row.action_resState
-          }}</el-tag>
+          <el-tag hit :type="stateType(scope.row.action_resState)">
+            {{ scope.row.action_resState }}
+          </el-tag>
         </template>
       </el-table-column>
       <el-table-column align="center" label="操作" width="250">
@@ -128,7 +112,7 @@ export default {
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
               picker.$emit("pick", [start, end]);
-            }
+            },
           },
           {
             text: "最近一个月",
@@ -137,7 +121,7 @@ export default {
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
               picker.$emit("pick", [start, end]);
-            }
+            },
           },
           {
             text: "最近三个月",
@@ -146,11 +130,11 @@ export default {
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
               picker.$emit("pick", [start, end]);
-            }
-          }
-        ]
+            },
+          },
+        ],
       },
-      value: ""
+      value: "",
     };
   },
   created() {
@@ -196,21 +180,21 @@ export default {
       this.$confirm("确定要删除此记录吗？", "警告", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
         .then(async () => {
           const res = await this.$http.post(`/admin/man/delOrderRec`, {
-            order_id: id
+            order_id: id,
           });
           this.$message({
             type: "success",
             message: `${res} 删除成功!`,
-            offset: 10
+            offset: 10,
           });
         })
         .catch(() => {});
-    }
-  }
+    },
+  },
 };
 </script>
 
