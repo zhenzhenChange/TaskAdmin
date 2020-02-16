@@ -21,9 +21,7 @@
     <el-table
       v-if="searchData"
       ref="filterTable"
-      :data="
-        searchData.slice((currentPage - 1) * pageSize, currentPage * pageSize)
-      "
+      :data="searchData.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
       stripe
       border
     >
@@ -40,21 +38,9 @@
           <span class="ml-10">{{ scope.row.wb_datetime | date }}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        align="center"
-        prop="wb_uid"
-        label="交易账号"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        prop="Alipay_account"
-        label="支付宝账号"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        prop="Alipay_name"
-        label="支付宝姓名"
-      ></el-table-column>
+      <el-table-column align="center" prop="wb_uid" label="交易账号"></el-table-column>
+      <el-table-column align="center" prop="Alipay_account" label="支付宝账号"></el-table-column>
+      <el-table-column align="center" prop="Alipay_name" label="支付宝姓名"></el-table-column>
       <el-table-column align="center" prop="wb_type" label="交易类型">
         <template v-slot="scope">
           <el-tag hit :type="scope.row.wb_type === 0 ? 'success' : 'warning'">{{
@@ -62,11 +48,11 @@
           }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column
-        align="center"
-        prop="wb_fee"
-        label="交易费用"
-      ></el-table-column>
+      <el-table-column align="center" label="交易费用">
+        <template v-slot="scope">
+          <span class="ml-10">{{ scope.row.wb_fee / 100 }}</span>
+        </template>
+      </el-table-column>
       <el-table-column align="center" prop="wb_state" label="交易状态">
         <template v-slot="scope">
           <el-tag hit :type="scope.row.wb_state === 0 ? 'danger' : 'success'">{{
@@ -125,7 +111,7 @@ export default {
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
               picker.$emit("pick", [start, end]);
-            }
+            },
           },
           {
             text: "最近一个月",
@@ -134,7 +120,7 @@ export default {
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
               picker.$emit("pick", [start, end]);
-            }
+            },
           },
           {
             text: "最近三个月",
@@ -143,13 +129,13 @@ export default {
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
               picker.$emit("pick", [start, end]);
-            }
-          }
-        ]
+            },
+          },
+        ],
       },
       value: "",
       flag: false,
-      btnText: "点击查看详细信息"
+      btnText: "点击查看详细信息",
     };
   },
   created() {
@@ -165,7 +151,7 @@ export default {
         });
       }
       return this.data;
-    }
+    },
   },
   methods: {
     async getData() {
@@ -200,17 +186,17 @@ export default {
       this.$prompt("请输入新的支付宝账号", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "info"
+        type: "info",
       })
         .then(async ({ value }) => {
           const res = await this.$http.post(`/admin/changeAlipayAccount`, {
             uid,
-            Alipay_account: value
+            Alipay_account: value,
           });
           this.$message({
             type: "success",
             message: `${res.data.status}`,
-            offset: 10
+            offset: 10,
           });
           this.getData();
         })
@@ -220,21 +206,21 @@ export default {
       this.$confirm("确定要删除该条记录吗？", "警告", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
         .then(async () => {
           const res = await this.$http.post(`/admin/finac/delWbRec`, {
-            wb_id: id
+            wb_id: id,
           });
           this.$message({
             type: "success",
             message: "操作成功!" + res,
-            offset: 10
+            offset: 10,
           });
         })
         .catch(() => {});
-    }
-  }
+    },
+  },
 };
 </script>
 

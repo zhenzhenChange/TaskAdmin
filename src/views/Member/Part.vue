@@ -19,9 +19,7 @@
     </el-card>
     <el-table
       ref="filterTable"
-      :data="
-        searchData.slice((currentPage - 1) * pageSize, currentPage * pageSize)
-      "
+      :data="searchData.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
       stripe
       border
       :row-key="getRowKeys"
@@ -38,7 +36,7 @@
               <span>{{ props.row.user_remark }}</span>
             </el-form-item>
             <el-form-item label="当天充值">
-              <span>{{ showInfo.todayCharge }}</span>
+              <span>{{ showInfo.todayCharge / 100 }}</span>
             </el-form-item>
             <el-form-item label="总订单">
               <span>{{ showInfo.relesSumOrder }}</span>
@@ -68,21 +66,17 @@
           <span class="ml-10">{{ scope.row.reg_datetime | date }}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        align="center"
-        prop="phone"
-        label="账号"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        prop="my_balance"
-        label="余额"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        prop="wb_fee"
-        label="总充值"
-      ></el-table-column>
+      <el-table-column align="center" prop="phone" label="账号"></el-table-column>
+      <el-table-column align="center" label="余额">
+        <template v-slot="scope">
+          <span class="ml-10">{{ scope.row.my_balance / 100 }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="总充值">
+        <template v-slot="scope">
+          <span class="ml-10">{{ scope.row.wb_fee / 100 }}</span>
+        </template>
+      </el-table-column>
       <el-table-column align="center" label="账号状态">
         <template v-slot="scope">
           <el-tag
@@ -153,7 +147,7 @@ export default {
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
               picker.$emit("pick", [start, end]);
-            }
+            },
           },
           {
             text: "最近一个月",
@@ -162,7 +156,7 @@ export default {
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
               picker.$emit("pick", [start, end]);
-            }
+            },
           },
           {
             text: "最近三个月",
@@ -171,13 +165,13 @@ export default {
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
               picker.$emit("pick", [start, end]);
-            }
-          }
-        ]
+            },
+          },
+        ],
       },
       value: "",
       flag: false,
-      showInfo: {}
+      showInfo: {},
     };
   },
   created() {
@@ -193,7 +187,7 @@ export default {
         });
       }
       return this.data;
-    }
+    },
   },
   methods: {
     async getData() {
@@ -244,24 +238,24 @@ export default {
       this.$prompt("请重新输入价格", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "info"
+        type: "info",
       })
         .then(async ({ value }) => {
           const res = await this.$http.post(`/admin/give/modPrice`, {
             uid,
-            user_minPrice: value
+            user_minPrice: value,
           });
           if (res.status === 200 && JSON.parse(res.data.statusCode)) {
             this.$message({
               type: "success",
               message: `修改成功！`,
-              offset: 10
+              offset: 10,
             });
           } else {
             this.$message({
               type: "warning",
               message: `服务器已超时，请稍后重试～`,
-              offset: 10
+              offset: 10,
             });
           }
         })
@@ -272,24 +266,24 @@ export default {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "info",
-        inputType: "password"
+        inputType: "password",
       })
         .then(async ({ value }) => {
           const res = await this.$http.post(`/admin/changePwd`, {
             phone,
-            NewPwd: value
+            NewPwd: value,
           });
           if (res.status === 200 && JSON.parse(res.data.status)) {
             this.$message({
               type: "success",
               message: "修改成功",
-              offset: 10
+              offset: 10,
             });
           } else {
             this.$message({
               type: "warning",
               message: "服务器已超时~",
-              offset: 10
+              offset: 10,
             });
           }
         })
@@ -299,30 +293,30 @@ export default {
       this.$confirm("确定要禁止该账号登录吗？", "警告", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
         .then(async () => {
           const res = await this.$http.post(`/admin/disableAccount`, {
-            phone
+            phone,
           });
           if (res.data.status) {
             this.getData();
             this.$message({
               type: "success",
               message: `账号 ${phone} 已封禁!`,
-              offset: 10
+              offset: 10,
             });
           } else {
             this.$message({
               type: "warning",
               message: `服务器已超时，请稍后重试～`,
-              offset: 10
+              offset: 10,
             });
           }
         })
         .catch(() => {});
-    }
-  }
+    },
+  },
 };
 </script>
 

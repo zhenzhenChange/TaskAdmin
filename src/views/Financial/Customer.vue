@@ -5,40 +5,32 @@
     </div>
     <el-form :model="customerData" @submit.native.prevent="postCustomerData">
       <el-form-item>
-        <el-input v-model="customerData.phone" placeholder="请输入手机号"
-          ><template slot="prepend">充值手机号</template>
+        <el-input v-model="customerData.phone" placeholder="请输入手机号">
+          <template slot="prepend">充值手机号</template>
         </el-input>
       </el-form-item>
       <el-form-item>
-        <el-input
-          v-model="customerData.Alipay_account"
-          placeholder="请输入支付宝账号"
-          ><template slot="prepend">支付宝账号</template></el-input
-        >
+        <el-input v-model="customerData.Alipay_account" placeholder="请输入支付宝账号">
+          <template slot="prepend">支付宝账号</template>
+        </el-input>
       </el-form-item>
       <el-form-item>
-        <el-input
-          v-model="customerData.Alipay_name"
-          placeholder="请输入支付宝姓名"
-          ><template slot="prepend">支付宝姓名</template></el-input
-        >
+        <el-input v-model="customerData.Alipay_name" placeholder="请输入支付宝姓名">
+          <template slot="prepend">支付宝姓名</template>
+        </el-input>
       </el-form-item>
       <el-form-item>
-        <el-input v-model="customerData.wb_fee" placeholder="请输入充值金额"
-          ><template slot="prepend">充值的金额</template></el-input
-        >
+        <el-input v-model="customerData.wb_fee" placeholder="请输入充值金额">
+          <template slot="prepend">充值的金额</template>
+        </el-input>
       </el-form-item>
       <el-form-item>
-        <el-input
-          v-model="customerData.wb_remark"
-          placeholder="请输入备注"
-          ><template slot="prepend">备注---可选</template></el-input
-        >
+        <el-input v-model="customerData.wb_remark" placeholder="请输入备注">
+          <template slot="prepend">备注---可选</template>
+        </el-input>
       </el-form-item>
       <el-form-item>
-        <el-button native-type="submit" type="primary" icon="el-icon-finished"
-          >充值</el-button
-        >
+        <el-button native-type="submit" type="primary" icon="el-icon-finished">充值</el-button>
       </el-form-item>
     </el-form>
   </el-card>
@@ -48,13 +40,7 @@
 export default {
   data() {
     return {
-      customerData: {
-        phone: "",
-        Alipay_account: "",
-        Alipay_name: "",
-        wb_fee: "",
-        wb_remark: ""
-      }
+      customerData: { phone: "", Alipay_account: "", Alipay_name: "", wb_fee: "", wb_remark: "" },
     };
   },
   methods: {
@@ -63,8 +49,8 @@ export default {
       if (res.statusCode) {
         this.$message({ type: "success", message: "充值成功！", offset: 10 });
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

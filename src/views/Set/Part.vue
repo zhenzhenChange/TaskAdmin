@@ -30,9 +30,7 @@
       <el-card class="box-card">
         <div slot="header" class="clearfix">
           <span>下单端公告发布</span>
-          <el-button class="btn" type="text" @click="sendNotice">
-            发布
-          </el-button>
+          <el-button class="btn" type="text" @click="sendNotice">发布</el-button>
         </div>
         <div>
           <el-input
@@ -58,12 +56,12 @@ export default {
         su_vipInitPrice: "",
         su_extensionAward: "",
         su_isExtensionCodeReq: "",
-        su_giveAnno: ""
+        su_giveAnno: "",
       },
       position: "top",
       currentPage: 1,
       pageSize: 10,
-      pageSizes: [10, 20, 50, 100, 200, 300, 400]
+      pageSizes: [10, 20, 50, 100, 200, 300, 400],
     };
   },
   created() {
@@ -71,8 +69,8 @@ export default {
   },
   computed: {
     ...mapState({
-      userID: state => state.userID
-    })
+      userID: state => state.userID,
+    }),
   },
   methods: {
     async getData() {
@@ -97,32 +95,24 @@ export default {
         uid: this.userID,
         su_vipInitPrice: this.defaultSet.su_vipInitPrice,
         su_extensionAward: this.defaultSet.su_extensionAward,
-        su_isExtensionCodeReq: this.defaultSet.su_isExtensionCodeReq ? 1 : 0
+        su_isExtensionCodeReq: this.defaultSet.su_isExtensionCodeReq ? 1 : 0,
       });
       if (res.status === 200 && JSON.parse(res.data.status)) {
-        this.$message({
-          type: "success",
-          message: "保存成功",
-          offset: 10
-        });
+        this.$message({ type: "success", message: "保存成功", offset: 10 });
         this.getData();
       }
     },
     async sendNotice() {
       const res = await this.$http.post(`/admin/setup/setRelesAnno`, {
         uid: this.userID,
-        su_giveAnno: this.defaultSet.su_giveAnno
+        su_giveAnno: this.defaultSet.su_giveAnno,
       });
       if (res.status === 200 && JSON.parse(res.data.status)) {
-        this.$message({
-          type: "success",
-          message: "发布成功",
-          offset: 10
-        });
+        this.$message({ type: "success", message: "发布成功", offset: 10 });
         this.getData();
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

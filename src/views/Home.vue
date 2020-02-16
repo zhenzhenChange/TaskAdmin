@@ -3,17 +3,13 @@
     <el-aside class="home-aside">
       <el-menu router :default-active="$route.path" unique-opened>
         <el-submenu index="1">
-          <template slot="title">
-            <i class="el-icon-user"></i>会员管理
-          </template>
+          <template slot="title"><i class="el-icon-user"></i>会员管理</template>
           <el-menu-item-group>
             <el-menu-item index="/members">会员中心</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
         <el-submenu index="2">
-          <template slot="title">
-            <i class="el-icon-shopping-bag-1"></i>订单管理
-          </template>
+          <template slot="title"><i class="el-icon-shopping-bag-1"></i>订单管理</template>
           <el-menu-item-group>
             <el-menu-item index="/orders">订单中心</el-menu-item>
           </el-menu-item-group>
@@ -22,9 +18,7 @@
           </el-menu-item-group>
         </el-submenu>
         <el-submenu index="3">
-          <template slot="title">
-            <i class="el-icon-setting"></i>系统设置
-          </template>
+          <template slot="title"><i class="el-icon-setting"></i>系统设置</template>
           <el-menu-item-group>
             <el-menu-item index="/financial">流水中心</el-menu-item>
           </el-menu-item-group>
@@ -61,11 +55,11 @@ export default {
       this.$router.push("/");
       localStorage.removeItem("userID");
       localStorage.removeItem("sonPumpRation");
-    }
+    },
   },
   computed: {
-    ...mapState({ userID: state => state.userID })
-  }
+    ...mapState({ userID: state => state.userID }),
+  },
 };
 </script>
 

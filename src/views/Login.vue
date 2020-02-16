@@ -5,26 +5,17 @@
     </div>
     <el-form @submit.native.prevent="login">
       <el-form-item>
-        <el-input v-model="userData.phone" placeholder="请输入账号">
+        <el-input clearable v-model="userData.phone" placeholder="请输入账号">
           <template slot="prepend">账号</template>
         </el-input>
       </el-form-item>
       <el-form-item>
-        <el-input
-          type="password"
-          v-model="userData.pwd"
-          placeholder="请输入密码"
-        >
+        <el-input show-password type="password" v-model="userData.pwd" placeholder="请输入密码">
           <template slot="prepend">密码</template>
         </el-input>
       </el-form-item>
       <el-form-item>
-        <el-button
-          icon="el-icon-user-solid"
-          type="primary"
-          size="medium"
-          native-type="submit"
-        >
+        <el-button icon="el-icon-user-solid" type="primary" size="medium" native-type="submit">
           登录
         </el-button>
       </el-form-item>
@@ -36,7 +27,7 @@
 export default {
   data() {
     return {
-      userData: { phone: "", pwd: "" }
+      userData: { phone: "", pwd: "" },
     };
   },
   methods: {
@@ -47,7 +38,7 @@ export default {
           message: `请输入账号`,
           duration: 1500,
           center: true,
-          offset: 10
+          offset: 10,
         });
         return;
       }
@@ -57,7 +48,7 @@ export default {
           message: `请输入密码`,
           duration: 1500,
           center: true,
-          offset: 10
+          offset: 10,
         });
         return;
       }
@@ -69,7 +60,7 @@ export default {
           message: `${res.data.msg}`,
           duration: 1500,
           center: true,
-          offset: 10
+          offset: 10,
         });
         return;
       }
@@ -79,7 +70,7 @@ export default {
           message: "请使用管理员账号登录～",
           duration: 1500,
           center: true,
-          offset: 10
+          offset: 10,
         });
         return;
       }
@@ -89,7 +80,7 @@ export default {
           message: "该账号已被封禁～",
           duration: 1500,
           center: true,
-          offset: 10
+          offset: 10,
         });
         return;
       }
@@ -102,11 +93,11 @@ export default {
           message: "登录成功",
           duration: 1500,
           center: true,
-          offset: 10
+          offset: 10,
         });
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

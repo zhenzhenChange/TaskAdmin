@@ -21,54 +21,21 @@ import SetPart from "../views/Set/Part.vue";
 import SetClerk from "../views/Set/Clerk.vue";
 
 const routes = [
-  {
-    path: "/",
-    name: "login",
-    component: Login,
-    meta: { isPublic: true }
-  },
+  { path: "/", name: "login", component: Login, meta: { isPublic: true } },
   {
     path: "/home",
     name: "home",
     component: Home,
     children: [
-      {
-        path: "/members",
-        name: "MemberCenter",
-        component: MemberCenter
-      },
-      {
-        path: "/orders",
-        name: "OrderCenter",
-        component: OrderCenter
-      },
-      {
-        path: "/chart",
-        name: "chart",
-        component: Data
-      },
-      {
-        path: "/financial",
-        name: "FinancialCenter",
-        component: FinancialCenter
-      },
-      {
-        path: "/agency",
-        name: "AgencyCenter",
-        component: AgencyCenter
-      },
-      {
-        path: "/settings/part",
-        name: "setPart",
-        component: SetPart
-      },
-      {
-        path: "/settings/clerk",
-        name: "setClerk",
-        component: SetClerk
-      }
-    ]
-  }
+      { path: "/members", name: "MemberCenter", component: MemberCenter },
+      { path: "/orders", name: "OrderCenter", component: OrderCenter },
+      { path: "/chart", name: "chart", component: Data },
+      { path: "/financial", name: "FinancialCenter", component: FinancialCenter },
+      { path: "/agency", name: "AgencyCenter", component: AgencyCenter },
+      { path: "/settings/part", name: "setPart", component: SetPart },
+      { path: "/settings/clerk", name: "setClerk", component: SetClerk },
+    ],
+  },
 ];
 
 export default routes;

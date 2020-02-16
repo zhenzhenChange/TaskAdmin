@@ -17,11 +17,7 @@
         start-placeholder="开始日期"
         :picker-options="pickerOptions"
       ></el-date-picker>
-      <el-button
-        type="primary"
-        icon="el-icon-edit"
-        @click="openEditDefaultIncome"
-      >
+      <el-button type="primary" icon="el-icon-edit" @click="openEditDefaultIncome">
         总代提成默认设置
       </el-button>
       <span class="ml-10">总代默认提成：{{ sonPumpRation }}</span>
@@ -29,13 +25,11 @@
     <el-table
       stripe
       border
-      :data="
-        searchData.slice((currentPage - 1) * pageSize, currentPage * pageSize)
-      "
       ref="filterTable"
       :row-key="getRowKeys"
       :expand-row-keys="expands"
       @expand-change="expandChange"
+      :data="searchData.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
     >
       <el-table-column type="expand">
         <template v-slot="props">
@@ -83,47 +77,37 @@
           <span class="ml-10">{{ scope.row.reg_datetime | date }}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        width="180"
-        prop="phone"
-        label="账号"
-        align="center"
-      ></el-table-column>
+      <el-table-column width="180" prop="phone" label="账号" align="center"></el-table-column>
       <el-table-column
         width="180"
         align="center"
         label="推广码"
         prop="extension_code"
       ></el-table-column>
-      <el-table-column
-        label="余额"
-        align="center"
-        prop="my_balance"
-      ></el-table-column>
-      <el-table-column
-        width="180"
-        label="备注"
-        align="center"
-        prop="user_remark"
-        show-overflow-tooltip
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        label="总提成"
-        prop="general_income"
-      ></el-table-column>
+      <el-table-column label="余额" align="center">
+        <template v-slot="scope">
+          <span class="ml-10">{{ scope.row.my_balance / 100 }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column width="200" label="备注" align="center" prop="user_remark"></el-table-column>
+      <el-table-column align="center" label="提成比例">
+        <template v-slot="scope">
+          <span class="ml-10">{{ scope.row.son_pumpRation / 100 }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="总提成" width="150">
+        <template v-slot="scope">
+          <span class="ml-10">{{ scope.row.general_income / 100 }}</span>
+        </template>
+      </el-table-column>
       <el-table-column align="center" label="账号状态">
         <template v-slot="scope">
-          <el-tag
-            hit
-            disable-transitions
-            :type="scope.row.is_valide === 1 ? 'success' : 'danger'"
-          >
+          <el-tag hit disable-transitions :type="scope.row.is_valide === 1 ? 'success' : 'danger'">
             {{ scope.row.is_valide === 1 ? "正常" : "已封禁" }}
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column fixed="right" align="center" label="操作" width="600">
+      <el-table-column fixed="right" align="center" label="操作" width="400">
         <template v-slot="scope">
           <el-button
             size="mini"
@@ -146,6 +130,8 @@
             @click="openEditPwd(scope.row.phone)"
             >修改密码</el-button
           >
+          <br/>
+          <div class="mt-10"></div>
           <el-button
             size="mini"
             type="primary"
@@ -196,7 +182,7 @@ export default {
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
               picker.$emit("pick", [start, end]);
-            }
+            },
           },
           {
             text: "最近一个月",
@@ -205,7 +191,7 @@ export default {
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
               picker.$emit("pick", [start, end]);
-            }
+            },
           },
           {
             text: "最近三个月",
@@ -214,9 +200,9 @@ export default {
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
               picker.$emit("pick", [start, end]);
-            }
-          }
-        ]
+            },
+          },
+        ],
       },
       value: "",
       search: "",
@@ -224,7 +210,7 @@ export default {
       pageSize: 10,
       pageSizes: [10, 20, 50, 100, 200, 300, 500],
       flag: false,
-      showInfo: {}
+      showInfo: {},
     };
   },
   created() {
@@ -243,8 +229,8 @@ export default {
     },
     ...mapState({
       userID: state => state.userID,
-      sonPumpRation: state => state.sonPumpRation
-    })
+      sonPumpRation: state => state.sonPumpRation,
+    }),
   },
   methods: {
     async getData() {
@@ -296,24 +282,24 @@ export default {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "info",
-        inputType: "password"
+        inputType: "password",
       })
         .then(async ({ value }) => {
           const res = await this.$http.post(`/admin/changePwd`, {
             phone,
-            NewPwd: value
+            NewPwd: value,
           });
           if (res.status === 200 && JSON.parse(res.data.status)) {
             this.$message({
               type: "success",
               message: `修改成功！`,
-              offset: 10
+              offset: 10,
             });
           } else {
             this.$message({
               type: "warning",
               message: `服务器已超时，请稍后重试～`,
-              offset: 10
+              offset: 10,
             });
           }
         })
@@ -323,24 +309,24 @@ export default {
       this.$prompt("请输入新备注", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "info"
+        type: "info",
       })
         .then(async ({ value }) => {
           const { data } = await this.$http.post(`/recv/setNickname`, {
             uid,
-            user_remark: value
+            user_remark: value,
           });
           if (JSON.parse(data.ret)) {
             this.$message({
               type: "success",
               message: `修改成功！`,
-              offset: 10
+              offset: 10,
             });
           } else {
             this.$message({
               type: "warning",
               message: `服务器已超时，请稍后重试～`,
-              offset: 10
+              offset: 10,
             });
           }
           this.getData();
@@ -351,12 +337,12 @@ export default {
       this.$prompt("请输入新提成", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "info"
+        type: "info",
       })
         .then(async ({ value }) => {
           const { data } = await this.$http.post(`/admin/updateSunRatio`, {
             uid,
-            my_returnRatio: value
+            my_returnRatio: value,
           });
           this.$message({ type: "success", message: data.status, offset: 10 });
           this.getData();
@@ -367,7 +353,7 @@ export default {
       this.$prompt("请设置新邀请码", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "info"
+        type: "info",
       })
         .then(async ({ value }) => {
           value = value.replace(/\s*/g, "");
@@ -376,33 +362,33 @@ export default {
             this.$message({
               type: "warning",
               message: `邀请码限制为10位以下的英文字符和数字组合~`,
-              offset: 10
+              offset: 10,
             });
             return;
           }
           const res = await this.$http.post(`/admin/adminUpdateCode`, {
             uid,
-            extension_code: value
+            extension_code: value,
           });
           if (res.status === 200) {
             if (res.data.status === "邀请码已存在！") {
               this.$message({
                 type: "warning",
                 message: `邀请码已存在，请您重新设置~`,
-                offset: 10
+                offset: 10,
               });
               return;
             }
             this.$message({
               type: "success",
               message: `${res.data.status}`,
-              offset: 10
+              offset: 10,
             });
           } else {
             this.$message({
               type: "warning",
               message: `服务器已超时，请稍后重试～`,
-              offset: 10
+              offset: 10,
             });
           }
           this.getData();
@@ -413,23 +399,23 @@ export default {
       this.$confirm("确定要禁止该账号登录吗？", "警告", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
         .then(async () => {
           const res = await this.$http.post(`/admin/disableAccount`, {
-            phone
+            phone,
           });
           if (res.status === 200 && JSON.parse(res.data.status)) {
             this.$message({
               type: "success",
               message: `总代 ${phone} 已封禁成功！`,
-              offset: 10
+              offset: 10,
             });
           } else {
             this.$message({
               type: "warning",
               message: `服务器已超时，请稍后重试～`,
-              offset: 10
+              offset: 10,
             });
           }
           this.getData();
@@ -440,34 +426,31 @@ export default {
       this.$prompt("请重新设置总代默认提成", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "info"
+        type: "info",
       })
         .then(async ({ value }) => {
           const res = await this.$http.post(`/admin/agent/setRetRatio`, {
             uid: this.userID,
-            son_pumpRation: value
+            son_pumpRation: value,
           });
           if (res.status === 200) {
             this.$message({
               type: "success",
               message: "设置成功！",
-              offset: 10
+              offset: 10,
             });
-            this.$store.commit(
-              "SaveUserSonPumpRation",
-              res.data.son_pumpRation
-            );
+            this.$store.commit("SaveUserSonPumpRation", res.data.son_pumpRation);
           } else {
             this.$message({
               type: "warning",
               message: `服务器已超时，请稍后重试～`,
-              offset: 10
+              offset: 10,
             });
           }
         })
         .catch(() => {});
-    }
-  }
+    },
+  },
 };
 </script>
 

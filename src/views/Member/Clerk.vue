@@ -22,9 +22,7 @@
       ref="filterTable"
       :row-key="getRowKeys"
       :expand-row-keys="expands"
-      :data="
-        searchData.slice((currentPage - 1) * pageSize, currentPage * pageSize)
-      "
+      :data="searchData.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
       stripe
       border
       @expand-change="expandChange"
@@ -39,10 +37,10 @@
               <span> {{ props.row.user_remark }} </span>
             </el-form-item>
             <el-form-item label="总提成">
-              <span>{{ props.row.general_income }}</span>
+              <span>{{ props.row.general_income / 100 }}</span>
             </el-form-item>
             <el-form-item label="当天提成">
-              <span>{{ props.row.general_income }}</span>
+              <span>{{ props.row.general_income / 100 }}</span>
             </el-form-item>
             <el-form-item label="总接单">
               <span>{{ showInfo.sumOrder }}</span>
@@ -84,21 +82,13 @@
           <span class="ml-10">{{ scope.row.reg_datetime | date }}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        align="center"
-        prop="phone"
-        label="账号"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        prop="my_balance"
-        label="余额"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        prop="extension_code"
-        label="推广码"
-      ></el-table-column>
+      <el-table-column align="center" prop="phone" label="账号"></el-table-column>
+      <el-table-column align="center" label="余额">
+        <template v-slot="scope">
+          <span class="ml-10">{{ scope.row.my_balance / 100 }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" prop="extension_code" label="推广码"></el-table-column>
       <el-table-column align="center" label="账号状态">
         <template v-slot="scope">
           <el-tag
@@ -166,7 +156,7 @@ export default {
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
               picker.$emit("pick", [start, end]);
-            }
+            },
           },
           {
             text: "最近一个月",
@@ -175,7 +165,7 @@ export default {
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
               picker.$emit("pick", [start, end]);
-            }
+            },
           },
           {
             text: "最近三个月",
@@ -184,14 +174,14 @@ export default {
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
               picker.$emit("pick", [start, end]);
-            }
-          }
-        ]
+            },
+          },
+        ],
       },
       value: "",
       length: "",
       flag: false,
-      showInfo: {}
+      showInfo: {},
     };
   },
   created() {
@@ -207,7 +197,7 @@ export default {
         });
       }
       return this.data;
-    }
+    },
   },
   methods: {
     async getData() {
@@ -259,24 +249,24 @@ export default {
         confirmButtonText: "提交",
         cancelButtonText: "取消",
         type: "info",
-        inputType: "password"
+        inputType: "password",
       })
         .then(async ({ value }) => {
           const res = await this.$http.post("/admin/changePwd", {
             phone,
-            NewPwd: value
+            NewPwd: value,
           });
           if (res.status === 200 && JSON.parse(res.data.status)) {
             this.$message({
               type: "success",
               message: `修改成功！`,
-              offset: 10
+              offset: 10,
             });
           } else {
             this.$message({
               type: "warning",
               message: `服务器已超时~`,
-              offset: 10
+              offset: 10,
             });
           }
         })
@@ -286,11 +276,11 @@ export default {
       this.$confirm("确定要禁止该账号登录吗？", "警告", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
         .then(async () => {
           const res = await this.$http.post("/admin/disableAccount", {
-            phone
+            phone,
           });
           if (JSON.parse(res.data.status)) {
             this.getData();
@@ -298,19 +288,19 @@ export default {
               type: "success",
               message: `账号 ${phone} 已封禁!`,
               offset: 10,
-              center: true
+              center: true,
             });
           } else {
             this.$message({
               type: "warning",
               message: `服务器已超时，请稍后重试～`,
-              offset: 10
+              offset: 10,
             });
           }
         })
         .catch(() => {});
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -34,31 +34,15 @@
           <span class="ml-10">{{ scope.row.wb_datetime | date }}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        align="center"
-        prop="wb_id"
-        label="流水编号"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        prop="wb_uid"
-        label="提现账号"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        prop="Alipay_account"
-        label="支付宝账号"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        prop="Alipay_name"
-        label="支付宝姓名"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        prop="wb_fee"
-        label="提现金额"
-      ></el-table-column>
+      <el-table-column align="center" prop="wb_id" label="流水编号"></el-table-column>
+      <el-table-column align="center" prop="wb_uid" label="提现账号"></el-table-column>
+      <el-table-column align="center" prop="Alipay_account" label="支付宝账号"></el-table-column>
+      <el-table-column align="center" prop="Alipay_name" label="支付宝姓名"></el-table-column>
+      <el-table-column align="center" label="提现金额">
+        <template v-slot="scope">
+          <span class="ml-10">{{ scope.row.wb_fee / 100 }}</span>
+        </template>
+      </el-table-column>
       <el-table-column align="center" prop="wb_state" label="提现状态"
         ><template v-slot="scope">
           <el-tag hit :type="scope.row.wb_state === 0 ? 'danger' : 'success'">{{
@@ -123,7 +107,7 @@ export default {
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
               picker.$emit("pick", [start, end]);
-            }
+            },
           },
           {
             text: "最近一个月",
@@ -132,7 +116,7 @@ export default {
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
               picker.$emit("pick", [start, end]);
-            }
+            },
           },
           {
             text: "最近三个月",
@@ -141,11 +125,11 @@ export default {
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
               picker.$emit("pick", [start, end]);
-            }
-          }
-        ]
+            },
+          },
+        ],
       },
-      value: ""
+      value: "",
     };
   },
   created() {
@@ -187,17 +171,17 @@ export default {
       this.$confirm("确定同意提现申请吗？", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "info"
+        type: "info",
       })
         .then(async () => {
           const res = await this.$http.post(`/admin/finac/doWithdraw`, {
             wb_id: id,
-            wb_state: 1
+            wb_state: 1,
           });
           this.$message({
             type: "success",
             message: "操作成功!" + res,
-            offset: 10
+            offset: 10,
           });
         })
         .catch(() => {});
@@ -206,17 +190,17 @@ export default {
       this.$confirm("确定驳回提现申请吗？", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "info"
+        type: "info",
       })
         .then(async () => {
           const res = await this.$http.post(`/admin/finac/doWithdraw`, {
             wb_id: id,
-            wb_state: 0
+            wb_state: 0,
           });
           this.$message({
             type: "success",
             message: "操作成功!" + res,
-            offset: 10
+            offset: 10,
           });
         })
         .catch(() => {});
@@ -225,21 +209,21 @@ export default {
       this.$confirm("确定删除该条记录吗？", "警告", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
         .then(async () => {
           const res = await this.$http.post(`/admin/finac/delWbRec`, {
-            wb_id: id
+            wb_id: id,
           });
           this.$message({
             type: "success",
             message: "操作成功!" + res,
-            offset: 10
+            offset: 10,
           });
         })
         .catch(() => {});
-    }
-  }
+    },
+  },
 };
 </script>
 

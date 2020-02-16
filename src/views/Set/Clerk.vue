@@ -30,9 +30,7 @@
       <el-card class="box-card">
         <div slot="header" class="clearfix">
           <span>接单端公告发布</span>
-          <el-button class="btn" type="text" @click="sendNotice"
-            >发布</el-button
-          >
+          <el-button class="btn" type="text" @click="sendNotice">发布</el-button>
         </div>
         <div>
           <el-input
@@ -54,21 +52,16 @@ import { mapState } from "vuex";
 export default {
   data() {
     return {
-      defaultSet: {
-        orderLimit: "",
-        su_recvAnno: "",
-        su_holdLimit: "",
-        su_isExtensionCodeReq: ""
-      },
       textarea: "",
-      positon: "top"
+      positon: "top",
+      defaultSet: { orderLimit: "", su_recvAnno: "", su_holdLimit: "", su_isExtensionCodeReq: "" },
     };
   },
   created() {
     this.getData();
   },
   computed: {
-    ...mapState({ userID: state => state.userID })
+    ...mapState({ userID: state => state.userID }),
   },
   methods: {
     async getData() {
@@ -78,12 +71,12 @@ export default {
     async saveSet() {
       await this.$http.post(`/admin/setLimit`, {
         uid: this.userID,
-        limit: this.defaultSet.orderLimit
+        limit: this.defaultSet.orderLimit,
       });
       const res = await this.$http.post(`/admin/setup/defaultClerkSet`, {
         uid: this.userID,
         su_holdLimit: this.defaultSet.su_holdLimit,
-        su_isExtensionCodeReq: this.defaultSet.su_isExtensionCodeReq ? 1 : 0
+        su_isExtensionCodeReq: this.defaultSet.su_isExtensionCodeReq ? 1 : 0,
       });
       if (res.status === 200 && JSON.parse(res.status)) {
         this.$message({ type: "success", message: "保存成功", offset: 10 });
@@ -92,7 +85,7 @@ export default {
     async sendNotice() {
       const res = await this.$http.post(`/admin/setup/setRecvAnno`, {
         uid: this.userID,
-        su_recvAnno: this.defaultSet.su_recvAnno
+        su_recvAnno: this.defaultSet.su_recvAnno,
       });
       if (res.status === 200 && JSON.parse(res.data.status)) {
         this.$message({ type: "success", message: "发布成功！", offset: 10 });
@@ -101,8 +94,8 @@ export default {
     },
     changeValue(value) {
       this.su_isExtensionCodeReq = value;
-    }
-  }
+    },
+  },
 };
 </script>
 
