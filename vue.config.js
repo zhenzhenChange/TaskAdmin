@@ -3,7 +3,7 @@ module.exports = {
     proxy: {
       "/api": {
         changeOrigin: true,
-        target: "http://47.111.180.163:8080/chStageV8",
+        target: "http://47.99.213.197:8080/chStageV8",
       },
     },
   },

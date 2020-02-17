@@ -92,7 +92,7 @@
       <el-table-column width="200" label="备注" align="center" prop="user_remark"></el-table-column>
       <el-table-column align="center" label="提成比例">
         <template v-slot="scope">
-          <span class="ml-10">{{ scope.row.son_pumpRation / 100 }}</span>
+          <span class="ml-10">{{ scope.row.son_pumpRation * 100 }}%</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="总提成" width="150">
@@ -130,7 +130,7 @@
             @click="openEditPwd(scope.row.phone)"
             >修改密码</el-button
           >
-          <br/>
+          <br />
           <div class="mt-10"></div>
           <el-button
             size="mini"
@@ -334,12 +334,16 @@ export default {
         .catch(() => {});
     },
     openRatio(uid) {
-      this.$prompt("请输入新提成", "提示", {
+      this.$prompt("请输入新提成（0-1之间的数（包含0-1））", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "info",
       })
         .then(async ({ value }) => {
+          if (value > 1 || value < 0) {
+            this.$message({ type: "success", message: "请输入0-1之间的数（包含0-1）", offset: 10 });
+            return;
+          }
           const { data } = await this.$http.post(`/admin/updateSunRatio`, {
             uid,
             my_returnRatio: value,
