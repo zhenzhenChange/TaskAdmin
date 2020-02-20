@@ -92,7 +92,7 @@
       <el-table-column width="200" label="备注" align="center" prop="user_remark"></el-table-column>
       <el-table-column align="center" label="提成比例">
         <template v-slot="scope">
-          <span class="ml-10">{{ scope.row.son_pumpRation * 100 }}%</span>
+          <span class="ml-10">{{ scope.row.my_returnRatio * 100 }}%</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="总提成" width="150">
