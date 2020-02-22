@@ -18,9 +18,12 @@
         :picker-options="pickerOptions"
       ></el-date-picker>
       <el-button type="primary" icon="el-icon-edit" @click="openEditDefaultIncome">
-        总代提成默认设置
+        批量设置平台抽成
       </el-button>
-      <span class="ml-10">总代默认提成：{{ sonPumpRation }}</span>
+      <span class="ml-10 mr-20">平台抽成：{{ sonPumpRation }}</span>
+      <el-button type="primary" icon="el-icon-edit" @click="openEditDefaultRatio">
+        批量设置总代抽成
+      </el-button>
     </el-card>
     <el-table
       stripe
@@ -172,6 +175,7 @@ export default {
       expands: [],
       mineOrder: [],
       foreverData: [],
+      my_returnRatio: "",
       son_pumpRation: "",
       pickerOptions: {
         shortcuts: [
@@ -230,6 +234,7 @@ export default {
     ...mapState({
       userID: state => state.userID,
       sonPumpRation: state => state.sonPumpRation,
+      myReturnRation: state => state.myReturnRation,
     }),
   },
   methods: {
@@ -427,7 +432,7 @@ export default {
         .catch(() => {});
     },
     openEditDefaultIncome() {
-      this.$prompt("请重新设置总代默认提成", "提示", {
+      this.$prompt("批量设置平台抽成", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "info",
@@ -451,6 +456,29 @@ export default {
               offset: 10,
             });
           }
+          this.getData();
+        })
+        .catch(() => {});
+    },
+    openEditDefaultRatio() {
+      this.$prompt("批量设置总代抽成", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "info",
+      })
+        .then(async ({ value }) => {
+          const { data } = await this.$http.post(`/admin/updateRecvRation`, {
+            my_returnRatio: value,
+          });
+          this.$message({
+            type: "success",
+            message: data.status,
+            offset: 10,
+          });
+          /* if (data.status === "修改成功") {
+            // this.$store.commit("SaveUserMyReturnRation",value);
+          } */
+          this.getData();
         })
         .catch(() => {});
     },

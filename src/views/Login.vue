@@ -87,6 +87,7 @@ export default {
       if (res.status === 200 && user.my_stratum === 0) {
         this.$store.commit("SaveUserID", user.uid);
         this.$store.commit("SaveUserSonPumpRation", user.son_pumpRation);
+        this.$store.commit("SaveUserMyReturnRation", user.my_returnRatio);
         this.$router.push("/members");
         this.$message({
           type: "success",

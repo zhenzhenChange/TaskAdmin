@@ -55,6 +55,7 @@ export default {
       this.$router.push("/");
       localStorage.removeItem("userID");
       localStorage.removeItem("sonPumpRation");
+      localStorage.removeItem("myReturnRation");
     },
   },
   computed: {
