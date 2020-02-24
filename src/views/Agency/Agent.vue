@@ -40,6 +40,9 @@
             <el-form-item label="账号">
               <span>{{ props.row.phone }}</span>
             </el-form-item>
+            <el-form-item label="订单成功率">
+              <span>{{ (Number(showInfo.sussOrder) / Number(showInfo.sumOrder)) * 100 || 0 }} %</span>
+            </el-form-item>
             <el-form-item label="总领取订单">
               <span>{{ showInfo.sumOrder }}</span>
             </el-form-item>

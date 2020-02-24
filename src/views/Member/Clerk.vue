@@ -33,6 +33,11 @@
             <el-form-item label="账号">
               <span>{{ props.row.phone }}</span>
             </el-form-item>
+            <el-form-item label="订单成功率">
+              <span
+                >{{ (Number(showInfo.sussOrder) / Number(showInfo.sumOrder)) * 100 || 0 }} %</span
+              >
+            </el-form-item>
             <el-form-item label="备注">
               <span> {{ props.row.user_remark }} </span>
             </el-form-item>
