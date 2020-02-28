@@ -33,55 +33,25 @@ export default {
   methods: {
     async login() {
       if (!this.userData.phone) {
-        this.$message({
-          type: "warning",
-          message: `请输入账号`,
-          duration: 1500,
-          center: true,
-          offset: 10,
-        });
+        this.$message.warning({ message: `请输入账号`, duration: 1500, offset: 10 });
         return;
       }
       if (!this.userData.pwd) {
-        this.$message({
-          type: "warning",
-          message: `请输入密码`,
-          duration: 1500,
-          center: true,
-          offset: 10,
-        });
+        this.$message.warning({ message: `请输入密码`, duration: 1500, offset: 10 });
         return;
       }
       const res = await this.$http.post("/common/login", this.userData);
       const user = res.data.user;
       if (res.data.msg) {
-        this.$message({
-          type: "warning",
-          message: `${res.data.msg}`,
-          duration: 1500,
-          center: true,
-          offset: 10,
-        });
+        this.$message.warning({ message: `${res.data.msg}`, duration: 1500, offset: 10 });
         return;
       }
       if (user.my_stratum !== 0) {
-        this.$message({
-          type: "warning",
-          message: "请使用管理员账号登录～",
-          duration: 1500,
-          center: true,
-          offset: 10,
-        });
+        this.$message.warning({ message: "您不是管理员～", duration: 1500, offset: 10 });
         return;
       }
       if (user.is_valide === 0) {
-        this.$message({
-          type: "warning",
-          message: "该账号已被封禁～",
-          duration: 1500,
-          center: true,
-          offset: 10,
-        });
+        this.$message.warning({ message: "该账号已被封禁～", duration: 1500, offset: 10 });
         return;
       }
       if (res.status === 200 && user.my_stratum === 0) {
@@ -89,13 +59,7 @@ export default {
         this.$store.commit("SaveUserSonPumpRation", user.son_pumpRation);
         this.$store.commit("SaveUserMyReturnRation", user.my_returnRatio);
         this.$router.push("/members");
-        this.$message({
-          type: "success",
-          message: "登录成功",
-          duration: 1500,
-          center: true,
-          offset: 10,
-        });
+        this.$message.success({ message: "登录成功", duration: 1500, offset: 10 });
       }
     },
   },

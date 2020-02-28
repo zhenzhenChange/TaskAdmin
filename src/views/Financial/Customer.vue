@@ -5,7 +5,7 @@
     </div>
     <el-form :model="customerData" @submit.native.prevent="postCustomerData">
       <el-form-item>
-        <el-input v-model="customerData.phone" placeholder="请输入手机号">
+        <el-input v-model="customerData.phone" placeholder="请输入手机号码">
           <template slot="prepend">充值手机号</template>
         </el-input>
       </el-form-item>
@@ -47,7 +47,7 @@ export default {
     async postCustomerData() {
       const res = this.$http.post(`/admin/recharge`, this.customerData);
       if (res.statusCode) {
-        this.$message({ type: "success", message: "充值成功！", offset: 10 });
+        this.$message.success({ message: "充值成功！", offset: 10 });
       }
     },
   },

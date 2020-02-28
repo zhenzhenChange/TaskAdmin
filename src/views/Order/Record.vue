@@ -5,25 +5,25 @@
         <i slot="prefix" class="el-input__icon el-icon-search"></i>
       </el-input>
       <el-date-picker
+        class="mr-20"
         size="medium"
-        type="datetimerange"
-        v-model="value"
         align="center"
         unlink-panels
-        range-separator="至"
-        start-placeholder="开始日期"
-        end-placeholder="结束日期"
-        :picker-options="pickerOptions"
+        v-model="value"
         @change="filterDate"
-        class="mr-20"
+        type="datetimerange"
+        range-separator="至"
+        end-placeholder="结束日期"
+        start-placeholder="开始日期"
+        :picker-options="pickerOptions"
       ></el-date-picker>
     </el-card>
     <el-table
-      v-if="searchData"
-      ref="filterTable"
-      :data="searchData.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
       stripe
       border
+      ref="filterTable"
+      v-if="searchData"
+      :data="searchData.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
     >
       <el-table-column type="expand">
         <template v-slot="props">
@@ -44,11 +44,11 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="order_release_time"
-        label="发布日期"
-        align="center"
         sortable
         width="180"
+        align="center"
+        label="发布日期"
+        prop="order_release_time"
         column-key="order_release_time"
       >
         <template v-slot="scope">
@@ -83,10 +83,10 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="order_state"
-        label="订单状态"
-        align="center"
         width="140"
+        align="center"
+        label="订单状态"
+        prop="order_state"
         filter-placement="bottom-end"
       >
         <template v-slot="scope">
@@ -122,23 +122,24 @@
         <template v-slot="scope">
           <el-button
             size="mini"
-            icon="el-icon-error"
             type="danger"
+            icon="el-icon-error"
             @click="deleteRecord(scope.row.order_id)"
-            >删除该记录</el-button
           >
+            删除该记录
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
     <el-pagination
-      @size-change="sizeChange"
-      @current-change="currentChange"
+      class="mt-20 mb-20"
+      :total="data.length"
       :page-size="pageSize"
       :page-sizes="pageSizes"
+      @size-change="sizeChange"
       :current-page="currentPage"
-      :total="data.length"
+      @current-change="currentChange"
       layout="total, sizes, prev, pager, next, jumper"
-      class="mt-20 mb-20"
     ></el-pagination>
   </div>
 </template>
@@ -254,20 +255,11 @@ export default {
       this.currentPage = val;
     },
     deleteRecord(id) {
-      this.$confirm("确定要删除该条记录吗？", "警告", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      })
+      this.$confirm("确定要删除该条记录吗？", "警告", { type: "warning" })
         .then(async () => {
-          const res = await this.$http.post(`/admin/man/delOrderRec`, {
-            order_id: id,
-          });
+          const res = await this.$http.post(`/admin/man/delOrderRec`, { order_id: id });
           if (res.status === 200 && JSON.parse(res.data.statusCode)) {
-            this.$message({
-              type: "success",
-              message: "删除成功!",
-            });
+            this.$message.success({ message: "删除成功!" });
             this.getData();
           }
         })

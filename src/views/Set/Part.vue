@@ -17,12 +17,12 @@
             <span class="exCode">邀请码是否为必填项：</span>
             <el-switch
               class="switch"
-              v-model="defaultSet.su_isExtensionCodeReq"
               active-text="是"
               inactive-text="否"
               :active-value="true"
-              :inactive-value="false"
               @change="changeValue"
+              :inactive-value="false"
+              v-model="defaultSet.su_isExtensionCodeReq"
             ></el-switch>
           </div>
         </div>
@@ -35,8 +35,8 @@
         <div>
           <el-input
             resize
-            type="textarea"
             rows="6"
+            type="textarea"
             placeholder="请输入内容"
             v-model="defaultSet.su_giveAnno"
           ></el-input>
@@ -68,9 +68,7 @@ export default {
     this.getData();
   },
   computed: {
-    ...mapState({
-      userID: state => state.userID,
-    }),
+    ...mapState({ userID: state => state.userID }),
   },
   methods: {
     async getData() {
@@ -98,7 +96,7 @@ export default {
         su_isExtensionCodeReq: this.defaultSet.su_isExtensionCodeReq ? 1 : 0,
       });
       if (res.status === 200 && JSON.parse(res.data.status)) {
-        this.$message({ type: "success", message: "保存成功", offset: 10 });
+        this.$message.success({ message: "保存成功", offset: 10 });
         this.getData();
       }
     },
@@ -108,7 +106,7 @@ export default {
         su_giveAnno: this.defaultSet.su_giveAnno,
       });
       if (res.status === 200 && JSON.parse(res.data.status)) {
-        this.$message({ type: "success", message: "发布成功", offset: 10 });
+        this.$message.success({ message: "发布成功", offset: 10 });
         this.getData();
       }
     },

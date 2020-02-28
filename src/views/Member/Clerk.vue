@@ -6,26 +6,26 @@
       </el-input>
       <el-date-picker
         size="medium"
-        type="datetimerange"
-        v-model="value"
         align="center"
         unlink-panels
-        range-separator="至"
-        start-placeholder="开始日期"
-        end-placeholder="结束日期"
-        :picker-options="pickerOptions"
+        v-model="value"
         @change="filterDate"
+        type="datetimerange"
+        range-separator="至"
+        end-placeholder="结束日期"
+        start-placeholder="开始日期"
+        :picker-options="pickerOptions"
       ></el-date-picker>
     </el-card>
     <el-table
+      stripe
+      border
       v-if="searchData"
       ref="filterTable"
       :row-key="getRowKeys"
       :expand-row-keys="expands"
-      :data="searchData.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
-      stripe
-      border
       @expand-change="expandChange"
+      :data="searchData.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
     >
       <el-table-column type="expand">
         <template v-slot="props">
@@ -34,9 +34,9 @@
               <span>{{ props.row.phone }}</span>
             </el-form-item>
             <el-form-item label="订单成功率">
-              <span
-                >{{ (Number(showInfo.sussOrder) / Number(showInfo.sumOrder)) * 100 || 0 }} %</span
-              >
+              <span>
+                {{ (Number(showInfo.sussOrder) / Number(showInfo.sumOrder)) * 100 || 0 }} %
+              </span>
             </el-form-item>
             <el-form-item label="备注">
               <span> {{ props.row.user_remark }} </span>
@@ -75,11 +75,11 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="reg_datetime"
-        align="center"
-        label="注册日期"
         sortable
         width="180"
+        align="center"
+        label="注册日期"
+        prop="reg_datetime"
         column-key="reg_datetime"
       >
         <template v-slot="scope">
@@ -96,44 +96,77 @@
       <el-table-column align="center" prop="extension_code" label="推广码"></el-table-column>
       <el-table-column align="center" label="账号状态">
         <template v-slot="scope">
-          <el-tag
-            :type="scope.row.is_valide === 1 ? 'success' : 'danger'"
-            disable-transitions
-            hit
-            >{{ scope.row.is_valide === 1 ? "正常" : "已封禁" }}</el-tag
-          >
+          <el-tag :type="scope.row.is_valide === 1 ? 'success' : 'danger'" disable-transitions hit>
+            {{ scope.row.is_valide === 1 ? "正常" : "已封禁" }}
+          </el-tag>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="操作" width="300">
+      <el-table-column align="center" label="操作" width="420">
         <template v-slot="scope">
           <el-button
             size="mini"
-            icon="el-icon-edit"
-            type="primary"
-            @click="openEditPwd(scope.row.phone)"
-            >修改密码</el-button
+            type="danger"
+            icon="el-icon-delete"
+            @click="openDeleteUser(scope.row.uid)"
           >
+            删除用户
+          </el-button>
           <el-button
             size="mini"
-            icon="el-icon-warning"
-            type="warning"
+            type="danger"
+            icon="el-icon-error"
+            @click="openBanOrder(scope.row.uid)"
+          >
+            禁止账号接单
+          </el-button>
+          <el-button
+            size="mini"
+            type="danger"
+            icon="el-icon-error"
             @click="openBan(scope.row.phone)"
             :disabled="scope.row.is_valide === 0 ? true : false"
-            >禁止账号登录</el-button
           >
+            禁止账号登录
+          </el-button>
+          <div class="mt-10"></div>
+          <el-button
+            size="mini"
+            type="primary"
+            icon="el-icon-edit"
+            @click="openEditPwd(scope.row.phone)"
+          >
+            修改密码
+          </el-button>
+          <el-button
+            size="mini"
+            type="warning"
+            icon="el-icon-thumb"
+            @click="openRelieveOrder(scope.row.uid)"
+          >
+            解除接单限制
+          </el-button>
+          <el-button
+            size="mini"
+            type="warning"
+            icon="el-icon-thumb"
+            @click="openRelieve(scope.row.uid)"
+            :disabled="scope.row.is_valide === 0 ? false : true"
+          >
+            解除登录限制
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
     <el-pagination
       v-if="data"
-      @size-change="sizeChange"
-      @current-change="currentChange"
+      class="mt-20 mb-20"
       :page-size="pageSize"
       :page-sizes="pageSizes"
+      @size-change="sizeChange"
       :current-page="currentPage"
       :total="length || data.length"
+      @current-change="currentChange"
       layout="total, sizes, prev, pager, next, jumper"
-      class="mt-20 mb-20"
     ></el-pagination>
   </div>
 </template>
@@ -185,7 +218,6 @@ export default {
       },
       value: "",
       length: "",
-      flag: false,
       showInfo: {},
     };
   },
@@ -250,58 +282,63 @@ export default {
       this.currentPage = val;
     },
     openEditPwd(phone) {
-      this.$prompt("请输入新密码", "提示", {
-        confirmButtonText: "提交",
-        cancelButtonText: "取消",
-        type: "info",
-        inputType: "password",
-      })
+      this.$prompt("请输入新密码", "提示", { type: "info", inputType: "password" })
         .then(async ({ value }) => {
-          const res = await this.$http.post("/admin/changePwd", {
-            phone,
-            NewPwd: value,
-          });
+          const res = await this.$http.post("/admin/changePwd", { phone, NewPwd: value });
           if (res.status === 200 && JSON.parse(res.data.status)) {
-            this.$message({
-              type: "success",
-              message: `修改成功！`,
-              offset: 10,
-            });
+            this.$message.success({ message: `修改成功！`, offset: 10 });
           } else {
-            this.$message({
-              type: "warning",
-              message: `服务器已超时~`,
-              offset: 10,
-            });
+            this.$message.warning({ message: `服务器已超时~`, offset: 10 });
           }
         })
         .catch(() => {});
     },
     openBan(phone) {
-      this.$confirm("确定要禁止该账号登录吗？", "警告", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      })
+      this.$confirm("确定要禁止该账号登录吗？", "警告", { type: "warning" })
         .then(async () => {
-          const res = await this.$http.post("/admin/disableAccount", {
-            phone,
-          });
+          const res = await this.$http.post("/admin/disableAccount", { phone });
           if (JSON.parse(res.data.status)) {
             this.getData();
-            this.$message({
-              type: "success",
-              message: `账号 ${phone} 已封禁!`,
-              offset: 10,
-              center: true,
-            });
+            this.$message.success({ message: `账号 ${phone} 已封禁!`, offset: 10 });
           } else {
-            this.$message({
-              type: "warning",
-              message: `服务器已超时，请稍后重试～`,
-              offset: 10,
-            });
+            this.$message.warning({ message: `服务器已超时，请稍后重试～`, offset: 10 });
           }
+        })
+        .catch(() => {});
+    },
+    openRelieve(uid) {
+      this.$confirm("确定要解除登录限制吗？", "警告", { type: "warning" })
+        .then(async () => {
+          const { data } = await this.$http.post("/admin/removeLimit", { uid });
+          this.$message.info({ message: data.status, offset: 10 });
+          this.getData();
+        })
+        .catch(() => {});
+    },
+    openBanOrder(uid) {
+      this.$confirm("确定要禁止该账号接单吗？", "警告", { type: "warning" })
+        .then(async () => {
+          const res = await this.$http.post("/admin/setTakeOrderLimit", { uid, is_takeOrder: 0 });
+          this.$message.success({ message: res.data.status, offset: 10 });
+          this.getData();
+        })
+        .catch(() => {});
+    },
+    openRelieveOrder(uid) {
+      this.$confirm("确定要解除限制吗？", "警告", { type: "warning" })
+        .then(async () => {
+          const res = await this.$http.post("/admin/setTakeOrderLimit", { uid, is_takeOrder: 1 });
+          this.$message.success({ message: res.data.status, offset: 10 });
+          this.getData();
+        })
+        .catch(() => {});
+    },
+    openDeleteUser(uid) {
+      this.$confirm("确定要删除该用户吗？", "危险", { type: "error" })
+        .then(async () => {
+          const { data } = await this.$http.post("/admin/deleteUser", { uid });
+          this.$message.success({ message: data.status, offset: 10 });
+          this.getData();
         })
         .catch(() => {});
     },

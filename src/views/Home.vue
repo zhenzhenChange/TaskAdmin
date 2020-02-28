@@ -48,18 +48,16 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 export default {
   methods: {
     logout() {
       this.$router.push("/");
-      localStorage.removeItem("userID");
-      localStorage.removeItem("sonPumpRation");
-      localStorage.removeItem("myReturnRation");
+      localStorage.clear();
     },
   },
   computed: {
-    ...mapState({ userID: state => state.userID }),
+    ...mapGetters(["userID"]),
   },
 };
 </script>
@@ -72,11 +70,11 @@ export default {
 }
 
 .home-header {
-  background-color: #b3c0d1;
   color: #333;
+  font-size: 12px;
   line-height: 60px;
   text-align: right;
-  font-size: 12px;
+  background-color: #b3c0d1;
 }
 
 .el-menu-item {

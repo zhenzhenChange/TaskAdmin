@@ -41,7 +41,9 @@
               <span>{{ props.row.phone }}</span>
             </el-form-item>
             <el-form-item label="订单成功率">
-              <span>{{ (Number(showInfo.sussOrder) / Number(showInfo.sumOrder)) * 100 || 0 }} %</span>
+              <span>
+                {{ (Number(showInfo.sussOrder) / Number(showInfo.sumOrder)) * 100 || 0 }} %
+              </span>
             </el-form-item>
             <el-form-item label="总领取订单">
               <span>{{ showInfo.sumOrder }}</span>
@@ -83,25 +85,20 @@
           <span class="ml-10">{{ scope.row.reg_datetime | date }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="180" prop="phone" label="账号" align="center"></el-table-column>
-      <el-table-column
-        width="180"
-        align="center"
-        label="推广码"
-        prop="extension_code"
-      ></el-table-column>
+      <el-table-column prop="phone" label="账号" align="center"></el-table-column>
+      <el-table-column align="center" label="推广码" prop="extension_code"></el-table-column>
       <el-table-column label="余额" align="center">
         <template v-slot="scope">
           <span class="ml-10">{{ scope.row.my_balance / 100 }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="200" label="备注" align="center" prop="user_remark"></el-table-column>
+      <el-table-column label="备注" align="center" prop="user_remark"></el-table-column>
       <el-table-column align="center" label="提成比例">
         <template v-slot="scope">
           <span class="ml-10">{{ scope.row.my_returnRatio * 100 }}%</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="总提成" width="150">
+      <el-table-column align="center" label="总提成">
         <template v-slot="scope">
           <span class="ml-10">{{ scope.row.general_income / 100 }}</span>
         </template>
@@ -113,46 +110,67 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column fixed="right" align="center" label="操作" width="400">
+      <el-table-column fixed="right" align="center" label="操作" width="500">
         <template v-slot="scope">
           <el-button
             size="mini"
             type="primary"
             icon="el-icon-edit"
-            @click="openEditCode(scope.row.uid)"
-            >修改邀请码</el-button
-          >
-          <el-button
-            size="mini"
-            type="primary"
-            icon="el-icon-edit"
             @click="openRemark(scope.row.uid)"
-            >修改备注</el-button
           >
+            修改备注
+          </el-button>
           <el-button
             size="mini"
             type="primary"
             icon="el-icon-edit"
             @click="openEditPwd(scope.row.phone)"
-            >修改密码</el-button
           >
-          <br />
-          <div class="mt-10"></div>
+            修改密码
+          </el-button>
           <el-button
             size="mini"
             type="primary"
             icon="el-icon-edit"
             @click="openRatio(scope.row.uid)"
-            >修改提成</el-button
           >
+            修改提成
+          </el-button>
+          <el-button
+            size="mini"
+            type="danger"
+            icon="el-icon-delete"
+            @click="openDeleteUser(scope.row.uid)"
+          >
+            删除用户
+          </el-button>
+          <div class="mt-10"></div>
+          <el-button
+            size="mini"
+            type="primary"
+            icon="el-icon-edit"
+            @click="openEditCode(scope.row.uid)"
+          >
+            修改邀请码
+          </el-button>
+          <el-button
+            size="mini"
+            type="danger"
+            icon="el-icon-error"
+            @click="openBan(scope.row.phone)"
+            :disabled="scope.row.is_valide === 0 ? true : false"
+          >
+            禁止账号登录
+          </el-button>
           <el-button
             size="mini"
             type="warning"
-            icon="el-icon-warning"
-            @click="openBan(scope.row.phone)"
-            :disabled="scope.row.is_valide === 0 ? true : false"
-            >禁止账号登录</el-button
+            icon="el-icon-thumb"
+            @click="openRelieve(scope.row.uid)"
+            :disabled="scope.row.is_valide === 0 ? false : true"
           >
+            解除登录限制
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -286,93 +304,51 @@ export default {
       this.currentPage = val;
     },
     openEditPwd(phone) {
-      this.$prompt("请输入新密码", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "info",
-        inputType: "password",
-      })
+      this.$prompt("请输入新密码", "提示", { type: "info", inputType: "password" })
         .then(async ({ value }) => {
-          const res = await this.$http.post(`/admin/changePwd`, {
-            phone,
-            NewPwd: value,
-          });
+          const res = await this.$http.post(`/admin/changePwd`, { phone, NewPwd: value });
           if (res.status === 200 && JSON.parse(res.data.status)) {
-            this.$message({
-              type: "success",
-              message: `修改成功！`,
-              offset: 10,
-            });
+            this.$message.success({ message: `修改成功！`, offset: 10 });
           } else {
-            this.$message({
-              type: "warning",
-              message: `服务器已超时，请稍后重试～`,
-              offset: 10,
-            });
+            this.$message.warning({ message: `服务器已超时，请稍后重试～`, offset: 10 });
           }
         })
         .catch(() => {});
     },
     openRemark(uid) {
-      this.$prompt("请输入新备注", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "info",
-      })
+      this.$prompt("请输入新备注", "提示", { type: "info" })
         .then(async ({ value }) => {
-          const { data } = await this.$http.post(`/recv/setNickname`, {
-            uid,
-            user_remark: value,
-          });
+          const { data } = await this.$http.post(`/recv/setNickname`, { uid, user_remark: value });
           if (JSON.parse(data.ret)) {
-            this.$message({
-              type: "success",
-              message: `修改成功！`,
-              offset: 10,
-            });
+            this.$message.success({ message: `修改成功！`, offset: 10 });
           } else {
-            this.$message({
-              type: "warning",
-              message: `服务器已超时，请稍后重试～`,
-              offset: 10,
-            });
+            this.$message.warning({ message: `服务器已超时，请稍后重试～`, offset: 10 });
           }
           this.getData();
         })
         .catch(() => {});
     },
     openRatio(uid) {
-      this.$prompt("请输入新提成（0-1之间的数（包含0-1））", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "info",
-      })
+      this.$prompt("请输入新提成（0-1之间的数（包含0-1））", "提示", { type: "info" })
         .then(async ({ value }) => {
           if (value > 1 || value < 0) {
-            this.$message({ type: "success", message: "请输入0-1之间的数（包含0-1）", offset: 10 });
+            this.$message.success({ message: "请输入0-1之间的数（包含0-1）", offset: 10 });
             return;
           }
-          const { data } = await this.$http.post(`/admin/updateSunRatio`, {
-            uid,
-            my_returnRatio: value,
-          });
-          this.$message({ type: "success", message: data.status, offset: 10 });
+          const args = { uid, my_returnRatio: value };
+          const { data } = await this.$http.post(`/admin/updateSunRatio`, args);
+          this.$message.success({ message: data.status, offset: 10 });
           this.getData();
         })
         .catch(() => {});
     },
     openEditCode(uid) {
-      this.$prompt("请设置新邀请码", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "info",
-      })
+      this.$prompt("请设置新邀请码", "提示", { type: "info" })
         .then(async ({ value }) => {
           value = value.replace(/\s*/g, "");
           const reg = new RegExp("[\\u4E00-\\u9FFF]+", "g");
           if (reg.test(value) || value.length > 10) {
-            this.$message({
-              type: "warning",
+            this.$message.warning({
               message: `邀请码限制为10位以下的英文字符和数字组合~`,
               offset: 10,
             });
@@ -384,103 +360,72 @@ export default {
           });
           if (res.status === 200) {
             if (res.data.status === "邀请码已存在！") {
-              this.$message({
-                type: "warning",
-                message: `邀请码已存在，请您重新设置~`,
-                offset: 10,
-              });
+              this.$message.warning({ message: `邀请码已存在，请您重新设置~`, offset: 10 });
               return;
             }
-            this.$message({
-              type: "success",
-              message: `${res.data.status}`,
-              offset: 10,
-            });
+            this.$message.success({ message: res.data.status, offset: 10 });
           } else {
-            this.$message({
-              type: "warning",
-              message: `服务器已超时，请稍后重试～`,
-              offset: 10,
-            });
+            this.$message.warning({ message: `服务器已超时，请稍后重试～`, offset: 10 });
           }
           this.getData();
         })
         .catch(() => {});
     },
     openBan(phone) {
-      this.$confirm("确定要禁止该账号登录吗？", "警告", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      })
+      this.$confirm("确定要禁止该账号登录吗？", "警告", { type: "warning" })
         .then(async () => {
-          const res = await this.$http.post(`/admin/disableAccount`, {
-            phone,
-          });
+          const res = await this.$http.post(`/admin/disableAccount`, { phone });
           if (res.status === 200 && JSON.parse(res.data.status)) {
-            this.$message({
-              type: "success",
-              message: `总代 ${phone} 已封禁成功！`,
-              offset: 10,
-            });
+            this.$message.success({ message: `总代 ${phone} 已封禁成功！`, offset: 10 });
           } else {
-            this.$message({
-              type: "warning",
-              message: `服务器已超时，请稍后重试～`,
-              offset: 10,
-            });
+            this.$message.warning({ message: `服务器已超时，请稍后重试～`, offset: 10 });
           }
           this.getData();
         })
         .catch(() => {});
     },
     openEditDefaultIncome() {
-      this.$prompt("批量设置平台抽成", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "info",
-      })
+      this.$prompt("批量设置平台抽成", "提示", { type: "info" })
         .then(async ({ value }) => {
           const res = await this.$http.post(`/admin/agent/setRetRatio`, {
             uid: this.userID,
             son_pumpRation: value,
           });
           if (res.status === 200) {
-            this.$message({
-              type: "success",
-              message: "设置成功！",
-              offset: 10,
-            });
+            this.$message.success({ message: "设置成功！", offset: 10 });
             this.$store.commit("SaveUserSonPumpRation", res.data.son_pumpRation);
           } else {
-            this.$message({
-              type: "warning",
-              message: `服务器已超时，请稍后重试～`,
-              offset: 10,
-            });
+            this.$message.warning({ message: `服务器已超时，请稍后重试～`, offset: 10 });
           }
           this.getData();
         })
         .catch(() => {});
     },
     openEditDefaultRatio() {
-      this.$prompt("批量设置总代抽成", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "info",
-      })
+      this.$prompt("批量设置总代抽成", "提示", { type: "info" })
         .then(async ({ value }) => {
           const { data } = await this.$http.post(`/admin/updateRecvRation`, {
             my_returnRatio: value,
           });
-          this.$message({
-            type: "success",
-            message: data.status,
-            offset: 10,
-          });
-          /* if (data.status === "修改成功") {
-            // this.$store.commit("SaveUserMyReturnRation",value);
-          } */
+          this.$message.success({ message: data.status, offset: 10 });
+          this.getData();
+        })
+        .catch(() => {});
+    },
+    openRelieve(uid) {
+      this.$confirm("确定要解除登录限制吗？", "警告", { type: "warning" })
+        .then(async () => {
+          const { data } = await this.$http.post("/admin/removeLimit", { uid });
+          this.$message.info({ message: data.status, offset: 10 });
+          this.getData();
+        })
+        .catch(() => {});
+    },
+    openDeleteUser(uid) {
+      this.$confirm("确定要删除该用户吗？", "危险", { type: "error" })
+        .then(async () => {
+          const { data } = await this.$http.post("/admin/deleteUser", { uid });
+          this.$message.success({ message: data.status, offset: 10 });
           this.getData();
         })
         .catch(() => {});

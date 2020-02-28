@@ -9,8 +9,8 @@
 export default {
   data() {
     return {
-      position: "top"
+      position: "top",
     };
-  }
+  },
 };
 </script>

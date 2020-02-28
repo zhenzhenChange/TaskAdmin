@@ -84,12 +84,7 @@ export default {
                 padding: [0, 7],
                 rich: {
                   a: { color: "#999", lineHeight: 22, align: "center" },
-                  hr: {
-                    borderColor: "#aaa",
-                    width: "100%",
-                    borderWidth: 0.5,
-                    height: 0,
-                  },
+                  hr: { borderColor: "#aaa", width: "100%", borderWidth: 0.5, height: 0 },
                   b: { fontSize: 16, lineHeight: 33 },
                   per: {
                     color: "#eee",
@@ -202,12 +197,7 @@ export default {
                 padding: [0, 7],
                 rich: {
                   a: { color: "#999", lineHeight: 22, align: "center" },
-                  hr: {
-                    borderColor: "#aaa",
-                    width: "100%",
-                    borderWidth: 0.5,
-                    height: 0,
-                  },
+                  hr: { borderColor: "#aaa", width: "100%", borderWidth: 0.5, height: 0 },
                   b: { fontSize: 16, lineHeight: 33 },
                   per: {
                     color: "#eee",

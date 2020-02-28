@@ -3,31 +3,31 @@
     <el-card class="card">
       <el-date-picker
         size="medium"
-        type="datetimerange"
-        v-model="value"
+        class="mr-20"
         align="center"
         unlink-panels
-        range-separator="至"
-        start-placeholder="开始日期"
-        end-placeholder="结束日期"
-        :picker-options="pickerOptions"
+        v-model="value"
         @change="filterDate"
-        class="mr-20"
+        type="datetimerange"
+        range-separator="至"
+        end-placeholder="结束日期"
+        start-placeholder="开始日期"
+        :picker-options="pickerOptions"
       ></el-date-picker>
     </el-card>
     <el-table
+      stripe
+      border
       v-if="data"
       ref="filterTable"
       :data="data.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
-      stripe
-      border
     >
       <el-table-column
-        prop="order_release_time"
-        label="发布日期"
-        align="center"
         sortable
         width="180"
+        align="center"
+        label="发布日期"
+        prop="order_release_time"
         column-key="order_release_time"
       >
         <template v-slot="scope">
@@ -61,10 +61,10 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="action_resState"
-        label="申诉状态"
-        align="center"
         width="120"
+        align="center"
+        label="申诉状态"
+        prop="action_resState"
         filter-placement="bottom-end"
       >
         <template v-slot="scope">
@@ -77,23 +77,24 @@
         <template v-slot="scope">
           <el-button
             size="mini"
-            icon="el-icon-error"
             type="danger"
+            icon="el-icon-error"
             @click="openDeleteRecord(scope.row.order_id)"
-            >删除该记录</el-button
           >
+            删除该记录
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
     <el-pagination
-      @size-change="sizeChange"
-      @current-change="currentChange"
+      class="mt-20 mb-20"
+      :total="data.length"
       :page-size="pageSize"
       :page-sizes="pageSizes"
+      @size-change="sizeChange"
       :current-page="currentPage"
-      :total="data.length"
+      @current-change="currentChange"
       layout="total, sizes, prev, pager, next, jumper"
-      class="mt-20 mb-20"
     ></el-pagination>
   </div>
 </template>
@@ -181,20 +182,10 @@ export default {
       this.currentPage = val;
     },
     openDeleteRecord(id) {
-      this.$confirm("确定要删除此记录吗？", "警告", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      })
+      this.$confirm("确定要删除此记录吗？", "警告", { type: "warning" })
         .then(async () => {
-          const res = await this.$http.post(`/admin/man/delOrderRec`, {
-            order_id: id,
-          });
-          this.$message({
-            type: "success",
-            message: `${res} 删除成功!`,
-            offset: 10,
-          });
+          const res = await this.$http.post(`/admin/man/delOrderRec`, { order_id: id });
+          this.$message.success({ message: `${res} 删除成功!`, offset: 10 });
         })
         .catch(() => {});
     },

@@ -3,31 +3,31 @@
     <el-card class="card">
       <el-date-picker
         size="medium"
-        type="datetimerange"
-        v-model="value"
+        class="ml-20"
         align="center"
         unlink-panels
-        range-separator="至"
-        start-placeholder="开始日期"
-        end-placeholder="结束日期"
-        :picker-options="pickerOptions"
+        v-model="value"
         @change="filterDate"
-        class="ml-20"
+        type="datetimerange"
+        range-separator="至"
+        end-placeholder="结束日期"
+        start-placeholder="开始日期"
+        :picker-options="pickerOptions"
       ></el-date-picker>
     </el-card>
     <el-table
-      ref="filterTable"
-      :data="data.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
       stripe
       border
+      ref="filterTable"
+      :data="data.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
     >
       <el-table-column
-        prop="wb_datetime"
-        label="提现日期"
-        align="center"
-        width="180"
-        column-key="wb_datetime"
         sortable
+        width="180"
+        align="center"
+        label="提现日期"
+        prop="wb_datetime"
+        column-key="wb_datetime"
       >
         <template v-slot="scope">
           <i class="el-icon-time"></i>
@@ -43,48 +43,51 @@
           <span class="ml-10">{{ scope.row.wb_fee / 100 }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="wb_state" label="提现状态"
-        ><template v-slot="scope">
-          <el-tag hit :type="scope.row.wb_state === 0 ? 'danger' : 'success'">{{
-            scope.row.wb_state === 0 ? "失败" : "成功"
-          }}</el-tag>
-        </template></el-table-column
-      >
+      <el-table-column align="center" prop="wb_state" label="提现状态">
+        <template v-slot="scope">
+          <el-tag hit :type="scope.row.wb_state === 0 ? 'danger' : 'success'">
+            {{ scope.row.wb_state === 0 ? "失败" : "成功" }}
+          </el-tag>
+        </template>
+      </el-table-column>
       <el-table-column align="center" label="操作" width="400">
         <template v-slot="scope">
           <el-button
             size="mini"
-            icon="el-icon-success"
             type="primary"
+            icon="el-icon-success"
             @click="openAgreed(scope.row.wb_id)"
-            >同意申请</el-button
           >
+            同意申请
+          </el-button>
           <el-button
             size="mini"
-            icon="el-icon-warning"
             type="warning"
+            icon="el-icon-warning"
             @click="openRejected(scope.row.wb_id)"
-            >驳回申请</el-button
           >
+            驳回申请
+          </el-button>
           <el-button
             size="mini"
-            icon="el-icon-error"
             type="danger"
+            icon="el-icon-error"
             @click="openDeleteRecord(scope.row.wb_id)"
-            >删除该条记录</el-button
           >
+            删除该条记录
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
     <el-pagination
-      @size-change="sizeChange"
-      @current-change="currentChange"
+      class="mt-20 mb-20"
+      :total="data.length"
       :page-size="pageSize"
       :page-sizes="pageSizes"
+      @size-change="sizeChange"
       :current-page="currentPage"
-      :total="data.length"
+      @current-change="currentChange"
       layout="total, sizes, prev, pager, next, jumper"
-      class="mt-20 mb-20"
     ></el-pagination>
   </div>
 </template>
@@ -94,9 +97,9 @@ export default {
   data() {
     return {
       data: [],
-      foreverData: [],
-      currentPage: 1,
       pageSize: 10,
+      currentPage: 1,
+      foreverData: [],
       pageSizes: [10, 20, 50, 100, 200, 300, 400],
       pickerOptions: {
         shortcuts: [
@@ -168,58 +171,26 @@ export default {
       this.currentPage = val;
     },
     openAgreed(id) {
-      this.$confirm("确定同意提现申请吗？", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "info",
-      })
+      this.$confirm("确定同意提现申请吗？", "提示", { type: "info" })
         .then(async () => {
-          const res = await this.$http.post(`/admin/finac/doWithdraw`, {
-            wb_id: id,
-            wb_state: 1,
-          });
-          this.$message({
-            type: "success",
-            message: "操作成功!" + res,
-            offset: 10,
-          });
+          const res = await this.$http.post(`/admin/finac/doWithdraw`, { wb_id: id, wb_state: 1 });
+          this.$message.success({ message: "操作成功!" + res, offset: 10 });
         })
         .catch(() => {});
     },
     openRejected(id) {
-      this.$confirm("确定驳回提现申请吗？", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "info",
-      })
+      this.$confirm("确定驳回提现申请吗？", "提示", { type: "info" })
         .then(async () => {
-          const res = await this.$http.post(`/admin/finac/doWithdraw`, {
-            wb_id: id,
-            wb_state: 0,
-          });
-          this.$message({
-            type: "success",
-            message: "操作成功!" + res,
-            offset: 10,
-          });
+          const res = await this.$http.post(`/admin/finac/doWithdraw`, { wb_id: id, wb_state: 0 });
+          this.$message.success({ message: "操作成功!" + res, offset: 10 });
         })
         .catch(() => {});
     },
     openDeleteRecord(id) {
-      this.$confirm("确定删除该条记录吗？", "警告", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      })
+      this.$confirm("确定删除该条记录吗？", "警告", { type: "warning" })
         .then(async () => {
-          const res = await this.$http.post(`/admin/finac/delWbRec`, {
-            wb_id: id,
-          });
-          this.$message({
-            type: "success",
-            message: "操作成功!" + res,
-            offset: 10,
-          });
+          const res = await this.$http.post(`/admin/finac/delWbRec`, { wb_id: id });
+          this.$message.success({ message: "操作成功!" + res, offset: 10 });
         })
         .catch(() => {});
     },
