@@ -101,6 +101,13 @@
           </el-tag>
         </template>
       </el-table-column>
+      <el-table-column align="center" label="接单限制">
+        <template v-slot="scope">
+          <el-tag :type="scope.row.is_takeOrder === 1 ? 'success' : 'danger'" hit>
+            {{ scope.row.is_takeOrder === 1 ? "正常" : "已限制" }}
+          </el-tag>
+        </template>
+      </el-table-column>
       <el-table-column align="center" label="操作" width="420">
         <template v-slot="scope">
           <el-button
@@ -116,6 +123,7 @@
             type="danger"
             icon="el-icon-error"
             @click="openBanOrder(scope.row.uid)"
+            :disabled="scope.row.is_takeOrder === 0 ? true : false"
           >
             禁止账号接单
           </el-button>
@@ -142,6 +150,7 @@
             type="warning"
             icon="el-icon-thumb"
             @click="openRelieveOrder(scope.row.uid)"
+            :disabled="scope.row.is_takeOrder === 0 ? false : true"
           >
             解除接单限制
           </el-button>
