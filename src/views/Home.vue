@@ -54,6 +54,7 @@ export default {
     logout() {
       this.$router.push("/");
       localStorage.clear();
+      sessionStorage.clear();
     },
   },
   computed: {

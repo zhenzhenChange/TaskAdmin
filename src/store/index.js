@@ -6,7 +6,7 @@ Vue.use(Vuex);
 const mutations = {
   SaveUserID: (state, userID) => {
     state.userID = userID;
-    localStorage.setItem("userID", userID);
+    sessionStorage.setItem("userID", userID);
   },
   SaveUserSonPumpRation: (state, sonPumpRation) => {
     state.sonPumpRation = sonPumpRation;
@@ -16,18 +16,24 @@ const mutations = {
     state.myReturnRation = myReturnRation;
     localStorage.setItem("myReturnRation", myReturnRation);
   },
+  SaveKey: (state, key) => {
+    state.key = key;
+    localStorage.setItem("key", key);
+  },
 };
 
 const state = {
-  userID: "" || localStorage.getItem("userID"),
+  userID: "" || sessionStorage.getItem("userID"),
   sonPumpRation: "" || localStorage.getItem("sonPumpRation"),
   myReturnRation: "" || localStorage.getItem("myReturnRation"),
+  key: "" || localStorage.getItem("key"),
 };
 
 const getters = {
   userID: state => state.userID,
   sonPumpRation: state => state.sonPumpRation,
   myReturnRation: state => state.myReturnRation,
+  key: state => state.key,
 };
 
 const store = new Vuex.Store({ mutations, state, getters });

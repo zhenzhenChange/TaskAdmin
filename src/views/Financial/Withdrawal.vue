@@ -36,27 +36,19 @@
       </el-table-column>
       <el-table-column align="center" prop="wb_id" label="流水编号"></el-table-column>
       <el-table-column align="center" prop="wb_uid" label="提现账号"></el-table-column>
-      <el-table-column align="center" prop="Alipay_account" label="支付宝账号"></el-table-column>
-      <el-table-column align="center" prop="Alipay_name" label="支付宝姓名"></el-table-column>
+      <el-table-column align="center" prop="wb_remark" label="备注"></el-table-column>
       <el-table-column align="center" label="提现金额">
         <template v-slot="scope">
           <span class="ml-10">{{ scope.row.wb_fee / 100 }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="wb_state" label="提现状态">
-        <template v-slot="scope">
-          <el-tag hit :type="scope.row.wb_state === 0 ? 'danger' : 'success'">
-            {{ scope.row.wb_state === 0 ? "失败" : "成功" }}
-          </el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" label="操作" width="400">
+      <el-table-column align="center" label="操作" width="300">
         <template v-slot="scope">
           <el-button
             size="mini"
             type="primary"
             icon="el-icon-success"
-            @click="openAgreed(scope.row.wb_id)"
+            @click="openAgreed(scope.row.wb_id, scope.row.wb_uid, scope.row.wb_fee)"
           >
             同意申请
           </el-button>
@@ -67,14 +59,6 @@
             @click="openRejected(scope.row.wb_id)"
           >
             驳回申请
-          </el-button>
-          <el-button
-            size="mini"
-            type="danger"
-            icon="el-icon-error"
-            @click="openDeleteRecord(scope.row.wb_id)"
-          >
-            删除该条记录
           </el-button>
         </template>
       </el-table-column>
@@ -93,6 +77,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -138,14 +123,20 @@ export default {
   created() {
     this.getData();
   },
+  computed: {
+    ...mapGetters(["userID", "key"]),
+  },
   methods: {
     async getData() {
-      const res = await this.$http.get(`/admin/finac/get`);
-      res.data.data.map(item => {
-        if (item.wb_type === 1) {
-          this.data.push(item);
-        }
+      const { data } = await this.$http.post(`/admin/doAdminShowWdApply`, {
+        uid: this.userID,
+        key: this.key,
       });
+      if (Array.isArray(data)) {
+        this.data = data;
+      } else {
+        this.$message.error({ message: `提现功能为${data}，或重新登录系统`, offset: 10 });
+      }
     },
     filterDate(value) {
       if (!value) {
@@ -170,27 +161,31 @@ export default {
     currentChange(val) {
       this.currentPage = val;
     },
-    openAgreed(id) {
+    openAgreed(id, uid, fee) {
       this.$confirm("确定同意提现申请吗？", "提示", { type: "info" })
         .then(async () => {
-          const res = await this.$http.post(`/admin/finac/doWithdraw`, { wb_id: id, wb_state: 1 });
-          this.$message.success({ message: "操作成功!" + res, offset: 10 });
+          const { data } = await this.$http.post(`/recv/withdrawApply`, {
+            wb_id: id,
+            wb_uid: uid,
+            uid: this.userID,
+            wb_fee: fee / 100,
+            key: this.key,
+          });
+          console.log(data);
+          console.log(JSON.parse(data));
+          this.$message.success({ message: "操作成功!", offset: 10 });
         })
         .catch(() => {});
     },
-    openRejected(id) {
+    openRejected(wb_id) {
       this.$confirm("确定驳回提现申请吗？", "提示", { type: "info" })
         .then(async () => {
-          const res = await this.$http.post(`/admin/finac/doWithdraw`, { wb_id: id, wb_state: 0 });
-          this.$message.success({ message: "操作成功!" + res, offset: 10 });
-        })
-        .catch(() => {});
-    },
-    openDeleteRecord(id) {
-      this.$confirm("确定删除该条记录吗？", "警告", { type: "warning" })
-        .then(async () => {
-          const res = await this.$http.post(`/admin/finac/delWbRec`, { wb_id: id });
-          this.$message.success({ message: "操作成功!" + res, offset: 10 });
+          const { data } = await this.$http.post(`/admin/doAdminRefuseWithdraw`, {
+            wb_id,
+            uid: this.userID,
+          });
+          this.$message.success({ message: `操作${data}`, offset: 10 });
+          this.getData();
         })
         .catch(() => {});
     },

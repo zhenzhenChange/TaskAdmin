@@ -13,7 +13,7 @@ VueRouter.prototype.push = function push(location) {
 const router = new VueRouter({ mode: "history", base: "/task-admin/", routes });
 
 router.beforeEach((to, from, next) => {
-  if (!to.meta.isPublic && !localStorage.getItem("userID")) {
+  if (!to.meta.isPublic && !sessionStorage.getItem("userID")) {
     return next("/");
   }
   next();

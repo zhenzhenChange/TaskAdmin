@@ -58,6 +58,7 @@ export default {
         this.$store.commit("SaveUserID", user.uid);
         this.$store.commit("SaveUserSonPumpRation", user.son_pumpRation);
         this.$store.commit("SaveUserMyReturnRation", user.my_returnRatio);
+        this.$store.commit("SaveKey", user.key);
         this.$router.push("/members");
         this.$message.success({ message: "登录成功", duration: 1500, offset: 10 });
       }
