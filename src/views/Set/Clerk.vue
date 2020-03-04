@@ -11,7 +11,8 @@
             <template slot="prepend">最多同时几单未完成</template>
           </el-input>
           <el-input class="mt-20" v-model="defaultSet.orderLimit">
-            <template slot="prepend">成功率超出自动封号</template>
+            <template slot="prepend">平台新用户接单超出</template>
+            <template slot="append">单之后记录成功率</template>
           </el-input>
           <div>
             <span class="exCode">邀请码是否为必填项：</span>
