@@ -171,9 +171,11 @@ export default {
             wb_fee: fee / 100,
             key: this.key,
           });
-          console.log(data);
-          console.log(JSON.parse(data));
-          this.$message.success({ message: "操作成功!", offset: 10 });
+          if (data.ret === "true") {
+            this.$message.success({ message: data.msg, offset: 10 });
+          } else {
+            this.$message.error({ message: data.msg, offset: 10 });
+          }
         })
         .catch(() => {});
     },
