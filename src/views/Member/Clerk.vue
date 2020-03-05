@@ -108,7 +108,7 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="操作" width="420">
+      <el-table-column align="center" label="操作" width="600">
         <template v-slot="scope">
           <el-button
             size="mini"
@@ -137,6 +137,14 @@
             禁止账号登录
           </el-button>
           <div class="mt-10"></div>
+          <el-button
+            size="mini"
+            type="primary"
+            icon="el-icon-edit"
+            @click="openEditCode(scope.row.uid)"
+          >
+            修改邀请码
+          </el-button>
           <el-button
             size="mini"
             type="primary"
@@ -347,6 +355,35 @@ export default {
         .then(async () => {
           const { data } = await this.$http.post("/admin/deleteUser", { uid });
           this.$message.success({ message: data.status, offset: 10 });
+          this.getData();
+        })
+        .catch(() => {});
+    },
+    openEditCode(uid) {
+      this.$prompt("请设置新邀请码", "提示", { type: "info" })
+        .then(async ({ value }) => {
+          value = value.replace(/\s*/g, "");
+          const reg = new RegExp("[\\u4E00-\\u9FFF]+", "g");
+          if (reg.test(value) || value.length > 10) {
+            this.$message.warning({
+              message: `邀请码限制为10位以下的英文字符和数字组合~`,
+              offset: 10,
+            });
+            return;
+          }
+          const res = await this.$http.post(`/admin/adminUpdateCode`, {
+            uid,
+            extension_code: value,
+          });
+          if (res.status === 200) {
+            if (res.data.status === "邀请码已存在！") {
+              this.$message.warning({ message: `邀请码已存在，请您重新设置~`, offset: 10 });
+              return;
+            }
+            this.$message.success({ message: res.data.status, offset: 10 });
+          } else {
+            this.$message.warning({ message: `服务器已超时，请稍后重试～`, offset: 10 });
+          }
           this.getData();
         })
         .catch(() => {});

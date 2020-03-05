@@ -32,9 +32,6 @@
             <el-form-item label="账号">
               <span>{{ props.row.phone }}</span>
             </el-form-item>
-            <el-form-item label="备注">
-              <span>{{ props.row.user_remark }}</span>
-            </el-form-item>
             <el-form-item label="当天充值">
               <span>{{ showInfo.todayCharge / 100 }}</span>
             </el-form-item>
@@ -72,11 +69,13 @@
           <span class="ml-10">{{ scope.row.my_balance / 100 }}</span>
         </template>
       </el-table-column>
+      <el-table-column align="center" prop="user_minPrice" label="最低价格"></el-table-column>
       <el-table-column align="center" label="总充值">
         <template v-slot="scope">
           <span class="ml-10">{{ scope.row.wb_fee / 100 }}</span>
         </template>
       </el-table-column>
+      <el-table-column align="center" prop="user_remark" label="备注"></el-table-column>
       <el-table-column align="center" label="账号状态">
         <template v-slot="scope">
           <el-tag :type="scope.row.is_valide === 1 ? 'success' : 'danger'" disable-transitions hit>
@@ -257,6 +256,7 @@ export default {
           const res = await this.$http.post(`/admin/give/modPrice`, { uid, user_minPrice: value });
           if (res.status === 200 && JSON.parse(res.data.statusCode)) {
             this.$message.success({ message: `修改成功！`, offset: 10 });
+            this.getData();
           } else {
             this.$message.warning({ message: `服务器已超时，请稍后重试～`, offset: 10 });
           }
