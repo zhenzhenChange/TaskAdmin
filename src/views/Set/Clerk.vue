@@ -10,6 +10,9 @@
           <el-input v-model="defaultSet.su_holdLimit">
             <template slot="prepend">最多同时几单未完成</template>
           </el-input>
+          <el-input class="mt-20" v-model="defaultSet.todayLimit">
+            <template slot="prepend">限制用户当天接单量</template>
+          </el-input>
           <el-input class="mt-20" v-model="defaultSet.orderLimit">
             <template slot="prepend">平台新用户接单超出</template>
             <template slot="append">单之后记录成功率</template>
@@ -61,6 +64,7 @@ export default {
       positon: "top",
       defaultSet: {
         orderLimit: "",
+        todayLimit: "",
         su_MinSuccessRate: "",
         su_recvAnno: "",
         su_holdLimit: "",
@@ -90,7 +94,11 @@ export default {
         limit: this.defaultSet.orderLimit,
       });
       await this.$http.post(`/admin/setTodayLimit`, {
-        todayLimit: this.defaultSet.su_MinSuccessRate / 100,
+        todayLimit: this.defaultSet.todayLimit,
+      });
+      await this.$http.post(`/admin/adminSetSuss`, {
+        uid: this.userID,
+        su_MinSuccessRate: this.defaultSet.su_MinSuccessRate / 100,
       });
       const res = await this.$http.post(`/admin/setup/defaultClerkSet`, {
         uid: this.userID,
