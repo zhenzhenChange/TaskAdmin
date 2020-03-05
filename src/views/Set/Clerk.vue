@@ -14,6 +14,10 @@
             <template slot="prepend">平台新用户接单超出</template>
             <template slot="append">单之后记录成功率</template>
           </el-input>
+          <el-input class="mt-20" v-model="defaultSet.su_MinSuccessRate">
+            <template slot="prepend">用户接单成功率小于</template>
+            <template slot="append">%之后将自动封号</template>
+          </el-input>
           <div>
             <span class="exCode">邀请码是否为必填项：</span>
             <el-switch
@@ -55,7 +59,13 @@ export default {
     return {
       textarea: "",
       positon: "top",
-      defaultSet: { orderLimit: "", su_recvAnno: "", su_holdLimit: "", su_isExtensionCodeReq: "" },
+      defaultSet: {
+        orderLimit: "",
+        su_MinSuccessRate: "",
+        su_recvAnno: "",
+        su_holdLimit: "",
+        su_isExtensionCodeReq: "",
+      },
     };
   },
   created() {
@@ -68,11 +78,19 @@ export default {
     async getData() {
       const res = await this.$http.get("/admin/setup/get");
       this.defaultSet = res.data;
+      this.defaultSet.su_MinSuccessRate = res.data.su_MinSuccessRate * 100;
     },
     async saveSet() {
+      if (this.defaultSet.su_MinSuccessRate < 0 || this.defaultSet.su_MinSuccessRate > 100) {
+        this.$message.error({ message: "成功率设置要在1-100之间,且是整数", offset: 10 });
+        return;
+      }
       await this.$http.post(`/admin/setLimit`, {
         uid: this.userID,
         limit: this.defaultSet.orderLimit,
+      });
+      await this.$http.post(`/admin/setTodayLimit`, {
+        todayLimit: this.defaultSet.su_MinSuccessRate / 100,
       });
       const res = await this.$http.post(`/admin/setup/defaultClerkSet`, {
         uid: this.userID,
