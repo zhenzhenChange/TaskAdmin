@@ -103,6 +103,14 @@
           >
             解除登录限制
           </el-button>
+          <el-button
+            size="mini"
+            type="danger"
+            icon="el-icon-delete"
+            @click="openDeleteUser(scope.row.uid)"
+          >
+            删除用户
+          </el-button>
           <div class="mt-10"></div>
           <el-button
             size="mini"
@@ -116,17 +124,17 @@
             size="mini"
             type="primary"
             icon="el-icon-edit"
-            @click="openEditPwd(scope.row.phone)"
+            @click="openRemark(scope.row.uid)"
           >
-            修改密码
+            修改备注
           </el-button>
           <el-button
             size="mini"
-            type="danger"
-            icon="el-icon-delete"
-            @click="openDeleteUser(scope.row.uid)"
+            type="primary"
+            icon="el-icon-edit"
+            @click="openEditPwd(scope.row.phone)"
           >
-            删除用户
+            修改密码
           </el-button>
         </template>
       </el-table-column>
@@ -260,6 +268,19 @@ export default {
           } else {
             this.$message.warning({ message: `服务器已超时，请稍后重试～`, offset: 10 });
           }
+        })
+        .catch(() => {});
+    },
+    openRemark(uid) {
+      this.$prompt("请输入新备注", "提示", { type: "info" })
+        .then(async ({ value }) => {
+          const { data } = await this.$http.post(`/recv/setNickname`, { uid, user_remark: value });
+          if (JSON.parse(data.ret)) {
+            this.$message.success({ message: `修改成功！`, offset: 10 });
+          } else {
+            this.$message.warning({ message: `服务器已超时，请稍后重试～`, offset: 10 });
+          }
+          this.getData();
         })
         .catch(() => {});
     },
