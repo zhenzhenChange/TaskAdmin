@@ -19,6 +19,11 @@
           登录
         </el-button>
       </el-form-item>
+      <el-form-item>
+        <el-link type="danger" target="_blank" href="http://www.beian.miit.gov.cn">
+          ICP证：桂ICP备19009884号
+        </el-link>
+      </el-form-item>
     </el-form>
   </el-card>
 </template>
